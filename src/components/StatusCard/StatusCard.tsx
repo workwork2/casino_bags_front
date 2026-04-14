@@ -1,5 +1,6 @@
 import React from "react";
 import Image, { StaticImageData } from "next/image";
+import CpCoinIcon from "@/components/icons/CpCoinIcon";
 import styles from "./StatusCard.module.scss";
 
 export interface BenefitItemProps {
@@ -66,8 +67,11 @@ const StatusCard: React.FC<StatusCardProps> = ({
           <div className={styles.progressHeader}>
             <span>Ваш прогресс</span>
             <div className={styles.currentValues}>
-              <span className={styles.accentText}>CP{currentMoney}</span> / CP
-              {targetMoney}
+              <CpCoinIcon className={styles.cpInlineIcon} size={18} />
+              <span className={styles.cpValues}>
+                <span className={styles.accentText}>CP{currentMoney}</span>
+                <span className={styles.cpSlash}> / CP{targetMoney}</span>
+              </span>
             </div>
           </div>
 

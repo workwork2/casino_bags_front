@@ -154,6 +154,7 @@ import {
 } from "react-icons/io5";
 
 import LoyaltyHero from "@/components/LoyaltyHero/LoyaltyHero";
+import LoyaltyCpExchange from "@/components/LoyaltyCpExchange/LoyaltyCpExchange";
 import StatusCard from "@/components/StatusCard/StatusCard";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -203,10 +204,10 @@ export default function LoyaltyPage() {
       };
     }
     return {
-      currentPoints: data.progress?.currentPoints,
-      maxPoints: data.progress?.targetPoints,
-      userName: data.user?.username,
-      nextLevelName: data.progress?.nextLevelName,
+      currentPoints: data.progress?.currentPoints ?? 0,
+      maxPoints: data.progress?.targetPoints ?? 10000,
+      userName: data.user?.username ?? "Player",
+      nextLevelName: data.progress?.nextLevelName ?? "—",
       imageSrc: levelVisuals[data.progress?.currentLevel]?.icon || "/medal.svg",
     };
   }, [data]);
@@ -214,9 +215,7 @@ export default function LoyaltyPage() {
   // levelsData — полностью адаптировано под новую структуру бэкенда (CP, weeklyCashbackRate и т.д.)
   // но пропсы и логика отображения прогресса/бенефитов оставлены совместимыми с первым вариантом
   const levelsData = useMemo(() => {
-    console.log(data?.levels, "data.levels ");
     if (!data || !data.levels || data.levels.length === 0) return [];
-    console.log(data, "data");
     const userPoints = data.progress.currentPoints;
     const currentLevel = data.progress?.currentLevel;
 
@@ -269,6 +268,14 @@ export default function LoyaltyPage() {
     });
   }, [data]);
 
+  /** CP для обмена: отдельный кошелёк с бэка или, пока нет поля, текущий прогресс CP */
+  const exchangeableCp = useMemo(() => {
+    if (!data) return 0;
+    const wallet = data.cpWallet ?? data.cpBalance;
+    if (typeof wallet === "number" && Number.isFinite(wallet)) return wallet;
+    return data.progress?.currentPoints ?? 0;
+  }, [data]);
+
   // Дизайн первого варианта полностью сохранён (включая стрелки, grid, scrollRef, заголовок "Статусы" и т.д.)
   // Добавлена только функциональность Redux + обработка загрузки/ошибки
   return (
@@ -298,6 +305,8 @@ export default function LoyaltyPage() {
               nextLevelName={heroData.nextLevelName}
               imageSrc={heroData.imageSrc}
             />
+
+            <LoyaltyCpExchange availableCp={exchangeableCp} cpPerBonusUnit={100} />
 
             <section className={styles.wrapper}>
               <div className={styles.header}>

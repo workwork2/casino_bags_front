@@ -109,15 +109,31 @@ $color-accent: var(--ds-color-accent-indigo); /* Фиолетово-синий �
 }
 
 .points {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: 20px;
   font-weight: 700;
   color: var(--ds-color-text-primary);
+}
 
-  .maxPoints {
-    color: var(--ds-color-border-deep);
-    font-size: 16px;
-    font-weight: 500;
-  }
+.cpIcon {
+  flex-shrink: 0;
+}
+
+.pointsInner {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.cpNumbers {
+  font-variant-numeric: tabular-nums;
+}
+
+.maxPoints {
+  color: var(--ds-color-border-deep);
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .progressBarBg {

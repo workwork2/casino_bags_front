@@ -3,7 +3,12 @@
 import React from "react";
 import Image, { StaticImageData } from "next/image";
 import { IoDiamondOutline } from "react-icons/io5"; // Как пункт Loyalty в SlideBar (navigation)
+import CpCoinIcon from "@/components/icons/CpCoinIcon";
 import styles from "./LoyaltyHero.module.scss";
+
+function formatCp(n: number) {
+  return new Intl.NumberFormat("ru-RU").format(Math.max(0, Math.floor(n)));
+}
 
 interface LoyaltyHeroProps {
   currentPoints: number;
@@ -20,7 +25,8 @@ const LoyaltyHero: React.FC<LoyaltyHeroProps> = ({
   nextLevelName,
   imageSrc,
 }) => {
-  const progressPercent = Math.min((currentPoints / maxPoints) * 100, 100);
+  const progressPercent =
+    maxPoints > 0 ? Math.min((currentPoints / maxPoints) * 100, 100) : 0;
 
   return (
     <div className={styles.heroWrapper}>
@@ -42,8 +48,13 @@ const LoyaltyHero: React.FC<LoyaltyHeroProps> = ({
               <strong style={{ color: "#fff" }}>{nextLevelName}</strong>:
             </span>
             <span className={styles.points}>
-              CP {currentPoints}{" "}
-              <span className={styles.maxPoints}> / {maxPoints}</span>
+              <CpCoinIcon className={styles.cpIcon} size={24} />
+              <span className={styles.pointsInner} aria-label="Comp Points">
+                <span className={styles.cpNumbers}>
+                  {formatCp(currentPoints)}
+                  <span className={styles.maxPoints}> / {formatCp(maxPoints)}</span>
+                </span>
+              </span>
             </span>
           </div>
 

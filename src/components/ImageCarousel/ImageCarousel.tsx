@@ -23,11 +23,16 @@ type SlideItem = {
   secondaryHref?: string;
 };
 
+/** Разные арты под смысл слайда (единая палитра дизайн-системы) */
+const BANNER_WELCOME = "/hero-banner-v2.png";
+const BANNER_SLOTS = "/carousel-banner-slots.png";
+const BANNER_TOURNAMENTS = "/carousel-banner-tournaments.png";
+
 /** Гость — как в хедере: основная кнопка = Sign up, вторая = Log in */
 const guestSlides: SlideItem[] = [
   {
     id: 1,
-    src: "/hero-banner-v2.png",
+    src: BANNER_WELCOME,
     alt: "Онлайн-казино: бонусы и слоты",
     title: "Крути — забирай",
     rotatingPhrases: [
@@ -42,7 +47,7 @@ const guestSlides: SlideItem[] = [
   },
   {
     id: 2,
-    src: "/hero-banner-v2.png",
+    src: BANNER_SLOTS,
     alt: "Слоты, рулетка и live-столы",
     title: "Слоты и live без пауз",
     rotatingPhrases: [
@@ -59,7 +64,7 @@ const guestSlides: SlideItem[] = [
   },
   {
     id: 3,
-    src: "/hero-banner-v2.png",
+    src: BANNER_TOURNAMENTS,
     alt: "VIP и программа лояльности",
     title: "Статус растёт с каждой ставкой",
     rotatingPhrases: [
@@ -79,7 +84,7 @@ const guestSlides: SlideItem[] = [
 const playerSlides: SlideItem[] = [
   {
     id: 1,
-    src: "/hero-banner-v2.png",
+    src: BANNER_WELCOME,
     alt: "Бонусы казино и кэшбек",
     title: "Твои бонусы уже ждут",
     rotatingPhrases: [
@@ -96,7 +101,7 @@ const playerSlides: SlideItem[] = [
   },
   {
     id: 2,
-    src: "/hero-banner-v2.png",
+    src: BANNER_TOURNAMENTS,
     alt: "Турниры и гонка за призами",
     title: "Гонка за призами",
     rotatingPhrases: [
@@ -113,7 +118,7 @@ const playerSlides: SlideItem[] = [
   },
   {
     id: 3,
-    src: "/hero-banner-v2.png",
+    src: BANNER_SLOTS,
     alt: "VIP-статус в казино",
     title: "VIP — это про тебя",
     rotatingPhrases: [

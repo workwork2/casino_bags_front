@@ -60,7 +60,7 @@ $footer-action-pill-width: rem(200);
     }
 
     @media (max-width: $tablet-width) {
-      align-items: center; /* Центрируем внутри колонки */
+      align-items: center;
       width: 100%;
     }
 
@@ -68,19 +68,27 @@ $footer-action-pill-width: rem(200);
       grid-column: 1 / -1;
       align-items: stretch;
     }
+
+    /* Десктоп: лого + крипта по центру первой колонки (как раньше) */
+    @media (min-width: #{$mobile-width + 1px}) {
+      align-items: center;
+    }
   }
 
   &__brandTop {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: rem(24);
-
-    @media (max-width: $tablet-width) {
-      align-items: center; /* Лого и крипта строго по центру */
-    }
+    width: 100%;
+    max-width: rem(420);
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
 
     @media (max-width: $mobile-width) {
       gap: rem(14);
+      max-width: none;
     }
   }
 
@@ -88,6 +96,7 @@ $footer-action-pill-width: rem(200);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    align-self: center;
     transition: opacity 0.2s;
 
     img {
@@ -126,14 +135,9 @@ $footer-action-pill-width: rem(200);
     display: flex;
     flex-wrap: wrap;
     gap: rem(12);
-
-    @media (max-width: $tablet-width) {
-      justify-content: center; /* Центрируем пилюли крипты */
-    }
-
-    @media (max-width: $mobile-width) {
-      display: none;
-    }
+    justify-content: center;
+    width: 100%;
+    align-self: stretch;
   }
 
   &__cryptoItem {

@@ -110,14 +110,33 @@ $border-color: var(--ds-color-border-deep);
   gap: 6px;
 
   .currentValues {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     color: $color-text-primary;
     font-weight: bold;
     font-size: 14px;
+    min-width: 0;
+    flex-shrink: 0;
 
     .accentText {
       color: $color-accent;
     }
   }
+}
+
+.cpInlineIcon {
+  flex-shrink: 0;
+}
+
+.cpValues {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cpSlash {
+  color: $color-text-secondary;
+  font-weight: 600;
 }
 
 .progressBarContainer {
