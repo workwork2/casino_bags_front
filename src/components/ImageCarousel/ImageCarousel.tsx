@@ -7,14 +7,15 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useAuthModal } from "@/components/AuthModal/provider/AuthModalProvider";
 import { useAppSelector } from "@/shared/lib/redux/hooks";
+import RotatingTypewriter from "./RotatingTypewriter";
 import classes from "./ImageCarousel.module.scss";
 
 type SlideItem = {
   id: number;
   src: string;
   alt: string;
-  badge: string;
   title: string;
+  rotatingPhrases: string[];
   description: string;
   primaryText: string;
   primaryHref?: string;
@@ -22,86 +23,109 @@ type SlideItem = {
   secondaryHref?: string;
 };
 
-/** Баннеры для гостя: CTA через модалку регистрации / входа */
+/** Гость — как в хедере: основная кнопка = Sign up, вторая = Log in */
 const guestSlides: SlideItem[] = [
   {
     id: 1,
-    src: "/promo-banner-winwave.png",
-    alt: "Welcome bonus",
-    badge: "Welcome",
-    title: "Start strong with your first bonus",
-    description:
-      "Create an account and unlock welcome offers, slots, and live tables in one place.",
-    primaryText: "Sign up",
-    secondaryText: "Log in",
+    src: "/hero-banner-v2.png",
+    alt: "Онлайн-казино: бонусы и слоты",
+    title: "Крути — забирай",
+    rotatingPhrases: [
+      "Депозитный бонус на старт",
+      "Пакет фриспинов каждый день",
+      "Кэшбек без лишней бумаги",
+      "Reload, который чувствуется",
+    ],
+    description: "Топ-слоты, live и турниры в одном аккаунте. Регистрация за минуту — и ты в игре.",
+    primaryText: "Регистрация",
+    secondaryText: "Войти",
   },
   {
     id: 2,
-    src: "/promo-banner-winwave.png",
-    alt: "Slots and live casino",
-    badge: "Hot games",
-    title: "Slots, live tables, tournaments",
-    description:
-      "Play top providers and keep progress in one account on desktop and mobile.",
-    primaryText: "Open bonuses",
+    src: "/hero-banner-v2.png",
+    alt: "Слоты, рулетка и live-столы",
+    title: "Слоты и live без пауз",
+    rotatingPhrases: [
+      "Megaways на полную",
+      "Live-рулетка 24/7",
+      "Турниры с призами",
+      "Провайдеры мирового уровня",
+    ],
+    description: "Крути где угодно — прогресс и баланс всегда с тобой, с телефона или ПК.",
+    primaryText: "К бонусам",
     primaryHref: "/bonuses",
-    secondaryText: "Explore slots",
+    secondaryText: "В слоты",
     secondaryHref: "/slots",
   },
   {
     id: 3,
-    src: "/promo-banner-winwave.png",
-    alt: "Loyalty program",
-    badge: "Loyalty",
-    title: "Grow your status and rewards",
-    description:
-      "Complete stages, join events, and get better perks from your activity.",
-    primaryText: "View loyalty",
+    src: "/hero-banner-v2.png",
+    alt: "VIP и программа лояльности",
+    title: "Статус растёт с каждой ставкой",
+    rotatingPhrases: [
+      "Персональные подарки",
+      "Закрытые ивенты",
+      "Повышенный кэшбек",
+      "Приоритет на вывод",
+    ],
+    description: "Проходи уровни и забирай награды за активность — без пустых обещаний.",
+    primaryText: "Лояльность",
     primaryHref: "/loyalty",
-    secondaryText: "How to start",
+    secondaryText: "FAQ",
     secondaryHref: "/faq",
   },
 ];
 
-/** Баннеры для авторизованного игрока */
 const playerSlides: SlideItem[] = [
   {
     id: 1,
-    src: "/promo-banner-winwave.png",
-    alt: "Weekly cashback",
-    badge: "For you",
-    title: "Weekly cashback is ready",
-    description:
-      "Open your rewards and keep the momentum with your current profile level.",
-    primaryText: "View bonuses",
+    src: "/hero-banner-v2.png",
+    alt: "Бонусы казино и кэшбек",
+    title: "Твои бонусы уже ждут",
+    rotatingPhrases: [
+      "Кэшбек недели внутри",
+      "Депозитный бонус активен",
+      "Персональный reload",
+      "Фриспины на любимые слоты",
+    ],
+    description: "Пополняй счёт и забирай офферы — всё подсвечено, ничего не пропустишь.",
+    primaryText: "Бонусы",
     primaryHref: "/bonuses",
-    secondaryText: "Deposit",
+    secondaryText: "Депозит",
     secondaryHref: "/deposit",
   },
   {
     id: 2,
-    src: "/promo-banner-winwave.png",
-    alt: "Tournaments and events",
-    badge: "Events",
-    title: "Join tournaments and prize races",
-    description:
-      "Compete with players, climb the leaderboard, and collect extra rewards.",
-    primaryText: "Open tournaments",
+    src: "/hero-banner-v2.png",
+    alt: "Турниры и гонка за призами",
+    title: "Гонка за призами",
+    rotatingPhrases: [
+      "Турниры каждую неделю",
+      "Лидерборд в реальном времени",
+      "Live-арена",
+      "Буст множителей",
+    ],
+    description: "Поднимайся в таблице и забирай дополнительные награды за активность.",
+    primaryText: "Турниры",
     primaryHref: "/tournaments",
-    secondaryText: "Live casino",
+    secondaryText: "Live",
     secondaryHref: "/live-casino",
   },
   {
     id: 3,
-    src: "/promo-banner-winwave.png",
-    alt: "Loyalty status",
-    badge: "VIP",
-    title: "Boost status in loyalty program",
-    description:
-      "Track your progress and unlock bigger privileges for regular play.",
-    primaryText: "Loyalty page",
+    src: "/hero-banner-v2.png",
+    alt: "VIP-статус в казино",
+    title: "VIP — это про тебя",
+    rotatingPhrases: [
+      "Рост статуса онлайн",
+      "Закрытые предложения",
+      "Приоритет на выплаты",
+      "История наград в одном месте",
+    ],
+    description: "Следи за прогрессом и открывай привилегии, которые заметны сразу.",
+    primaryText: "Лояльность",
     primaryHref: "/loyalty",
-    secondaryText: "My account",
+    secondaryText: "Аккаунт",
     secondaryHref: "/account",
   },
 ];
@@ -113,7 +137,7 @@ export default function ImageCarousel() {
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "start" },
-    [Autoplay({ delay: 5000, stopOnInteraction: false })],
+    [Autoplay({ delay: 6500, stopOnInteraction: false })],
   );
   const [selected, setSelected] = useState(0);
 
@@ -146,46 +170,48 @@ export default function ImageCarousel() {
                     alt={slide.alt}
                     fill
                     className={classes.bannerImage}
-                    sizes="(max-width: 600px) 100vw, min(1200px, 100vw)"
+                    sizes="(max-width: 640px) 100vw, min(1200px, 100vw)"
                     quality={92}
                     priority={slide.id === 1}
                   />
                 </div>
                 <div className={classes.overlay} aria-hidden />
                 <div className={classes.content}>
-                  <div className={classes.textBlock}>
-                    <span className={classes.badge}>{slide.badge}</span>
-                    <h2 className={classes.title}>{slide.title}</h2>
-                    <p className={classes.description}>{slide.description}</p>
-                  </div>
-                  <div className={classes.actions}>
-                    {slide.primaryHref ? (
-                      <Link href={slide.primaryHref} className={classes.primaryBtn}>
-                        {slide.primaryText}
-                      </Link>
-                    ) : (
-                      <button
-                        type="button"
-                        className={classes.primaryBtn}
-                        onClick={openSignup}
-                      >
-                        {slide.primaryText}
-                      </button>
-                    )}
+                  <div className={classes.contentRow}>
+                    <div className={classes.copyCol}>
+                      <h2 className={classes.title}>{slide.title}</h2>
+                      <RotatingTypewriter key={slide.id} phrases={slide.rotatingPhrases} />
+                      <p className={classes.description}>{slide.description}</p>
+                      <div className={classes.actions}>
+                        {slide.primaryHref ? (
+                          <Link href={slide.primaryHref} className={classes.primaryBtn}>
+                            {slide.primaryText}
+                          </Link>
+                        ) : (
+                          <button
+                            type="button"
+                            className={classes.primaryBtn}
+                            onClick={openSignup}
+                          >
+                            {slide.primaryText}
+                          </button>
+                        )}
 
-                    {slide.secondaryHref ? (
-                      <Link href={slide.secondaryHref} className={classes.secondaryBtn}>
-                        {slide.secondaryText}
-                      </Link>
-                    ) : (
-                      <button
-                        type="button"
-                        className={classes.secondaryBtn}
-                        onClick={openLogin}
-                      >
-                        {slide.secondaryText}
-                      </button>
-                    )}
+                        {slide.secondaryHref ? (
+                          <Link href={slide.secondaryHref} className={classes.secondaryBtn}>
+                            {slide.secondaryText}
+                          </Link>
+                        ) : (
+                          <button
+                            type="button"
+                            className={classes.secondaryBtn}
+                            onClick={openLogin}
+                          >
+                            {slide.secondaryText}
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -201,7 +227,7 @@ export default function ImageCarousel() {
             type="button"
             className={classes.indicator}
             data-active={selected === i ? true : undefined}
-            aria-label={`Go to slide ${i + 1}`}
+            aria-label={`Слайд ${i + 1}`}
             onClick={() => emblaApi?.scrollTo(i)}
           />
         ))}

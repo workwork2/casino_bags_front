@@ -8,7 +8,7 @@ const PAUSE_FULL_MS = 2400;
 const DELETING_MS = 26;
 const PAUSE_EMPTY_MS = 400;
 
-type Phase = "typing" | "pauseFull" | "deleting" | "pauseEmpty";
+type Phase = "typing" | "deleting" | "pauseEmpty";
 
 type Props = {
   phrases: string[];
@@ -43,11 +43,8 @@ export default function RotatingTypewriter({ phrases, className }: Props) {
         if (charCount < current.length) {
           t = setTimeout(() => setCharCount((c) => c + 1), TYPING_MS);
         } else {
-          t = setTimeout(() => setPhase("pauseFull"), PAUSE_FULL_MS);
+          t = setTimeout(() => setPhase("deleting"), PAUSE_FULL_MS);
         }
-        break;
-      case "pauseFull":
-        t = setTimeout(() => setPhase("deleting"), 0);
         break;
       case "deleting":
         if (charCount > 0) {
@@ -77,15 +74,14 @@ export default function RotatingTypewriter({ phrases, className }: Props) {
 
   if (list.length === 0) return null;
 
-  const showCaret =
-    !reducedMotion && (phase === "typing" || phase === "deleting" || phase === "pauseFull");
+  const showCaret = !reducedMotion && (phase === "typing" || phase === "deleting");
 
   return (
     <p
       className={[classes.rotatingLine, className].filter(Boolean).join(" ")}
       aria-live="polite"
     >
-      <span className={classes.rotatingGradient}>{visible}</span>
+      <span className={classes.rotatingHighlight}>{visible}</span>
       {showCaret && (
         <span className={classes.rotatingCaret} aria-hidden>
           |
