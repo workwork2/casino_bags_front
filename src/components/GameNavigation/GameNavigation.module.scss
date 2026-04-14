@@ -1,0 +1,784 @@
+// --- ПЕРЕМЕННЫЕ (акцент как у турниров / сайта) ---
+$bg-active: var(--ds-color-accent-indigo);
+$text-color: var(--ds-color-text-primary);
+$muted-text: rgba(255, 255, 255, 0.5);
+$glass-control: #ffffff0a;
+
+// ==========================================
+// ГЛАВНЫЙ БОКС
+// ==========================================
+.navigationContainer {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  margin: 20px 0 28px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; // Защита от глобального вылезания
+
+  @media (max-width: 1024px) {
+    padding: 16px 18px;
+    gap: 14px;
+    margin: 16px 0 24px;
+  }
+
+  @media (max-width: 767px) {
+    padding: 14px 12px;
+    margin: 12px 0 18px;
+    gap: 12px;
+    border-radius: 16px;
+  }
+}
+
+// ==========================================
+// ВЕРХНИЙ РЯД
+// ==========================================
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 0;
+  gap: 12px;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ds-color-text-primary);
+  margin: 0;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+
+  @media (max-width: 767px) {
+    font-size: 17px;
+    width: 100%;
+  }
+}
+
+.titleText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.titleIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.titleIcon {
+  font-size: 16px;
+  color: var(--ds-color-text-primary);
+}
+
+// КОНТРОЛЫ: Provider & Search
+.controlsRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  justify-content: flex-end;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+
+  @media (max-width: 767px) {
+    flex-direction: row; // Держим в одной строке на мобилках!
+    justify-content: space-between;
+    gap: 8px;
+  }
+}
+
+.providerButton, .searchWrapper {
+  height: var(--lobby-control-height, 44px);
+  border-radius: var(--lobby-pill-radius, 999px);
+  box-sizing: border-box;
+  min-width: 0;
+
+  @media (max-width: 767px) {
+    flex: 1 1 50%; // На мобилках делят экран ровно 50/50
+    width: 50%;
+  }
+}
+
+.providerButton {
+  display: flex;
+  align-items: center;
+  justify-content: center; // Центрируем контент
+  background-color: $glass-control;
+  border: 1px solid transparent;
+  padding: 0 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden; // Защита текста
+
+  .providerText {
+    color: $muted-text;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; // Если экран узкий - обрезаем троеточием
+    
+    @media (max-width: 767px) {
+      font-size: 13px;
+    }
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.05);
+    .providerText, .controlIcon { color: var(--ds-color-text-primary); }
+  }
+}
+
+.controlIcon {
+  font-size: 15px;
+  flex-shrink: 0;
+  color: $muted-text;
+  margin-right: 8px;
+
+  @media (max-width: 380px) {
+    margin-right: 4px; // Уменьшаем отступ на сверхмалых экранах
+  }
+}
+
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  @media (min-width: 768px) {
+    min-width: 200px;
+  }
+}
+
+.searchInput {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  appearance: none;
+  background-color: $glass-control;
+  border: 1px solid transparent;
+  border-radius: var(--lobby-pill-radius, 999px);
+  box-sizing: border-box;
+  padding: 0 14px 0 36px; // Отступ под иконку
+  color: $text-color;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  min-width: 0;
+
+  @media (max-width: 767px) {
+    font-size: 13px;
+    padding: 0 10px 0 32px;
+  }
+
+  &::placeholder {
+    color: $muted-text;
+  }
+
+  &:focus {
+    border-color: $bg-active;
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.controlIconAbsolute {
+  position: absolute;
+  left: 12px;
+  font-size: 14px;
+  color: $muted-text;
+  pointer-events: none;
+}
+
+// ==========================================
+// НИЖНИЙ РЯД (ДЕСКТОП)
+// ==========================================
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-pill-nav-chip-list-gap);
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+}
+
+.chip {
+  @include ds-pill-nav-chip;
+
+  .chipIcon {
+    font-size: 14px;
+    margin-right: 6px;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+}
+
+// ==========================================
+// ПЛАНШЕТ И МОБИЛКА: COMPACT SELECT
+// ==========================================
+.mobileCategoryWrapper {
+  display: none;
+
+  @media (max-width: 1024px) {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+}
+// // --- VARIABLES ---
+// $bg-button: #282626;
+// $bg-active: #3e30e9;
+// $stroke-color: rgba(255, 255, 255, 0.2);
+// $text-color: var(--ds-color-text-primary);
+// $line-color: rgba(255, 255, 255, 0.1);
+// $glow-color: rgba(62, 48, 233, 0.5);
+
+// $modal-bg: #141414; // Глубокий темный фон для модалки, как на скрине
+// $text-muted: rgba(255, 255, 255, 0.4);
+
+// .navigationContainer {
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   gap: rem(24);
+//   margin-bottom: rem(20);
+// }
+
+// // ==============================
+// // HEADER СЕКЦИЯ
+// // ==============================
+// .header {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding-bottom: rem(16);
+//   border-bottom: rem(1) solid $line-color;
+
+//   @media (max-width: 900px) {
+//     flex-direction: column;
+//     align-items: flex-start;
+//     gap: rem(16);
+//   }
+// }
+
+// .headerLeft {
+//   display: flex;
+//   align-items: center;
+//   gap: rem(12);
+
+//   .titleIndicator {
+//     width: rem(8);
+//     height: rem(24);
+//     background-color: $bg-active;
+//     border-radius: rem(4);
+//     box-shadow: 0 0 rem(10) $glow-color;
+//   }
+
+//   .titleText {
+//     font-size: rem(24);
+//     font-weight: 700;
+//     color: $text-color;
+//     text-transform: uppercase;
+//     letter-spacing: rem(1);
+//     margin: 0;
+//   }
+// }
+
+// .headerRight {
+//   display: flex;
+//   align-items: center;
+//   gap: rem(16);
+//   width: auto;
+
+//   @media (max-width: 900px) {
+//     width: 100%;
+//     justify-content: space-between;
+//   }
+
+//   @media (max-width: 500px) {
+//     flex-direction: column;
+//     align-items: stretch;
+//   }
+// }
+
+// // Главный Поиск
+// .searchWrapper {
+//   position: relative;
+//   width: rem(280);
+
+//   @media (max-width: 900px) {
+//     flex-grow: 1;
+//     width: auto;
+//   }
+// }
+
+// .searchInput {
+//   width: 100%;
+//   height: rem(44);
+//   background: rgba(40, 38, 38, 0.6);
+//   backdrop-filter: blur(8px);
+//   border: rem(1) solid $stroke-color;
+//   border-radius: rem(12);
+//   padding: 0 rem(20) 0 rem(44);
+//   color: $text-color;
+//   font-size: rem(14);
+//   outline: none;
+//   transition: all 0.3s ease;
+
+//   &::placeholder {
+//     color: $text-muted;
+//   }
+
+//   &:focus {
+//     border-color: $bg-active;
+//     box-shadow: 0 0 rem(15) rgba(62, 48, 233, 0.2);
+//     background: rgba(40, 38, 38, 0.9);
+//   }
+// }
+
+// .searchIcon {
+//   position: absolute;
+//   left: rem(14);
+//   top: 50%;
+//   transform: translateY(-50%);
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   opacity: 0.5;
+//   pointer-events: none;
+// }
+
+// // Кнопка провайдеров
+// .providersBtn {
+//   display: flex;
+//   align-items: center;
+//   gap: rem(8);
+//   height: rem(44);
+//   padding: 0 rem(20);
+//   background: linear-gradient(
+//     135deg,
+//     rgba(40, 38, 38, 1) 0%,
+//     rgba(20, 20, 20, 1) 100%
+//   );
+//   border: rem(1) solid $stroke-color;
+//   border-radius: rem(12);
+//   color: $text-color;
+//   font-size: rem(14);
+//   font-weight: 600;
+//   cursor: pointer;
+//   transition: all 0.3s ease;
+
+//   .providersIcon {
+//     display: flex;
+//     color: $bg-active;
+//     transition: transform 0.3s ease;
+//   }
+
+//   &:hover {
+//     border-color: $bg-active;
+//     box-shadow: 0 0 rem(12) rgba(62, 48, 233, 0.3);
+
+//     .providersIcon {
+//       transform: scale(1.1);
+//     }
+//   }
+// }
+
+// // ==============================
+// // CONTENT СЕКЦИЯ (ФИЛЬТРЫ)
+// // ==============================
+// .content {
+//   @media (max-width: 768px) {
+//     display: none; // Скрыт на мобильных
+//   }
+// }
+
+// .list {
+//   display: flex;
+//   flex-wrap: wrap;
+//   gap: rem(12);
+//   width: 100%;
+// }
+
+// .chip {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   gap: rem(8);
+//   height: rem(46);
+//   padding: 0 rem(20);
+//   background-color: $bg-button;
+//   border: rem(1) solid $stroke-color;
+//   border-radius: rem(100);
+//   cursor: pointer;
+//   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+//   color: $text-color;
+//   font-family: inherit;
+//   outline: none;
+//   white-space: nowrap;
+//   position: relative;
+//   overflow: hidden;
+
+//   span {
+//     font-size: rem(14);
+//     font-weight: 500;
+//     z-index: 2;
+//   }
+
+//   .icon {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     width: rem(20);
+//     height: rem(20);
+//     flex-shrink: 0;
+//     z-index: 2;
+//     transition: transform 0.3s ease;
+
+//     img {
+//       width: 100%;
+//       height: 100%;
+//       object-fit: contain;
+//       filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2));
+//     }
+//   }
+
+//   &:hover {
+//     border-color: rgba(255, 255, 255, 0.5);
+//     background-color: lighten($bg-button, 5%);
+//     transform: translateY(rem(-2));
+
+//     .icon {
+//       transform: scale(1.1);
+//     }
+//   }
+
+//   &.active {
+//     background-color: $bg-active;
+//     border-color: transparent;
+//     box-shadow: 0 rem(4) rem(15) $glow-color;
+//     transform: translateY(rem(-2));
+
+//     &::before {
+//       content: "";
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       width: 100%;
+//       height: 100%;
+//       background: linear-gradient(
+//         180deg,
+//         rgba(255, 255, 255, 0.15) 0%,
+//         rgba(255, 255, 255, 0) 100%
+//       );
+//       z-index: 1;
+//     }
+//   }
+// }
+
+// // ==============================
+// // MOBILE DROPDOWN
+// // ==============================
+// .mobileCategoryWrapper {
+//   display: none;
+//   @media (max-width: 768px) {
+//     display: block;
+//     width: 100%;
+//   }
+// }
+
+// // ==============================
+// // ADVANCED PROVIDERS MODAL
+// // ==============================
+// .modalOverlay {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100vw;
+//   height: 100vh;
+//   background: rgba(0, 0, 0, 0.8);
+//   backdrop-filter: blur(10px);
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   z-index: 1000;
+//   animation: fadeIn 0.2s ease-out;
+//   padding: rem(20);
+//   box-sizing: border-box;
+// }
+
+// .modalContainer {
+//   background: $modal-bg;
+//   border: rem(1) solid $stroke-color;
+//   border-radius: rem(16);
+//   width: 100%;
+//   max-width: rem(1200); // Широкая модалка как на скрине
+//   max-height: 90vh;
+//   display: flex;
+//   flex-direction: column;
+//   box-shadow:
+//     0 rem(20) rem(50) rgba(0, 0, 0, 0.9),
+//     0 0 rem(20) rgba(62, 48, 233, 0.15);
+//   animation: scaleUp 0.3s ease-out;
+//   overflow: hidden;
+// }
+
+// // Шапка модалки
+// .modalHeader {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding: rem(24) rem(32);
+//   border-bottom: rem(1) solid $line-color;
+
+//   @media (max-width: 768px) {
+//     flex-direction: column;
+//     align-items: stretch;
+//     gap: rem(16);
+//     padding: rem(20);
+//   }
+// }
+
+// .modalTitle {
+//   color: var(--ds-color-text-primary);
+//   margin: 0;
+//   font-size: rem(24);
+//   font-weight: 700;
+// }
+
+// .modalActions {
+//   display: flex;
+//   align-items: center;
+//   gap: rem(16);
+// }
+
+// // Поиск внутри модалки
+// .modalSearchWrapper {
+//   position: relative;
+//   width: rem(300);
+
+//   @media (max-width: 768px) {
+//     width: 100%;
+//   }
+
+//   .modalSearchIcon {
+//     position: absolute;
+//     left: rem(16);
+//     top: 50%;
+//     transform: translateY(-50%);
+//     opacity: 0.5;
+//     pointer-events: none;
+//   }
+
+//   .modalSearchInput {
+//     width: 100%;
+//     height: rem(40);
+//     background: transparent;
+//     border: rem(1) solid $bg-active; // Граница в стиле цвета $bg-active
+//     border-radius: rem(8);
+//     padding: 0 rem(16) 0 rem(40);
+//     color: var(--ds-color-text-primary);
+//     font-size: rem(14);
+//     outline: none;
+//     transition: all 0.2s;
+
+//     &::placeholder {
+//       color: $text-muted;
+//     }
+
+//     &:focus {
+//       box-shadow: 0 0 rem(10) $glow-color;
+//       background: rgba(62, 48, 233, 0.05);
+//     }
+//   }
+// }
+
+// // Кнопка закрытия
+// .closeBtn {
+//   background: $bg-button;
+//   border: rem(1) solid $stroke-color;
+//   border-radius: 50%;
+//   width: rem(40);
+//   height: rem(40);
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   color: $text-muted;
+//   cursor: pointer;
+//   transition: all 0.2s;
+
+//   &:hover {
+//     color: var(--ds-color-text-primary);
+//     border-color: var(--ds-color-text-primary);
+//     background: lighten($bg-button, 5%);
+//   }
+// }
+
+// // Тело модалки
+// .modalBody {
+//   padding: rem(24) rem(32);
+//   overflow-y: auto;
+//   flex-grow: 1;
+
+//   // Стилизация скроллбара (опционально)
+//   &::-webkit-scrollbar {
+//     width: rem(6);
+//   }
+//   &::-webkit-scrollbar-track {
+//     background: transparent;
+//   }
+//   &::-webkit-scrollbar-thumb {
+//     background: $bg-button;
+//     border-radius: rem(10);
+//   }
+
+//   @media (max-width: 768px) {
+//     padding: rem(20);
+//   }
+// }
+
+// // Кнопка "Показать всех"
+// .showAllRow {
+//   margin-bottom: rem(24);
+// }
+
+// .showAllBtn {
+//   background: transparent;
+//   border: none;
+//   color: var(--ds-color-text-primary);
+//   font-size: rem(15);
+//   cursor: pointer;
+//   padding: 0;
+//   transition: color 0.2s;
+
+//   &:hover {
+//     color: $bg-active;
+//   }
+// }
+
+// // Многоколоночный список (CSS Columns)
+// .providersColumns {
+//   column-count: 5;
+//   column-gap: rem(40);
+
+//   @media (max-width: 1200px) {
+//     column-count: 4;
+//   }
+//   @media (max-width: 992px) {
+//     column-count: 3;
+//   }
+//   @media (max-width: 768px) {
+//     column-count: 2;
+//     column-gap: rem(20);
+//   }
+//   @media (max-width: 480px) {
+//     column-count: 1;
+//   }
+// }
+
+// .providerGroup {
+//   break-inside: avoid; // Не разбиваем группу букв на разные колонки
+//   margin-bottom: rem(24);
+// }
+
+// .providerItem {
+//   display: flex;
+//   align-items: center;
+//   margin-bottom: rem(14);
+//   font-size: rem(15);
+//   cursor: pointer;
+//   transition: opacity 0.2s;
+
+//   &:hover {
+//     .providerName {
+//       color: var(--ds-color-text-primary);
+//     }
+//   }
+// }
+
+// .providerLetter {
+//   width: rem(24);
+//   color: $text-muted;
+//   font-weight: 600;
+//   font-size: rem(14);
+//   flex-shrink: 0;
+// }
+
+// .providerName {
+//   color: rgba(255, 255, 255, 0.85); // Чуть тусклее, при ховере становится белым
+//   transition: color 0.2s;
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+// }
+
+// // Плашка TOP
+// .topBadge {
+//   background: #d4af37; // Золотой/Желтый цвет как на скрине
+//   color: #000;
+//   font-size: rem(10);
+//   font-weight: 800;
+//   padding: rem(2) rem(6);
+//   border-radius: rem(4);
+//   margin-left: rem(8);
+//   line-height: 1;
+// }
+
+// .noResults {
+//   text-align: center;
+//   color: $text-muted;
+//   padding: rem(40) 0;
+//   font-size: rem(16);
+// }
+
+// // Анимации
+// @keyframes fadeIn {
+//   from {
+//     opacity: 0;
+//   }
+//   to {
+//     opacity: 1;
+//   }
+// }
+
+// @keyframes scaleUp {
+//   from {
+//     transform: scale(0.98);
+//     opacity: 0;
+//   }
+//   to {
+//     transform: scale(1);
+//     opacity: 1;
+//   }
+// }

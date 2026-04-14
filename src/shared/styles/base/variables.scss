@@ -1,0 +1,344 @@
+/**
+ * Дизайн-система казино (токены + совместимость со старыми --*-переменными).
+ * Миксины кнопок/инпутов/состояний: @see helpers/mixins.scss (ds-button-*, ds-input-*, ds-interactive-*).
+ */
+@use "sass:map";
+@use "../helpers/functions" as *;
+
+// =============================================================================
+// SCSS: шаг отступов ds-space($step) — зеркалит --ds-space-* в :root
+// =============================================================================
+
+$ds-spacing-keys: (
+  1: 4px,
+  2: 8px,
+  3: 12px,
+  4: 16px,
+  5: 24px,
+  6: 32px,
+  7: 48px,
+  8: 64px,
+);
+
+@function ds-space($step) {
+  @return map.get($ds-spacing-keys, $step);
+}
+
+// =============================================================================
+// :root — дизайн-токены (темная премиум-тема, высокий контраст)
+// =============================================================================
+
+:root {
+  // ---------------------------------------------------------------------------
+  // Макет / контейнеры
+  // ---------------------------------------------------------------------------
+  --bg-container-width: 1540px;
+  --small-container-width: 1147px;
+  --container-padding-x: #{rem(16)};
+
+  // ---------------------------------------------------------------------------
+  // Фон: базовый градиент страницы + уровни для карточек / модалок
+  // ---------------------------------------------------------------------------
+  --ds-color-bg-page: #0a0c14;
+  --ds-color-bg-page-end: #151d2e;
+  --bg-color: linear-gradient(
+    90deg,
+    #2a3c74 0%,
+    var(--ds-color-bg-page-end) 100%
+  );
+
+  --ds-color-bg-surface: rgba(255, 255, 255, 0.04);
+  --ds-color-bg-surface-hover: rgba(255, 255, 255, 0.07);
+  --ds-color-bg-elevated: rgba(36, 40, 72, 0.92);
+  --ds-color-bg-input: rgba(0, 0, 0, 0.35);
+  --ds-color-bg-input-disabled: rgba(255, 255, 255, 0.04);
+
+  // ---------------------------------------------------------------------------
+  // Текст
+  // ---------------------------------------------------------------------------
+  --ds-color-text-primary: #ffffff;
+  --ds-color-text-secondary: #9fa3c4;
+  --ds-color-text-disabled: rgba(159, 163, 196, 0.45);
+  --ds-color-text-inverse: #0a0c14;
+  --ds-color-text-violet-light: #c4b5fd;
+  --ds-color-text-error-light: #fecaca;
+
+  // ---------------------------------------------------------------------------
+  // Границы
+  // ---------------------------------------------------------------------------
+  --ds-color-border-default: rgba(255, 255, 255, 0.1);
+  --ds-color-border-strong: rgba(255, 255, 255, 0.16);
+  --ds-color-border-accent: rgba(99, 102, 241, 0.55);
+  /* Сплошные бордеры карточек / ЛК (legacy #4a5080) */
+  --ds-color-border-deep: #4a5080;
+  /* Акцентные обводки и ссылки (legacy indigo-500) */
+  --ds-color-accent-indigo: #6366f1;
+
+  // ---------------------------------------------------------------------------
+  // Primary / Secondary (бренд казино)
+  // ---------------------------------------------------------------------------
+  --ds-color-primary: #6a58f5;
+  --ds-color-primary-hover: #7d6ff7;
+  --ds-color-primary-active: #5846e0;
+  --ds-color-primary-muted: rgba(106, 88, 245, 0.22);
+
+  --ds-color-secondary: #2bc7de;
+  --ds-color-secondary-hover: #52d3e6;
+  --ds-color-secondary-active: #1fa3b7;
+
+  // ---------------------------------------------------------------------------
+  // Семантика (состояния)
+  // ---------------------------------------------------------------------------
+  --ds-color-success: #22c55e;
+  --ds-color-success-muted: rgba(34, 197, 94, 0.18);
+  --ds-color-warning: #f59e0b;
+  --ds-color-warning-muted: rgba(245, 158, 11, 0.18);
+  --ds-color-error: #ef4444;
+  --ds-color-error-muted: rgba(239, 68, 68, 0.18);
+
+  // ---------------------------------------------------------------------------
+  // Фокус / доступность (явное свечение под тёмную тему)
+  // ---------------------------------------------------------------------------
+  --ds-color-focus-ring: var(--ds-color-secondary);
+  --ds-focus-ring-width: 2px;
+  --ds-focus-ring-offset: 2px;
+
+  // ---------------------------------------------------------------------------
+  // Градиенты (CTA, хедер, чат — единая логика)
+  // ---------------------------------------------------------------------------
+  --gradient-main: linear-gradient(90deg, #795dd7 0%, #3e45be 100%);
+  --gradient-button: linear-gradient(90deg, #ed721d 0%, #d51b5b 100%);
+  --gradient-chat: linear-gradient(90deg, #795dd7 0%, #3e45be 100%);
+  --gradient-home: linear-gradient(90deg, #2a3c74 0%, #151d2e 100%);
+  --gradient-up: linear-gradient(90deg, #3e45be 0%, #795dd7 100%);
+  --gradient-vector: linear-gradient(90deg, #3e45be 0%, #795dd7 100%);
+
+  // ---------------------------------------------------------------------------
+  // Отступы (строго 4 · n)
+  // ---------------------------------------------------------------------------
+  --ds-space-1: 4px;
+  --ds-space-2: 8px;
+  --ds-space-3: 12px;
+  --ds-space-4: 16px;
+  --ds-space-5: 24px;
+  --ds-space-6: 32px;
+  --ds-space-7: 48px;
+  --ds-space-8: 64px;
+
+  /// Совместимость: старые --space-* (без «случайных» 20px)
+  --space-1: var(--ds-space-1);
+  --space-2: var(--ds-space-2);
+  --space-3: var(--ds-space-3);
+  --space-4: var(--ds-space-4);
+  --space-5: var(--ds-space-5);
+  --space-6: var(--ds-space-6);
+
+  // ---------------------------------------------------------------------------
+  // Радиусы: кнопки / инпуты / карточки
+  // ---------------------------------------------------------------------------
+  --ds-radius-sm: 8px;
+  --ds-radius-md: 12px;
+  --ds-radius-lg: 16px;
+  --ds-radius-xl: 20px;
+  --ds-radius-pill: 9999px;
+
+  // ---------------------------------------------------------------------------
+  // Pill-навигация: ЛК, партнёры, Game Type (см. mixins ds-pill-nav-* , config pillNav.ts)
+  // ---------------------------------------------------------------------------
+  --ds-pill-nav-gap: 12px;
+  --ds-pill-nav-gap-tablet: 8px;
+  --ds-pill-nav-gap-tight: 4px;
+  --ds-pill-nav-font-size: clamp(13px, 1.1vw, 16px);
+  --ds-pill-nav-font-size-md: clamp(12px, 1.05vw, 14px);
+  --ds-pill-nav-font-size-tight: 10px;
+  --ds-pill-nav-py: 12px;
+  --ds-pill-nav-px: 28px;
+  --ds-pill-nav-py-md: 10px;
+  --ds-pill-nav-px-md: 20px;
+  --ds-pill-nav-py-tight: 10px;
+  --ds-pill-nav-px-tight: 6px;
+  --ds-pill-nav-radius: 100px;
+  --ds-pill-nav-color: rgba(255, 255, 255, 0.82);
+  --ds-pill-nav-border: rgba(74, 80, 128, 0.45);
+  --ds-pill-nav-bg: rgba(30, 35, 60, 0.35);
+  --ds-pill-nav-bg-hover: rgba(30, 35, 60, 0.55);
+  --ds-pill-nav-border-hover: rgba(99, 102, 241, 0.45);
+  --ds-pill-nav-active-bg: linear-gradient(
+    180deg,
+    rgba(60, 70, 110, 0.65) 0%,
+    rgba(40, 45, 75, 0.75) 100%
+  );
+  --ds-pill-nav-active-border: var(--ds-color-accent-indigo);
+  --ds-pill-nav-active-shadow: 0 4px 18px rgba(99, 102, 241, 0.2);
+  --ds-pill-nav-chip-min-height: 36px;
+  --ds-pill-nav-chip-px: 14px;
+  --ds-pill-nav-chip-font-size: 13px;
+  --ds-pill-nav-chip-font-weight: 500;
+  --ds-pill-nav-chip-list-gap: var(--ds-space-2);
+
+  --radius-xs: var(--ds-space-1);
+  --radius-sm: var(--ds-radius-sm);
+  --radius-md: var(--ds-radius-md);
+  --radius-lg: var(--ds-radius-lg);
+  --radius-xl: var(--ds-radius-lg);
+  --radius-full: var(--ds-radius-pill);
+
+  // ---------------------------------------------------------------------------
+  // Типографика: шкала + межстрочный интервал (база 4px)
+  // ---------------------------------------------------------------------------
+  --ds-font-family-base: var(--font-proxima-nova), "Proxima Nova", sans-serif;
+  --ds-font-family-heading: var(--font-open-sans), "Open Sans", sans-serif;
+
+  --font-family-base: var(--ds-font-family-base);
+  --font-family-secondary: var(--ds-font-family-heading);
+
+  --ds-text-display-xl-size: 48px;
+  --ds-text-display-xl-lh: 56px;
+  --ds-text-display-lg-size: 40px;
+  --ds-text-display-lg-lh: 48px;
+
+  --ds-text-h1-size: 32px;
+  --ds-text-h1-lh: 40px;
+  --ds-text-h2-size: 28px;
+  --ds-text-h2-lh: 36px;
+  --ds-text-h3-size: 24px;
+  --ds-text-h3-lh: 32px;
+  --ds-text-h4-size: 20px;
+  --ds-text-h4-lh: 28px;
+  --ds-text-h5-size: 18px;
+  --ds-text-h5-lh: 24px;
+  --ds-text-h6-size: 16px;
+  --ds-text-h6-lh: 22px;
+
+  --ds-text-body-lg-size: 18px;
+  --ds-text-body-lg-lh: 28px;
+  --ds-text-body-md-size: 16px;
+  --ds-text-body-md-lh: 24px;
+  --ds-text-body-sm-size: 14px;
+  --ds-text-body-sm-lh: 20px;
+  --ds-text-caption-size: 12px;
+  --ds-text-caption-lh: 16px;
+
+  --font-xs: var(--ds-text-caption-size);
+  --font-sm: var(--ds-text-body-sm-size);
+  --font-md: var(--ds-text-body-md-size);
+  --font-lg: var(--ds-text-body-lg-size);
+  --font-xl: var(--ds-text-h5-size);
+  --font-2xl: var(--ds-text-h3-size);
+
+  --fw-thin: 100;
+  --fw-extralight: 200;
+  --fw-light: 300;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+  --fw-black: 900;
+
+  --ff-proxima-nova: var(--ds-font-family-base);
+  --ff-open-sans: var(--ds-font-family-heading);
+  --ff-roboto: var(--font-roboto), Roboto, sans-serif;
+  --ff-sf-pro-display:
+    var(--font-sf-pro-display), -apple-system, BlinkMacSystemFont, sans-serif;
+  --ff-inter: var(--font-inter), Inter, sans-serif;
+  --ff-arial: var(--font-arial), Arial, sans-serif;
+  --ff-tahoma: var(--font-tahoma), Tahoma, sans-serif;
+
+  // ---------------------------------------------------------------------------
+  // Контролы: высоты кнопок = инпутов (sm / md / lg)
+  // ---------------------------------------------------------------------------
+  --ds-control-height-sm: 36px;
+  --ds-control-height-md: 40px;
+  --ds-control-height-lg: 48px;
+
+  --ds-control-padding-x-sm: var(--ds-space-3);
+  --ds-control-padding-x-md: var(--ds-space-4);
+  --ds-control-padding-x-lg: var(--ds-space-5);
+
+  --ds-control-font-sm: var(--ds-text-body-sm-size);
+  --ds-control-font-md: var(--ds-text-body-md-size);
+  --ds-control-font-lg: var(--ds-text-body-lg-size);
+
+  --ds-control-radius: var(--ds-radius-pill);
+
+  // ---------------------------------------------------------------------------
+  // Инпуты: граница и свечение в фокусе
+  // ---------------------------------------------------------------------------
+  --ds-input-border: 1px solid var(--ds-color-border-default);
+  --ds-input-border-hover: 1px solid var(--ds-color-border-strong);
+  --ds-input-border-focus: 1px solid var(--ds-color-border-accent);
+  --ds-input-shadow-focus: 0 0 0 3px var(--ds-color-primary-muted);
+  --ds-input-radius: var(--ds-radius-md);
+
+  // ---------------------------------------------------------------------------
+  // Моушн
+  // ---------------------------------------------------------------------------
+  --ds-duration-fast: 0.15s;
+  --ds-duration-normal: 0.2s;
+  --ds-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-duration: var(--ds-duration-normal);
+
+  // ---------------------------------------------------------------------------
+  // Семантические алиасы (совместимость со всем проектом)
+  // ---------------------------------------------------------------------------
+  --white: #ffffff;
+  --black: #000000;
+
+  --color-light: var(--ds-color-text-primary);
+  --color-button-port: var(--ds-color-accent-cyan);
+
+  /* Акцентный циан для ссылок / неона (бывший cyan-100) */
+  --ds-color-accent-cyan: #c7f5fc;
+  --cyan-100: var(--ds-color-accent-cyan);
+  --cyan-500: var(--ds-color-secondary);
+  --cyan-600: var(--ds-color-secondary-active);
+
+  --success-500: var(--ds-color-success);
+  --success-600: #16a34a;
+  --warning-500: var(--ds-color-warning);
+  --warning-600: #d97706;
+  --danger-500: var(--ds-color-error);
+  --danger-600: #dc2626;
+  --info-500: var(--ds-color-secondary);
+  --info-600: var(--ds-color-secondary-active);
+
+  // ---------------------------------------------------------------------------
+  // Макет: фиксированный хедер → отступ main.mainContent (см. shared/config/layout.ts)
+  // ---------------------------------------------------------------------------
+  --app-header-height: 116px;
+  --app-main-below-header: 4px;
+
+  // ---------------------------------------------------------------------------
+  // Типографика страниц (body + согласованность с --ds-text-*; см. shared/config/typography.ts)
+  // ---------------------------------------------------------------------------
+  --app-body-font-size: clamp(14px, 0.28vw + 13.2px, 18px);
+  --app-body-line-height: 1.55;
+  --app-body-letter-spacing: -0.02em;
+
+  --app-heading-page-size: clamp(22px, 2.4vw + 14px, var(--ds-text-h2-size));
+  --app-heading-page-size-sm: clamp(20px, 2vw + 12px, var(--ds-text-h3-size));
+  --app-heading-page-lh: 1.2;
+  --app-heading-page-ls: -0.02em;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --app-header-height: 124px;
+    --app-main-below-header: 4px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --app-header-height: 148px;
+    --app-main-below-header: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --app-header-height: 154px;
+    --app-main-below-header: 4px;
+  }
+}

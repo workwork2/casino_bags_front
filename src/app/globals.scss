@@ -1,0 +1,295 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+}
+
+footer {
+  flex-shrink: 0;
+  padding-left: calc(var(--app-sidebar-offset) + var(--app-sidebar-gap));
+  box-sizing: border-box;
+  transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root {
+  /* --app-header-height / --app-main-below-header задаются в shared/styles/base/variables.scss */
+
+  /*
+   * Стеклянные панели (новости, FAQ, настройки, лояльность, турниры, карусели главной).
+   * Чуть прозрачнее прежнего #ffffff05 — фон и рамка из одной системы.
+   */
+  --glass-surface: rgba(255, 255, 255, 0.028);
+  --glass-border: rgba(255, 255, 255, 0.088);
+  --glass-blur: 10px;
+  /* Типографика заголовков внутри таких блоков (страницы: новости, турниры, FAQ…) */
+  --glass-heading-color: var(--ds-color-text-primary);
+  --glass-heading-size: var(--app-heading-page-size);
+  --glass-heading-size-sm: var(--app-heading-page-size-sm);
+  --glass-heading-weight: var(--fw-bold);
+  --glass-heading-ls: var(--app-heading-page-ls);
+  --glass-text-muted: var(--ds-color-text-secondary);
+  --glass-text-body: var(--ds-color-text-secondary);
+
+  /* Дефолт до гидрации SlideBar; затем обновляется из SlideBar.tsx */
+  --app-sidebar-offset: 260px;
+  /* Зазор сайдбар → контент (шкала ds-space) */
+  --app-sidebar-gap: var(--ds-space-4);
+
+  /*
+   * Пилюли лобби: высоты = кнопки/инпуты (--ds-control-height-*)
+   */
+  --lobby-control-height: var(--ds-control-height-md);
+  --lobby-pill-padding-x: var(--ds-control-padding-x-md);
+  --lobby-pill-radius: var(--ds-radius-pill);
+  --lobby-search-icon-left: var(--ds-space-4);
+  --lobby-search-input-pl: calc(var(--ds-space-4) + var(--ds-space-5));
+
+  /* Единая фиолетовая CTA как у Deposit в хедере (EmptyState, ссылки, ЛК) */
+  --app-cta-gradient: linear-gradient(
+    180deg,
+    #b4a9ff 0%,
+    #8b7cff 28%,
+    #6a58f5 65%,
+    #4f3fd4 100%
+  );
+  --app-cta-border: rgba(255, 255, 255, 0.42);
+  --app-cta-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 4px 22px rgba(100, 80, 255, 0.55),
+    0 0 32px rgba(140, 120, 255, 0.38);
+
+  /* Выпадашки (баланс, уведомления, язык) — один стиль */
+  --app-popover-gradient: linear-gradient(
+    165deg,
+    rgba(62, 53, 168, 0.98) 0%,
+    rgba(42, 60, 115, 0.98) 100%
+  );
+  --app-popover-border: 1px solid rgba(255, 255, 255, 0.12);
+  --app-popover-radius: var(--ds-radius-md);
+  --app-popover-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
+
+  /* Модалки — одна подложка и размер */
+  --app-modal-overlay: rgba(6, 4, 18, 0.82);
+  --app-modal-surface: linear-gradient(
+    165deg,
+    rgba(52, 48, 98, 0.98) 0%,
+    rgba(36, 40, 72, 0.99) 100%
+  );
+  --app-modal-border: 1px solid rgba(255, 255, 255, 0.14);
+  --app-modal-radius: var(--ds-radius-xl);
+  --app-modal-max-width: 440px;
+
+  /* Слои: хедер < выпадашки < бургер < чат < модалки */
+  --z-header: 1000;
+  --z-sidebar: 1001;
+  --z-chat: 10050;
+  --app-mobile-bottom-nav-height: 80px;
+  --z-dropdown: 10500;
+  --z-burger-backdrop: 10800;
+  --z-burger-panel: 10801;
+  --z-mobile-bottom-nav: 10900;
+  --z-modal: 12000;
+}
+
+/* Кнопка уровня «Deposit» в хедере */
+.app-cta-primary {
+  appearance: none;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: var(--lobby-control-height);
+  padding: 0 var(--ds-space-6);
+  border-radius: var(--lobby-pill-radius, 999px);
+  border: 1px solid var(--app-cta-border);
+  background: var(--app-cta-gradient);
+  box-shadow: var(--app-cta-shadow);
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-control-font-md);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(40, 25, 120, 0.35);
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    filter var(--ds-duration-normal) var(--ds-ease-standard),
+    border-color var(--ds-duration-normal) var(--ds-ease-standard),
+    box-shadow var(--ds-duration-normal) var(--ds-ease-standard),
+    transform var(--ds-duration-fast) var(--ds-ease-standard);
+  white-space: nowrap;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.55);
+    filter: brightness(1.05) saturate(1.05);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      0 6px 28px rgba(110, 90, 255, 0.6),
+      0 0 40px rgba(160, 140, 255, 0.45);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    filter: none;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 var(--ds-space-5);
+    font-size: var(--ds-control-font-sm);
+  }
+}
+
+/* Вторичная пилюля (полная ширина в карточках) — тот же радиус и высота */
+.app-cta-secondary {
+  appearance: none;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--lobby-control-height);
+  padding: 0 var(--ds-space-5);
+  border-radius: var(--lobby-pill-radius, 999px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-control-font-sm);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  transition:
+    background var(--ds-duration-normal) var(--ds-ease-standard),
+    border-color var(--ds-duration-normal) var(--ds-ease-standard),
+    transform var(--ds-duration-fast) var(--ds-ease-standard);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.38);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+/* Единая кнопка закрытия в модалках */
+.app-modal-close {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-control-height-md);
+  height: var(--ds-control-height-md);
+  padding: 0;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--ds-radius-md);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.88);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--ds-color-text-primary);
+  }
+}
+
+/* Основное действие в модалке (Save и т.п.) — как глобальная CTA */
+.app-modal-primary-action {
+  appearance: none;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 280px;
+  min-height: var(--lobby-control-height);
+  padding: 0 var(--ds-space-5);
+  border-radius: var(--lobby-pill-radius, 999px);
+  border: 1px solid var(--app-cta-border);
+  background: var(--app-cta-gradient);
+  box-shadow: var(--app-cta-shadow);
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-control-font-md);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    filter var(--ds-duration-normal) var(--ds-ease-standard),
+    transform var(--ds-duration-fast) var(--ds-ease-standard);
+
+  &:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (max-width: 1450px) {
+  :root {
+    --app-sidebar-offset: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --app-sidebar-offset: 0px;
+    --app-sidebar-gap: 0px;
+    --lobby-control-height: var(--ds-control-height-lg);
+    --lobby-pill-padding-x: var(--ds-space-4);
+    --lobby-search-icon-left: var(--ds-space-4);
+    --lobby-search-input-pl: calc(var(--ds-space-4) + var(--ds-space-6));
+  }
+
+  footer {
+    padding-bottom: calc(
+      var(--app-mobile-bottom-nav-height) + env(safe-area-inset-bottom, 0px)
+    );
+  }
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: calc(
+    var(--app-header-height, 136px) + var(--app-main-below-header, 8px)
+  );
+  padding-left: calc(var(--app-sidebar-offset) + var(--app-sidebar-gap));
+  box-sizing: border-box;
+  max-width: 100%;
+  transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding-bottom: calc(
+      var(--app-mobile-bottom-nav-height) + env(safe-area-inset-bottom, 0px)
+    );
+  }
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}

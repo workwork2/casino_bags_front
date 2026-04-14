@@ -1,0 +1,135 @@
+/* Единая сетка заголовков для всех страниц /partners/* */
+$mobile-bp: 768px;
+$icon-col: 48px;
+$head-gap: 16px;
+
+.partnersNavShell {
+  @include casino-page-shell;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.partnersPageHead {
+  margin-bottom: 24px;
+}
+
+.partnersPageHeadGrid {
+  display: grid;
+  grid-template-columns: $icon-col minmax(0, 1fr);
+  column-gap: $head-gap;
+  align-items: start;
+
+  @media (max-width: $mobile-bp) {
+    grid-template-columns: 44px minmax(0, 1fr);
+    column-gap: 12px;
+    align-items: flex-start;
+  }
+}
+
+.partnersIconSlot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: $icon-col;
+  padding-top: 2px;
+  box-sizing: border-box;
+
+  @media (max-width: $mobile-bp) {
+    width: 44px;
+    justify-content: flex-start;
+    padding-top: 4px;
+  }
+}
+
+.partnersIconSvg {
+  font-size: 32px;
+  line-height: 1;
+  color: var(--glass-heading-color);
+  flex-shrink: 0;
+
+  @media (max-width: $mobile-bp) {
+    font-size: 22px;
+  }
+
+  @media (min-width: #{$mobile-bp + 1px}) and (max-width: 1024px) {
+    font-size: 28px;
+  }
+}
+
+.partnersHeadBody {
+  min-width: 0;
+}
+
+.partnersKicker {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ds-color-accent-indigo);
+}
+
+.partnersH1 {
+  margin: 0 0 8px 0;
+  font-size: var(--glass-heading-size);
+  font-weight: var(--glass-heading-weight);
+  letter-spacing: var(--glass-heading-ls);
+  color: var(--glass-heading-color);
+  line-height: 1.15;
+
+  @media (max-width: $mobile-bp) {
+    font-size: var(--glass-heading-size-sm);
+  }
+}
+
+.partnersTitleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  min-width: 0;
+
+  .partnersH1 {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (max-width: $mobile-bp) {
+    flex-direction: column;
+    align-items: stretch;
+
+    .partnersH1 {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.partnersLead {
+  margin: 0;
+  max-width: 56rem;
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--glass-text-muted);
+
+  strong {
+    color: var(--glass-text-body);
+    font-weight: 600;
+  }
+
+  a {
+    color: var(--ds-color-accent-indigo);
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.partnersTitleRow + .partnersLead {
+  margin-top: 12px;
+}

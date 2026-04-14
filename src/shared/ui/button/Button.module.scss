@@ -1,0 +1,46 @@
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font: inherit;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: opacity 0.2s ease;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.ghost {
+  background: transparent;
+}
+
+.spinner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.hiddenLabel {
+  opacity: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

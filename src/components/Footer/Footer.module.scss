@@ -1,0 +1,537 @@
+$tablet-width: 1024px;
+$mobile-width: 768px;
+/* Одна ширина для Support, Log in и Sign up */
+$footer-action-pill-width: rem(200);
+
+.footer {
+  background: linear-gradient(180deg, rgba(88, 76, 237, 0.9) 0%, rgba(62, 53, 168, 0.9) 100%);
+  margin-top: rem(60); 
+  width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+
+  @media (max-width: $mobile-width) {
+    margin-top: rem(32);
+  }
+
+  &__grid {
+    display: grid;
+    /* Десктоп: 4 колонки */
+    grid-template-columns: 2.5fr 1fr 1fr 1fr; 
+    gap: rem(40);
+    padding-top: rem(80);    
+    padding-bottom: rem(80); 
+    box-sizing: border-box;
+
+    /* Планшет: бренд на всю ширину, CASINO | INFORMATION в две колонки, соцсети на всю ширину */
+    @media (max-width: $tablet-width) and (min-width: #{$mobile-width + 1px}) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      justify-items: stretch;
+      align-items: start;
+      row-gap: rem(28);
+      column-gap: rem(20);
+      padding-top: rem(44);
+      padding-bottom: rem(34);
+      padding-inline: 0;
+    }
+
+    @media (max-width: $mobile-width) {
+      /* Две равные колонки + одинаковые внешние отступы слева/справа (через .container) */
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      justify-items: stretch;
+      align-items: start;
+      row-gap: rem(18);
+      column-gap: rem(16);
+      padding-top: rem(28);
+      padding-bottom: rem(22);
+      /* Не дублируем padding с .container — иначе визуально «плывёт» баланс колонок */
+      padding-inline: 0;
+    }
+  }
+
+  /* --- 1. ЛЕВАЯ КОЛОНКА --- */
+  &__colBrand {
+    display: flex;
+    flex-direction: column;
+    gap: rem(36);
+
+    @media (max-width: $tablet-width) and (min-width: #{$mobile-width + 1px}) {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: $tablet-width) {
+      align-items: center; /* Центрируем внутри колонки */
+      width: 100%;
+    }
+
+    @media (max-width: $mobile-width) {
+      grid-column: 1 / -1;
+      align-items: stretch;
+    }
+  }
+
+  &__brandTop {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+
+    @media (max-width: $tablet-width) {
+      align-items: center; /* Лого и крипта строго по центру */
+    }
+
+    @media (max-width: $mobile-width) {
+      gap: rem(14);
+    }
+  }
+
+  &__logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+
+    img {
+      width: auto;
+      height: auto;
+      max-width: rem(104);
+      max-height: rem(104);
+      object-fit: contain;
+    }
+
+    @media (max-width: 1450px) {
+      img {
+        max-width: rem(52);
+        max-height: rem(52);
+      }
+    }
+
+    @media (max-width: $mobile-width) {
+      img {
+        max-width: rem(54);
+        max-height: rem(54);
+      }
+    }
+
+    @media (max-width: 400px) {
+      img {
+        max-width: rem(50);
+        max-height: rem(50);
+      }
+    }
+
+    &:hover { opacity: 0.8; }
+  }
+
+  &__cryptoList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(12);
+
+    @media (max-width: $tablet-width) {
+      justify-content: center; /* Центрируем пилюли крипты */
+    }
+
+    @media (max-width: $mobile-width) {
+      display: none;
+    }
+  }
+
+  &__cryptoItem {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    background: rgba(0, 0, 0, 0.25); 
+    padding: rem(8) rem(16);
+    border-radius: rem(50); 
+    color: var(--ds-color-text-primary);
+    font-size: rem(14);
+    font-weight: 600;
+    transition: transform 0.2s ease, background 0.2s ease;
+
+    &:hover {
+      transform: translateY(rem(-2));
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    @media (max-width: $mobile-width) {
+      padding: rem(6) rem(12);
+      font-size: rem(12);
+    }
+  }
+
+  /* Блок кнопок */
+  &__actionsRow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: rem(16);
+
+    @media (max-width: 1100px) and (min-width: #{$mobile-width + 1px}) {
+      justify-content: center;
+      align-items: stretch;
+      width: 100%;
+      max-width: rem(420);
+      margin-left: auto;
+      margin-right: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: rem(12);
+      box-sizing: border-box;
+    }
+
+    @media (max-width: $mobile-width) {
+      flex-direction: column;
+      width: 100%;
+      max-width: rem(300);
+      margin-left: auto;
+      margin-right: auto;
+      gap: rem(10);
+    }
+  }
+
+  /* КНОПКА SUPPORT */
+  &__supportBtn {
+    background: linear-gradient(90deg, #3E45BE 0%, #795DD7 100%); 
+    border-radius: rem(100);
+    padding: 0 rem(16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem(10);
+    min-height: rem(48);
+    min-width: $footer-action-pill-width;
+    width: $footer-action-pill-width;
+    max-width: 100%;
+    box-sizing: border-box;
+    color: var(--ds-color-text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: rem(15);
+    box-shadow: 0 rem(4) rem(15) rgba(62, 69, 190, 0.4);
+    transition: transform 0.2s ease, filter 0.2s ease;
+
+    &:hover {
+      transform: translateY(rem(-2));
+      filter: brightness(1.1);
+    }
+
+    @media (max-width: 1100px) and (min-width: #{$mobile-width + 1px}) {
+      grid-column: 1 / -1;
+      width: 100%;
+      max-width: rem(420);
+      margin-left: auto;
+      margin-right: auto;
+      min-width: 0;
+    }
+
+    @media (max-width: $mobile-width) {
+      width: 100%;
+      max-width: rem(300);
+      min-width: 0;
+    }
+  }
+
+  &__authRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem(8);
+    flex-wrap: wrap;
+
+    @media (max-width: 1100px) and (min-width: #{$mobile-width + 1px}) {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      width: 100%;
+      max-width: rem(420);
+      margin-left: auto;
+      margin-right: auto;
+      gap: rem(12);
+      box-sizing: border-box;
+    }
+
+    @media (max-width: $mobile-width) {
+      width: 100%;
+      max-width: rem(300);
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
+  }
+
+  &__authLogin {
+    cursor: pointer;
+    font: inherit;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(48);
+    min-width: $footer-action-pill-width;
+    width: $footer-action-pill-width;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 rem(12);
+    border-radius: rem(100);
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--ds-color-text-primary);
+    font-size: rem(15);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    @media (max-width: 1100px) and (min-width: #{$mobile-width + 1px}) {
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+      flex: none;
+    }
+
+    @media (max-width: $mobile-width) {
+      flex: 1 1 50%;
+      width: auto;
+      min-width: 0;
+    }
+  }
+
+  &__authRegister {
+    cursor: pointer;
+    font: inherit;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(48);
+    min-width: $footer-action-pill-width;
+    width: $footer-action-pill-width;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 rem(12);
+    border-radius: rem(100);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: linear-gradient(
+      180deg,
+      rgba(88, 76, 237, 0.92) 0%,
+      rgba(62, 53, 168, 0.98) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      0 3px 14px rgba(40, 32, 120, 0.4);
+    color: var(--ds-color-text-primary);
+    font-size: rem(15);
+    font-weight: 600;
+    text-decoration: none;
+    transition: filter 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+      filter: brightness(1.06);
+      border-color: rgba(255, 255, 255, 0.32);
+    }
+
+    @media (max-width: 1100px) and (min-width: #{$mobile-width + 1px}) {
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+      flex: none;
+    }
+
+    @media (max-width: $mobile-width) {
+      flex: 1 1 50%;
+      width: auto;
+      min-width: 0;
+    }
+  }
+
+  &__langWrap {
+    @media (max-width: 1100px) and (min-width: #{$mobile-width + 1px}) {
+      grid-column: 1 / -1;
+      width: 100%;
+      max-width: rem(420);
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    @media (max-width: $mobile-width) {
+      width: 100%;
+      max-width: rem(300);
+    }
+  }
+
+  /* --- НАВИГАЦИЯ --- */
+  &__colNav {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+    box-sizing: border-box;
+    min-width: 0;
+
+    @media (max-width: $tablet-width) and (min-width: #{$mobile-width + 1px}) {
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      max-width: none;
+      margin-inline: 0;
+    }
+
+    @media (max-width: $mobile-width) {
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      max-width: none;
+      margin-inline: 0;
+      gap: rem(10);
+    }
+  }
+
+  &__navTitle {
+    color: rgba(255, 255, 255, 0.5); 
+    font-size: rem(12);
+    font-weight: 700;
+    letter-spacing: rem(1);
+    margin: 0;
+  }
+
+  &__navList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+
+    @media (max-width: $tablet-width) and (min-width: #{$mobile-width + 1px}) {
+      align-items: center;
+      width: 100%;
+    }
+
+    @media (max-width: $mobile-width) {
+      align-items: center;
+      width: 100%;
+      gap: rem(10);
+    }
+
+    a {
+      color: var(--ds-color-text-primary);
+      font-size: rem(15);
+      text-decoration: none;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  /* --- СОЦСЕТИ --- */
+  &__colSocials {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+
+    @media (max-width: $tablet-width) and (min-width: #{$mobile-width + 1px}) {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: $tablet-width) {
+      align-items: center; /* Соцсети строго по центру */
+    }
+
+    @media (max-width: $mobile-width) {
+      align-items: center;
+      grid-column: 1 / -1;
+      width: 100%;
+    }
+  }
+
+  &__socialList {
+    display: flex;
+    gap: rem(12);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: rem(44);
+      height: rem(44);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: var(--ds-color-text-primary);
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(rem(-3));
+      }
+    }
+  }
+
+  /* --- НИЖНЯЯ ПАНЕЛЬ --- */
+  &__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.15); 
+    padding: rem(20) 0; 
+
+    @media (max-width: $mobile-width) {
+      padding: rem(12) 0;
+    }
+  }
+
+  &__bottomContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: $tablet-width) {
+      justify-content: center; /* Центрируем нижнюю полосу */
+    }
+  }
+
+  &__legalInfo {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+
+    p {
+      margin: 0;
+      font-size: rem(14);
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    @media (max-width: $tablet-width) {
+      flex-direction: column; /* Текст под кружком 18+ */
+      text-align: center;
+    }
+
+    @media (max-width: $mobile-width) {
+      gap: rem(8);
+
+      p {
+        font-size: rem(12);
+      }
+    }
+  }
+
+  &__ageLimit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(36);
+    height: rem(36);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: rem(13);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+}

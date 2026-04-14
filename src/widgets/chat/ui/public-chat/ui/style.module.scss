@@ -1,0 +1,366 @@
+@mixin scrollbars($size, $foreground-color, $background-color: transparent) {
+    &::-webkit-scrollbar {
+        width: $size;
+        height: $size;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $foreground-color;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $background-color;
+    }
+
+    scrollbar-color: $foreground-color $background-color;
+}
+
+.publicChat {
+    --accent: var(--ds-color-accent-cyan);
+    --text: var(--ds-color-text-primary);
+    --muted: rgba(255, 255, 255, 0.55);
+    --border: rgba(255, 255, 255, 0.15);
+
+    position: fixed;
+    right: 0;
+    width: 100%;
+    max-width: rem(380);
+    z-index: var(--z-chat, 10050);
+
+    background: linear-gradient(180deg, rgba(88, 76, 237, 0.96) 0%, rgba(62, 53, 168, 0.96) 100%);
+    box-shadow: rem(-6) 0 rem(28) rgba(0, 0, 0, 0.35);
+    border-left: 1px solid var(--border);
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: inherit;
+    font-size: rem(15);
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+
+    /* Десктоп / планшет: под фиксированным хедером, не наезжаем на него */
+    @media (min-width: 769px) {
+        top: var(--app-header-height, 128px);
+        height: calc(100dvh - var(--app-header-height, 128px));
+        max-height: calc(100dvh - var(--app-header-height, 128px));
+    }
+
+    /* Телефон: на весь экран */
+    @media (max-width: 768px) {
+        top: 0;
+        left: 0;
+        max-width: none;
+        height: 100dvh;
+        height: 100vh;
+        max-height: 100dvh;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        box-sizing: border-box;
+    }
+}
+
+.publicChatHeader {
+    padding: rem(14) rem(12);
+    background: rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: rem(10);
+
+    @media (max-width: 768px) {
+        padding-top: rem(10);
+        padding-bottom: rem(10);
+    }
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+    min-width: 0;
+}
+
+.headerIconWrap {
+    width: rem(44);
+    height: rem(44);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ds-color-text-primary);
+    flex-shrink: 0;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    flex-shrink: 0;
+}
+
+.publicChatUserName {
+    margin: 0;
+    font-size: rem(16);
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.statusText {
+    display: block;
+    margin-top: rem(2);
+    font-size: rem(12);
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.statusOnline {
+    color: #4ade80;
+}
+
+.statusPending {
+    color: var(--ds-color-warning);
+}
+
+.closeButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(40);
+    height: rem(40);
+    border: none;
+    border-radius: rem(8);
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+    transition: background 0.2s ease, opacity 0.2s ease;
+    opacity: 0.92;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        width: rem(48);
+        height: rem(48);
+        border-radius: rem(12);
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
+
+.publicChatMessages {
+    flex: 1;
+    overflow-y: auto;
+    padding: rem(14) rem(12);
+    display: flex;
+    flex-direction: column;
+    gap: rem(14);
+    min-height: 0;
+
+    @include scrollbars(5px, rgba(255, 255, 255, 0.28), transparent);
+}
+
+.connectingBox,
+.emptyBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: rem(10);
+    padding: rem(32) rem(16);
+    text-align: center;
+    flex: 1;
+}
+
+.connectingText,
+.emptyText {
+    font-size: rem(15);
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+.publicChatMessage {
+    display: flex;
+    align-items: flex-end;
+    gap: rem(8);
+    max-width: 92%;
+
+    &[data-pending='true'] {
+        opacity: 0.65;
+    }
+}
+
+.messageFailed {
+    display: block;
+    font-size: rem(12);
+    color: #f87171;
+    margin-top: rem(4);
+}
+
+.publicChatMessageUser {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.avatarPlaceholder {
+    width: rem(28);
+    height: rem(28);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ds-color-text-primary);
+    font-size: rem(12);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.publicChatMessageSender {
+    display: block;
+    font-size: rem(11);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-bottom: rem(4);
+    margin-left: rem(4);
+}
+
+.bubble {
+    padding: rem(10) rem(14);
+    position: relative;
+    word-break: break-word;
+}
+
+.bubbleOther {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: rem(12) rem(12) rem(12) rem(4);
+    color: var(--text);
+}
+
+.bubbleMe {
+    background: linear-gradient(90deg, #3e45be 0%, #795dd7 100%);
+    border-radius: rem(12) rem(12) rem(4) rem(12);
+    box-shadow: 0 rem(4) rem(14) rgba(62, 69, 190, 0.35);
+}
+
+.publicChatMessageContent {
+    font-size: rem(15);
+    line-height: 1.4;
+
+    .bubbleMe & {
+        color: var(--ds-color-text-primary);
+        font-weight: 500;
+    }
+
+    .bubbleOther & {
+        color: var(--text);
+    }
+}
+
+.timeStr {
+    font-size: rem(11);
+    color: rgba(255, 255, 255, 0.38);
+    text-align: right;
+    margin-top: rem(4);
+    margin-right: rem(2);
+}
+
+.publicChatInputContainer {
+    padding: rem(12) rem(12) rem(14);
+    background: rgba(0, 0, 0, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+.publicChatInputWrapper {
+    display: flex;
+    align-items: center;
+    gap: rem(6);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: rem(999);
+    padding: rem(4) rem(6) rem(4) rem(16);
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+    &:focus-within {
+        border-color: rgba(199, 245, 252, 0.45);
+        box-shadow: 0 0 0 rem(1) rgba(199, 245, 252, 0.2);
+    }
+}
+
+.publicChatInput {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    color: var(--text);
+    font-size: rem(15);
+    padding: rem(8) 0;
+    height: rem(40);
+
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.45);
+    }
+}
+
+.publicChatSendButton {
+    flex-shrink: 0;
+    width: rem(40);
+    height: rem(40);
+    border: none;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: linear-gradient(90deg, #3e45be 0%, #795dd7 100%);
+    color: var(--ds-color-text-primary);
+    transition:
+        filter 0.2s ease,
+        transform 0.1s ease;
+    box-shadow: 0 rem(3) rem(12) rgba(62, 69, 190, 0.45);
+
+    &:hover:not(:disabled) {
+        filter: brightness(1.08);
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.96);
+    }
+
+    &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+}
+
+.publicChatAuthPrompt {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: rem(15);
+    padding: rem(24) rem(16);
+    line-height: 1.5;
+}
+
+.authHeaderBar {
+    display: flex;
+    justify-content: flex-end;
+    padding: rem(12) rem(12) 0;
+}

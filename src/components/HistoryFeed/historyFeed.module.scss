@@ -1,0 +1,833 @@
+$color-text-main: var(--ds-color-text-primary);
+$color-text-dim: var(--ds-color-text-secondary);
+$color-green: var(--ds-color-success);
+$color-red: var(--ds-color-error);
+$color-amber: var(--ds-color-warning);
+
+$tablet-width: 1024px;
+$mobile-width: 767px;
+
+.section {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: rgba(30, 35, 60, 0.22);
+  border: 1px solid rgba(74, 80, 128, 0.38);
+  border-radius: 20px;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+
+  @media (max-width: $mobile-width) {
+    padding: 16px;
+  }
+}
+
+.headerWrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.titleIcon {
+  flex-shrink: 0;
+  color: rgba(199, 245, 252, 0.95);
+  opacity: 0.95;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.title {
+  font-size: var(--glass-heading-size-sm);
+  font-weight: var(--glass-heading-weight);
+  letter-spacing: var(--glass-heading-ls);
+  color: var(--glass-heading-color);
+  margin: 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+
+  @media (max-width: $mobile-width) {
+    overflow-x: auto;
+    padding-bottom: 5px;
+    flex-wrap: nowrap;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.tabButton {
+  background: rgba(30, 35, 60, 0.4);
+  border: 1px solid rgba(74, 80, 128, 0.4);
+  border-radius: 999px;
+  padding: 8px 16px;
+  color: rgba(159, 163, 196, 0.95);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(30, 35, 60, 0.6);
+    border-color: rgba(99, 102, 241, 0.35);
+    color: var(--ds-color-text-primary);
+  }
+
+  &.active {
+    color: var(--ds-color-text-primary);
+    background: linear-gradient(
+      180deg,
+      rgba(60, 70, 110, 0.65) 0%,
+      rgba(40, 45, 75, 0.8) 100%
+    );
+    border-color: var(--ds-color-accent-indigo);
+  }
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+
+  @media (max-width: $tablet-width) {
+    overflow: visible;
+  }
+}
+
+/* Wrapper keeps desktop grid/flex unchanged (display: contents); card layout gives it a real box */
+.cellValue {
+  display: contents;
+}
+
+/* ——— Bets: как на главной + колонка Status ——— */
+$bet-grid-desktop: 1.15fr 0.95fr 0.72fr 1fr 0.72fr 1fr 0.95fr;
+$bet-grid-tablet: 1.2fr 1fr 1fr 0.75fr 1fr 0.9fr;
+$bet-grid-mobile: 1fr 1fr;
+
+.betHeaderRow,
+.betRow {
+  display: grid;
+  grid-template-columns: $bet-grid-desktop;
+  align-items: center;
+  padding: 10px 12px;
+  gap: 10px;
+
+  @media (max-width: $tablet-width) {
+    grid-template-columns: $bet-grid-tablet;
+  }
+
+  @media (max-width: $mobile-width) {
+    grid-template-columns: $bet-grid-mobile;
+    padding: 10px 8px;
+  }
+}
+
+.betHeaderRow {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 4px;
+
+  .cell {
+    color: $color-text-dim;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+}
+
+.betRow {
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition:
+    background-color 0.2s,
+    border-radius 0.2s;
+  cursor: default;
+
+  &.clickable {
+    cursor: pointer;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-bottom-color: transparent;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.colTimeBet {
+  @media (max-width: $tablet-width) {
+    display: none;
+  }
+}
+
+.colUserBet {
+  @media (max-width: $tablet-width) {
+    display: none;
+  }
+}
+
+.colBetAmt,
+.colMultBet {
+  @media (max-width: $mobile-width) {
+    display: none;
+  }
+}
+
+.colStatusBet {
+  @media (max-width: $mobile-width) {
+    display: none;
+  }
+}
+
+/* ——— Transactions ——— */
+$tx-grid-desktop: 1.15fr 1.05fr 0.85fr 1fr 0.75fr 1fr;
+$tx-grid-tablet: 1.1fr 1fr 0.9fr 1fr 0.95fr;
+$tx-grid-mobile: 1fr 1fr;
+
+.txHeaderRow,
+.txRow {
+  display: grid;
+  grid-template-columns: $tx-grid-desktop;
+  align-items: center;
+  padding: 10px 12px;
+  gap: 10px;
+
+  @media (max-width: $tablet-width) {
+    grid-template-columns: $tx-grid-tablet;
+  }
+
+  @media (max-width: $mobile-width) {
+    grid-template-columns: $tx-grid-mobile;
+    padding: 10px 8px;
+  }
+}
+
+.txHeaderRow {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 4px;
+
+  .cell {
+    color: $color-text-dim;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+}
+
+.txRow {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition:
+    background-color 0.2s,
+    border-radius 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-bottom-color: transparent;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.colTxFee {
+  @media (max-width: $tablet-width) {
+    display: none;
+  }
+}
+
+.colTxType {
+  @media (max-width: $mobile-width) {
+    display: none;
+  }
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  min-width: 0;
+
+  &.alignRight {
+    justify-content: flex-end;
+  }
+}
+
+.gameCell {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+
+  .gameName {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.gameName {
+  color: $color-text-main;
+  font-weight: 600;
+}
+
+.hiddenUser {
+  color: $color-text-dim;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &::before {
+    content: "";
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: $color-text-dim;
+    opacity: 0.5;
+  }
+}
+
+.time {
+  color: $color-text-dim;
+  font-size: 12px;
+}
+
+.multiplier {
+  color: $color-text-main;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.amountRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: $color-text-main;
+
+  &.win {
+    color: $color-green;
+  }
+  &.loss {
+    color: $color-text-dim;
+  }
+  &.pendingPayout {
+    color: $color-amber;
+  }
+
+  @media (max-width: $mobile-width) {
+    font-size: 12px;
+    gap: 4px;
+  }
+}
+
+.currencySlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.typeCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: $color-text-main;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.typeIcon {
+  flex-shrink: 0;
+  display: flex;
+  color: rgba(199, 245, 252, 0.95);
+}
+
+.typeLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.amountSigned {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+
+  &.positive {
+    color: $color-green;
+  }
+  &.negative {
+    color: $color-red;
+  }
+}
+
+.feeMuted {
+  color: $color-text-dim;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.statusChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: rgba(30, 35, 60, 0.35);
+  color: rgba(159, 163, 196, 0.95);
+
+  &.win,
+  &.completed {
+    color: $color-green;
+    background: rgba(8, 219, 9, 0.08);
+    border-color: rgba(8, 219, 9, 0.22);
+  }
+  &.loss,
+  &.failed {
+    color: $color-red;
+    background: rgba(252, 48, 57, 0.08);
+    border-color: rgba(252, 48, 57, 0.2);
+  }
+  &.pending {
+    color: $color-amber;
+    background: rgba(251, 191, 36, 0.08);
+    border-color: rgba(251, 191, 36, 0.22);
+  }
+}
+
+.statusIcon {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.mobileStatus {
+  display: none;
+  @media (max-width: $mobile-width) {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+}
+
+.mobStatWin {
+  color: $color-green;
+  display: flex;
+}
+.mobStatLoss {
+  color: $color-red;
+  display: flex;
+}
+.mobStatPending {
+  color: $color-amber;
+  display: flex;
+}
+
+.emptyRow {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  color: $color-text-dim;
+  font-size: 14px;
+}
+
+/* Пагинация */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.pageBtn {
+  background: rgba(30, 35, 60, 0.35);
+  border: 1px solid rgba(74, 80, 128, 0.4);
+  color: rgba(159, 163, 196, 0.95);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+
+  &:hover {
+    color: var(--ds-color-text-primary);
+    background: rgba(30, 35, 60, 0.55);
+    border-color: rgba(99, 102, 241, 0.4);
+  }
+}
+
+.pageActive {
+  background: rgba(99, 102, 241, 0.22) !important;
+  border-color: var(--ds-color-accent-indigo) !important;
+  color: var(--ds-color-text-primary) !important;
+  font-weight: 700;
+}
+
+.arrowNav {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(74, 80, 128, 0.55);
+  background: rgba(30, 35, 60, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.75);
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+
+  &:hover:not(:disabled) {
+    border-color: var(--ds-color-accent-indigo);
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--ds-color-text-primary);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.pagesWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.dots {
+  color: $color-text-dim;
+  padding: 0 4px;
+  font-size: 14px;
+}
+
+/* Phone + tablet: stacked “cards” with labels (account history only; Recent Winnings = strip) */
+@media (max-width: $tablet-width) {
+  .table:not(.tableStripMobile) .betHeaderRow,
+  .txHeaderRow {
+    display: none;
+  }
+
+  .table:not(.tableStripMobile) .betRow,
+  .txRow {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    border-radius: 14px;
+    border: 1px solid rgba(74, 80, 128, 0.45);
+    background: rgba(30, 35, 60, 0.38);
+    margin-bottom: 12px;
+    border-bottom: none;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      border-radius: 14px;
+      border-bottom: none;
+      border-color: rgba(99, 102, 241, 0.38);
+    }
+
+    .cell {
+      display: flex !important;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      padding: 11px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      white-space: normal;
+      overflow: visible;
+      min-height: 44px;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.alignRight {
+        justify-content: flex-start;
+      }
+    }
+
+    .cell[data-label]::before {
+      content: attr(data-label);
+      flex: 0 0 5.75rem;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: $color-text-dim;
+      line-height: 1.2;
+    }
+  }
+
+  .table:not(.tableStripMobile) .betRow .cellValue,
+  .txRow .cellValue {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
+    text-align: right;
+  }
+
+  .table:not(.tableStripMobile) .betRow .gameCell .cellValue {
+    justify-content: space-between;
+  }
+
+  .table:not(.tableStripMobile) .mobileStatus {
+    display: none !important;
+  }
+}
+
+/* Recent Winnings (compact): one horizontal row per bet — drop Player, Time, Bet */
+$bet-strip-compact: minmax(0, 1.35fr) auto minmax(0, 1.05fr) auto;
+
+@media (max-width: $tablet-width) {
+  .tableStripMobile {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    .betHeaderRow {
+      display: grid !important;
+      grid-template-columns: $bet-strip-compact !important;
+      gap: 8px;
+      padding: 8px 10px !important;
+      margin-bottom: 2px;
+    }
+
+    .betHeaderRow .colUserBet,
+    .betHeaderRow .colTimeBet,
+    .betHeaderRow .colBetAmt {
+      display: none !important;
+    }
+
+    .betRow {
+      display: grid !important;
+      flex-direction: unset;
+      grid-template-columns: $bet-strip-compact !important;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px !important;
+      margin-bottom: 0 !important;
+      border-radius: 0 !important;
+      border: none !important;
+      background: transparent !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+
+      &:hover {
+        border-radius: 8px !important;
+        border-bottom-color: transparent !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+      }
+
+      &:last-child {
+        border-bottom: none !important;
+      }
+
+      .cell {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center;
+        padding: 0 !important;
+        min-height: 0 !important;
+        border-bottom: none !important;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 12px;
+      }
+
+      .cell[data-label]::before {
+        display: none !important;
+        content: none !important;
+      }
+    }
+
+    .betRow .colUserBet,
+    .betRow .colTimeBet,
+    .betRow .colBetAmt {
+      display: none !important;
+    }
+
+    .betRow .cellValue {
+      display: flex !important;
+      flex: 1 1 auto;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 0;
+      text-align: right;
+    }
+
+    .betRow .gameCell .cellValue {
+      justify-content: flex-start;
+    }
+
+    .betRow .gameCell {
+      min-width: 0;
+    }
+
+    .betRow .alignRight .cellValue {
+      justify-content: flex-end;
+    }
+
+    .mobileStatus {
+      display: none !important;
+    }
+  }
+}
+
+@media (max-width: $mobile-width) {
+  .tableStripMobile .betRow .colMultBet,
+  .tableStripMobile .betRow .colStatusBet {
+    display: flex !important;
+  }
+
+  .tableStripMobile .betRow .colBetAmt {
+    display: none !important;
+  }
+
+  .tableStripMobile {
+    .betHeaderRow,
+    .betRow {
+      gap: 6px;
+      padding: 7px 8px !important;
+      grid-template-columns: minmax(0, 1.2fr) auto minmax(0, 0.95fr) auto !important;
+    }
+
+    .betRow .cell {
+      font-size: 11px;
+    }
+
+    .multiplier {
+      padding: 2px 5px;
+      font-size: 10px;
+    }
+
+    .statusChip {
+      padding: 2px 6px;
+      font-size: 10px;
+      gap: 3px;
+    }
+
+    .amountRow {
+      font-size: 11px;
+      gap: 3px;
+    }
+  }
+}
+
+/* Recent Winnings wrapper: tabs + pagination a bit tighter */
+.feedCompact {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: $tablet-width) {
+  .feedCompact {
+    .tabs {
+      margin-bottom: 10px;
+      gap: 6px;
+    }
+
+    .tabButton {
+      padding: 5px 12px;
+      font-size: 12px;
+    }
+
+    .pagination {
+      margin-top: 14px;
+      gap: 8px;
+    }
+
+    .pageBtn {
+      min-width: 32px;
+      height: 32px;
+      font-size: 12px;
+    }
+
+    .arrowNav {
+      width: 34px;
+      height: 34px;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
+
+@media (max-width: $mobile-width) {
+  .feedCompact {
+    .tabs {
+      margin-bottom: 8px;
+      gap: 5px;
+    }
+
+    .tabButton {
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+
+    .pagination {
+      margin-top: 12px;
+    }
+
+    .pageBtn {
+      min-width: 30px;
+      height: 30px;
+      font-size: 11px;
+    }
+
+    .arrowNav {
+      width: 32px;
+      height: 32px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}

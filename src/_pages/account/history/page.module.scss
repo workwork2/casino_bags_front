@@ -1,0 +1,44 @@
+.historyStack {
+  @include casino-page-shell;
+  @include casino-page-body-color;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    gap: 16px;
+  }
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 220px;
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--glass-text-muted, var(--ds-color-text-secondary));
+  font-size: 15px;
+  font-weight: 600;
+
+  p {
+    margin: 0;
+  }
+}
+
+.loadingIcon {
+  color: #785edb;
+  animation: historyPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes historyPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}

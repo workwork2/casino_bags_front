@@ -1,0 +1,78 @@
+.chatActions {
+    position: fixed;
+    right: 0;
+    z-index: calc(var(--z-chat, 10050) + 1);
+    transform: translateY(-50%);
+
+    @media (min-width: 769px) {
+        top: calc(
+            var(--app-header-height, 128px) +
+                (100dvh - var(--app-header-height, 128px)) / 2
+        );
+    }
+
+    @media (max-width: 768px) {
+        top: 50%;
+    }
+
+    display: inline-flex;
+    flex-direction: column;
+    gap: rem(8);
+    padding: rem(8);
+    border-radius: rem(12) 0 0 rem(12);
+
+    background: linear-gradient(180deg, rgba(88, 76, 237, 0.95) 0%, rgba(62, 53, 168, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-right: none;
+    box-shadow: rem(-4) 0 rem(20) rgba(0, 0, 0, 0.25);
+
+    & > button {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: rem(48);
+        height: rem(48);
+        border: none;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--ds-color-text-primary);
+        cursor: pointer;
+        transition:
+            background 0.2s ease,
+            transform 0.15s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.22);
+            transform: translateY(rem(-1));
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+
+        svg {
+            width: rem(22);
+            height: rem(22);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .chatActions {
+        padding: rem(6);
+        gap: rem(6);
+        border-radius: rem(10) 0 0 rem(10);
+
+        & > button {
+            width: rem(40);
+            height: rem(40);
+
+            svg {
+                width: rem(18);
+                height: rem(18);
+            }
+        }
+    }
+}

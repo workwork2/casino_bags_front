@@ -1,0 +1,416 @@
+@use "sass:math";
+@use "@styles/helpers/functions" as *;
+
+// =============================================================================
+// Типографика (флюид остаётся для крупных заголовков на витрине)
+// =============================================================================
+
+@mixin fluid-text($max: 48, $min: 16) {
+  font-size: fluid($max, $min);
+}
+
+@mixin ds-heading-static($level: 1) {
+  @if $level == 1 {
+    font-size: var(--ds-text-h1-size);
+    line-height: var(--ds-text-h1-lh);
+  } @else if $level == 2 {
+    font-size: var(--ds-text-h2-size);
+    line-height: var(--ds-text-h2-lh);
+  } @else if $level == 3 {
+    font-size: var(--ds-text-h3-size);
+    line-height: var(--ds-text-h3-lh);
+  } @else if $level == 4 {
+    font-size: var(--ds-text-h4-size);
+    line-height: var(--ds-text-h4-lh);
+  } @else if $level == 5 {
+    font-size: var(--ds-text-h5-size);
+    line-height: var(--ds-text-h5-lh);
+  } @else {
+    font-size: var(--ds-text-h6-size);
+    line-height: var(--ds-text-h6-lh);
+  }
+  font-family: var(--font-family-secondary);
+  font-weight: var(--fw-medium);
+  color: var(--ds-color-text-primary);
+}
+
+@mixin ds-body($size: md) {
+  @if $size == lg {
+    font-size: var(--ds-text-body-lg-size);
+    line-height: var(--ds-text-body-lg-lh);
+  } @else if $size == sm {
+    font-size: var(--ds-text-body-sm-size);
+    line-height: var(--ds-text-body-sm-lh);
+  } @else {
+    font-size: var(--ds-text-body-md-size);
+    line-height: var(--ds-text-body-md-lh);
+  }
+  font-family: var(--font-family-base);
+  font-weight: var(--fw-normal);
+  color: var(--ds-color-text-primary);
+}
+
+@mixin ds-caption {
+  font-size: var(--ds-text-caption-size);
+  line-height: var(--ds-text-caption-lh);
+  font-weight: var(--fw-medium);
+  color: var(--ds-color-text-secondary);
+}
+
+// =============================================================================
+// Интерактивные состояния (единая логика по всем кнопкам)
+// =============================================================================
+
+@mixin ds-state-disabled {
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    filter: grayscale(0.15);
+  }
+}
+
+/// Лёгкое «поднятие» + яркость (премиум CTA, иконки-кнопки)
+@mixin ds-interactive-press {
+  transition:
+    filter var(--ds-duration-normal) var(--ds-ease-standard),
+    transform var(--ds-duration-fast) var(--ds-ease-standard),
+    box-shadow var(--ds-duration-normal) var(--ds-ease-standard),
+    border-color var(--ds-duration-normal) var(--ds-ease-standard);
+
+  &:hover:not(:disabled):not([aria-disabled="true"]) {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled):not([aria-disabled="true"]) {
+    filter: brightness(0.97);
+    transform: translateY(0);
+  }
+}
+
+/// Плоские кнопки (secondary / ghost)
+@mixin ds-interactive-surface {
+  transition:
+    background-color var(--ds-duration-normal) var(--ds-ease-standard),
+    border-color var(--ds-duration-normal) var(--ds-ease-standard),
+    color var(--ds-duration-normal) var(--ds-ease-standard),
+    transform var(--ds-duration-fast) var(--ds-ease-standard);
+
+  &:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ds-color-bg-surface-hover);
+    border-color: var(--ds-color-border-strong);
+  }
+
+  &:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: scale(0.98);
+  }
+}
+
+// =============================================================================
+// Кнопки: sm | md | lg — одна высота с инпутами
+// =============================================================================
+
+@mixin ds-button-base {
+  appearance: none;
+  box-sizing: border-box;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  margin: 0;
+  border-style: solid;
+  border-width: 1px;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: var(--ds-control-radius);
+  @include ds-state-disabled;
+}
+
+@mixin ds-button-size($size: md) {
+  @if $size == sm {
+    min-height: var(--ds-control-height-sm);
+    padding: 0 var(--ds-control-padding-x-sm);
+    font-size: var(--ds-control-font-sm);
+  } @else if $size == lg {
+    min-height: var(--ds-control-height-lg);
+    padding: 0 var(--ds-control-padding-x-lg);
+    font-size: var(--ds-control-font-lg);
+  } @else {
+    min-height: var(--ds-control-height-md);
+    padding: 0 var(--ds-control-padding-x-md);
+    font-size: var(--ds-control-font-md);
+  }
+}
+
+@mixin ds-button-primary {
+  @include ds-button-base;
+  @include ds-button-size(md);
+  @include ds-interactive-press;
+  color: var(--ds-color-text-primary);
+  border-color: rgba(255, 255, 255, 0.42);
+  background: var(--app-cta-gradient, var(--gradient-main));
+  box-shadow: var(
+    --app-cta-shadow,
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 4px 20px rgba(80, 60, 220, 0.45)
+  );
+}
+
+@mixin ds-button-secondary {
+  @include ds-button-base;
+  @include ds-button-size(md);
+  @include ds-interactive-surface;
+  color: var(--ds-color-text-primary);
+  border-color: var(--ds-color-border-default);
+  background: var(--ds-color-bg-surface);
+}
+
+// =============================================================================
+// Поля ввода: та же высота, что у кнопки того же размера
+// =============================================================================
+
+@mixin ds-input-base($size: md) {
+  appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  font-family: inherit;
+  font-weight: var(--fw-normal);
+  color: var(--ds-color-text-primary);
+  background: var(--ds-color-bg-input);
+  border: var(--ds-input-border);
+  border-radius: var(--ds-input-radius);
+  outline: none;
+  transition:
+    border-color var(--ds-duration-normal) var(--ds-ease-standard),
+    box-shadow var(--ds-duration-normal) var(--ds-ease-standard),
+    background-color var(--ds-duration-normal) var(--ds-ease-standard);
+
+  @if $size == sm {
+    min-height: var(--ds-control-height-sm);
+    padding: 0 var(--ds-control-padding-x-sm);
+    font-size: var(--ds-control-font-sm);
+  } @else if $size == lg {
+    min-height: var(--ds-control-height-lg);
+    padding: 0 var(--ds-control-padding-x-lg);
+    font-size: var(--ds-control-font-lg);
+  } @else {
+    min-height: var(--ds-control-height-md);
+    padding: 0 var(--ds-control-padding-x-md);
+    font-size: var(--ds-control-font-md);
+  }
+
+  &::placeholder {
+    color: var(--ds-color-text-secondary);
+    opacity: 0.85;
+  }
+
+  &:hover:not(:disabled):not(:read-only) {
+    border: var(--ds-input-border-hover);
+    background: rgba(0, 0, 0, 0.42);
+  }
+
+  &:focus-visible {
+    border: var(--ds-input-border-focus);
+    box-shadow: var(--ds-input-shadow-focus);
+  }
+
+  &:disabled,
+  &:read-only {
+    color: var(--ds-color-text-disabled);
+    background: var(--ds-color-bg-input-disabled);
+    cursor: not-allowed;
+    opacity: 0.85;
+  }
+}
+
+@mixin ds-focus-ring {
+  &:focus-visible {
+    outline: var(--ds-focus-ring-width) solid var(--ds-color-focus-ring);
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: 0 0 0 3px var(--ds-color-primary-muted);
+  }
+}
+
+// =============================================================================
+// Pill-навигация (WalletNavigation, PartnersNavigation, Game Type чипы)
+// Токены: --ds-pill-nav-* в variables.scss; имена в shared/config/pillNav.ts
+// =============================================================================
+
+@mixin ds-pill-nav-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-pill-nav-gap);
+  width: 100%;
+
+  @media (max-width: 768px) {
+    gap: var(--ds-pill-nav-gap-tablet);
+  }
+
+  @media (max-width: 400px) {
+    gap: var(--ds-pill-nav-gap-tight);
+  }
+}
+
+/// Ссылка / кнопка в ряду навигации (как в личном кабинете).
+/// $stretch-narrow: на узком экране равномерно растягивать пункты (ЛК, партнёры).
+@mixin ds-pill-nav-link($stretch-narrow: true) {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--ds-pill-nav-color);
+  text-decoration: none;
+  font-size: var(--ds-pill-nav-font-size);
+  font-weight: 600;
+  padding: var(--ds-pill-nav-py) var(--ds-pill-nav-px);
+  border-radius: var(--ds-pill-nav-radius);
+  border: 1px solid var(--ds-pill-nav-border);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+  white-space: nowrap;
+  background-color: var(--ds-pill-nav-bg);
+  cursor: pointer;
+  box-sizing: border-box;
+  font-family: inherit;
+  line-height: 1.2;
+
+  &:hover {
+    color: var(--ds-color-text-primary);
+    background-color: var(--ds-pill-nav-bg-hover);
+    border-color: var(--ds-pill-nav-border-hover);
+  }
+
+  &.active,
+  &[aria-current="page"] {
+    background: var(--ds-pill-nav-active-bg);
+    border-color: var(--ds-pill-nav-active-border);
+    color: var(--ds-color-text-primary);
+    box-shadow: var(--ds-pill-nav-active-shadow);
+  }
+
+  @media (max-width: 768px) {
+    font-size: var(--ds-pill-nav-font-size-md);
+    padding: var(--ds-pill-nav-py-md) var(--ds-pill-nav-px-md);
+  }
+
+  @media (max-width: 400px) {
+    font-size: var(--ds-pill-nav-font-size-tight);
+    padding: var(--ds-pill-nav-py-tight) var(--ds-pill-nav-px-tight);
+    letter-spacing: -0.2px;
+    text-align: center;
+
+    @if $stretch-narrow {
+      flex: 1;
+    }
+  }
+}
+
+/// Чип категории (Game Type): тот же визуальный язык, компактнее, без flex:1 на 320px.
+@mixin ds-pill-nav-chip {
+  @include ds-pill-nav-link($stretch-narrow: false);
+  min-height: var(--ds-pill-nav-chip-min-height);
+  padding: 0 var(--ds-pill-nav-chip-px);
+  font-size: var(--ds-pill-nav-chip-font-size);
+  font-weight: var(--ds-pill-nav-chip-font-weight);
+
+  @media (max-width: 768px) {
+    font-size: var(--ds-pill-nav-chip-font-size);
+    padding: 0 var(--ds-pill-nav-chip-px);
+  }
+
+  @media (max-width: 400px) {
+    font-size: 12px;
+    padding: 0 10px;
+    min-height: 34px;
+  }
+
+  span {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+}
+
+/// Ряд фильтров на страницах списков (турниры, новости): отступы как у Game Type.
+@mixin ds-pill-nav-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-pill-nav-chip-list-gap);
+  margin-bottom: var(--ds-space-5);
+  width: 100%;
+}
+
+/// «Назад к списку» (деталь турнира / деталь новости) — те же токены, что у pill-nav.
+@mixin ds-page-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  color: var(--glass-text-muted, var(--ds-color-text-secondary));
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: var(--ds-space-4);
+  padding: var(--ds-space-2) 14px;
+  border-radius: var(--ds-pill-nav-radius);
+  background-color: var(--ds-pill-nav-bg);
+  border: 1px solid var(--ds-pill-nav-border);
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+  box-sizing: border-box;
+
+  &:hover {
+    color: var(--ds-color-text-primary);
+    background-color: var(--ds-pill-nav-bg-hover);
+    border-color: var(--ds-pill-nav-border-hover);
+  }
+}
+
+@mixin hide {
+  opacity: 0;
+  visibility: hidden;
+}
+@mixin show {
+  opacity: 1;
+  visibility: visible;
+}
+@mixin flex-center($isInline: false) {
+  @if $isInline {
+    display: inline-flex;
+  } @else {
+    display: flex;
+  }
+  justify-content: center;
+  align-items: center;
+}
+@mixin abs-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+@mixin square($size) {
+  width: $size;
+  height: $size;
+}
+@mixin visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  border: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  clip-path: inset(100%) !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
+}

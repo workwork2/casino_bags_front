@@ -1,0 +1,132 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--app-modal-overlay);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal, 12000);
+  padding: 20px;
+}
+
+.modal {
+  background: var(--app-modal-surface);
+  width: 100%;
+  max-width: var(--app-modal-max-width, 440px);
+  border-radius: var(--app-modal-radius, 20px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+  border: var(--app-modal-border);
+  animation: modalFadeUp 0.25s ease-out;
+}
+
+@keyframes modalFadeUp {
+  from { opacity: 0; transform: translateY(15px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+// --- ДЕСКТОПНЫЕ НАСТРОЙКИ ---
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 26px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+  .exitTitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ds-color-text-primary);
+    font-size: 18px; // Хорошо читаемый заголовок
+    font-weight: 700;
+  }
+
+}
+
+.content {
+  padding: 40px 24px;
+  text-align: center;
+  
+  .question {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 20px; // Заметный, но не огромный
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  padding: 0 26px 32px;
+
+  button {
+    flex: 1;
+    height: 54px; // Удобная высота кнопок
+    border: none;
+    border-radius: 100px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ds-color-text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+    
+    &:active {
+      transform: translateY(0) scale(0.98);
+    }
+  }
+
+  .btnStay {
+    width: auto !important;
+    max-width: none;
+    flex: 1;
+  }
+
+  .btnExit {
+    flex: 1;
+    background-color: var(--ds-color-error);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 100px;
+  }
+}
+
+// --- МОБИЛЬНЫЕ НАСТРОЙКИ (УМЕНЬШАЕМ) ---
+@media (max-width: 600px) {
+  .modal {
+    max-width: 320px; // Маленькая и аккуратная на мобиле
+    border-radius: 20px;
+  }
+
+  .header {
+    padding: 14px 18px;
+    .exitTitle {
+      font-size: 16px;
+    }
+  }
+
+  .content {
+    padding: 26px 15px;
+    .question {
+      font-size: 16px;
+    }
+  }
+
+  .actions {
+    padding: 0 16px 22px;
+    gap: 10px;
+
+    button {
+      height: 46px; // Компактные кнопки на мобиле
+      font-size: 15px;
+    }
+  }
+}

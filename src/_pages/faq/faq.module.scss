@@ -1,0 +1,113 @@
+$tablet-bp: 1024px;
+$mobile-bp: 768px;
+
+.faqPage {
+  @include casino-page-shell;
+  @include casino-page-body-color;
+  padding-top: 0;
+  padding-bottom: 20px;
+}
+
+/* Как у страницы «Все новости»: та же ширина (100% внутри .container) и отступы */
+.wrapper {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  flex-direction: column;
+  width: 100%;
+  padding: 32px;
+  display: flex;
+  margin: 0 0 20px 0;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: $mobile-bp) {
+    padding: 16px;
+    margin: 0 0 20px 0;
+    border-radius: 16px;
+  }
+}
+
+/* Тонкая подсветка сверху — визуальная связь с каруселью / новостями */
+.wrapperGlow {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(99, 102, 241, 0.55),
+    rgba(139, 124, 255, 0.4),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: $mobile-bp) {
+    margin-bottom: 20px;
+  }
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  color: var(--ds-color-text-primary);
+  font-size: 32px;
+  flex-shrink: 0;
+
+  @media (max-width: $mobile-bp) {
+    font-size: 26px;
+  }
+}
+
+.title {
+  color: var(--glass-heading-color);
+  font-size: var(--glass-heading-size);
+  font-weight: var(--glass-heading-weight);
+  margin: 0;
+  letter-spacing: var(--glass-heading-ls);
+  line-height: 1.15;
+
+  @media (max-width: $mobile-bp) {
+    font-size: var(--glass-heading-size-sm);
+  }
+}
+
+.subtitle {
+  margin: 0;
+  padding-left: 44px;
+  max-width: 42rem;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--glass-text-muted);
+  font-weight: 500;
+
+  @media (max-width: $mobile-bp) {
+    padding-left: 0;
+    font-size: 14px;
+  }
+}
+
+.accordionWrap {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}

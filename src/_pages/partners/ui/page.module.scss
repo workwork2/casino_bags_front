@@ -1,0 +1,550 @@
+$tablet-bp: 1024px;
+$mobile-bp: 768px;
+
+/* Карточки как в CarouselNews / сетка «Все новости» */
+$card-bg: rgba(30, 35, 60, 0.6);
+$card-border: var(--ds-color-border-deep);
+$card-header-grad: linear-gradient(
+  90deg,
+  rgba(60, 70, 110, 0.8) 0%,
+  rgba(54, 57, 126, 0.8) 100%
+);
+$accent-link: var(--ds-color-accent-indigo);
+
+.partnersReview {
+  @include casino-page-shell;
+  padding-top: 0;
+  padding-bottom: 20px;
+  color: var(--glass-text-body);
+}
+
+/* Тот же glass-блок, что на /news и в карусели новостей */
+.glassBox {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  width: 100%;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 20px 0;
+
+  @media (max-width: $mobile-bp) {
+    padding: 16px;
+  }
+}
+
+.heroPoints {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+.heroPoint {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 12px;
+
+  strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ds-color-text-primary);
+    margin-bottom: 4px;
+  }
+
+  span {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ds-color-text-secondary);
+    font-weight: 500;
+  }
+}
+
+.heroPointIcon {
+  flex-shrink: 0;
+  font-size: 22px;
+  color: $accent-link;
+  margin-top: 2px;
+}
+
+.sectionHeading {
+  margin: 8px 0 12px 0;
+  font-size: var(--glass-heading-size-sm);
+  font-weight: var(--glass-heading-weight);
+  letter-spacing: var(--glass-heading-ls);
+  color: var(--glass-heading-color);
+  line-height: 1.2;
+
+  @media (min-width: $mobile-bp) {
+    font-size: var(--glass-heading-size);
+  }
+}
+
+.sectionIntro {
+  margin: 0 0 24px 0;
+  max-width: 48rem;
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--glass-text-muted);
+
+  @media (min-width: $mobile-bp) {
+    font-size: 15px;
+  }
+}
+
+/* Сетка как «Все новости» */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+
+  @media (max-width: $tablet-bp) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: $mobile-bp) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.newsCard {
+  display: flex;
+  flex-direction: column;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 12px;
+  overflow: hidden;
+  transition:
+    border-color 0.3s,
+    transform 0.3s;
+
+  &:hover {
+    border-color: $accent-link;
+    transform: translateY(-4px);
+  }
+}
+
+.newsCardHeader {
+  background: $card-header-grad;
+  border-bottom: 1px solid $card-border;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.newsCardTitle {
+  color: var(--ds-color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.newsCardMeta {
+  color: var(--ds-color-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.newsCardMid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 12px;
+  min-height: 100px;
+  border-bottom: 1px solid $card-border;
+}
+
+.newsCardIcon {
+  font-size: 36px;
+  color: $accent-link;
+  flex-shrink: 0;
+}
+
+.newsCardValue {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--ds-color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.newsCardBody {
+  padding: 12px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.newsCardDesc {
+  margin: 0;
+  color: var(--ds-color-text-secondary);
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+/* CTA */
+.ctaRow {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: stretch;
+
+  @media (min-width: 900px) {
+    flex-direction: row;
+    align-items: center;
+    gap: 28px;
+  }
+}
+
+.ctaIconWrap {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ds-color-text-primary);
+  font-size: 26px;
+
+  svg {
+    display: block;
+  }
+}
+
+.ctaText {
+  flex: 1;
+  min-width: 0;
+}
+
+.ctaTitle {
+  margin: 0 0 8px 0;
+  font-size: var(--glass-heading-size-sm);
+  font-weight: var(--glass-heading-weight);
+  letter-spacing: var(--glass-heading-ls);
+  color: var(--glass-heading-color);
+
+  @media (min-width: $mobile-bp) {
+    font-size: 22px;
+  }
+}
+
+.ctaDesc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--glass-text-muted);
+  font-weight: 500;
+
+  @media (min-width: $mobile-bp) {
+    font-size: 15px;
+  }
+}
+
+.ctaActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+
+  @media (min-width: 480px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ds-color-text-primary);
+  background: linear-gradient(90deg, #4c52ff, #7c3aed);
+  border: none;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(76, 82, 255, 0.35);
+  }
+}
+
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ds-color-text-primary);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
+}
+
+/* Benefits — 2 колонки, те же границы */
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  @media (max-width: $tablet-bp) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.benefitCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 12px;
+  padding: 16px;
+  transition:
+    border-color 0.3s,
+    transform 0.3s;
+
+  &:hover {
+    border-color: $accent-link;
+    transform: translateY(-2px);
+  }
+}
+
+.benefitCardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.benefitIconWrap {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(99, 102, 241, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a5b4fc;
+  font-size: 18px;
+
+  svg {
+    display: block;
+  }
+}
+
+.benefitTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ds-color-text-primary);
+  flex: 1;
+  min-width: 0;
+}
+
+.benefitDesc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ds-color-text-secondary);
+  font-weight: 500;
+}
+
+@media (max-width: $mobile-bp) {
+  .benefitCardHeader {
+    flex-direction: row;
+  }
+}
+
+/* FAQ */
+.faqList {
+  border: 1px solid $card-border;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.12);
+  margin-bottom: 28px;
+}
+
+.faqItem {
+  border-bottom: 1px solid rgba(74, 80, 128, 0.6);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.faqBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(99, 102, 241, 0.08);
+  }
+}
+
+.faqQuestion {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ds-color-text-primary);
+  line-height: 1.35;
+
+  @media (min-width: $mobile-bp) {
+    font-size: 15px;
+  }
+}
+
+.faqToggle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  color: $accent-link;
+  transition: transform 0.3s ease;
+
+  svg {
+    display: block;
+  }
+}
+
+.faqOpen .faqToggle {
+  transform: rotate(45deg);
+}
+
+.faqPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+
+.faqPanelInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.faqOpen .faqPanel {
+  grid-template-rows: 1fr;
+}
+
+.faqAnswer {
+  margin: 0;
+  padding: 0 18px 16px 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ds-color-text-secondary);
+  font-weight: 500;
+
+  @media (min-width: $mobile-bp) {
+    font-size: 14px;
+  }
+}
+
+.applyBlock {
+  padding-top: 8px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.applyHint {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--glass-text-muted);
+  font-weight: 500;
+  max-width: 42rem;
+}
+
+.applyActions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.btnPrimaryWide {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--ds-color-text-primary);
+  background: linear-gradient(90deg, #4c52ff, #9b51ff);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(76, 82, 255, 0.4);
+  }
+}
+
+.btnLink {
+  font-size: 14px;
+  font-weight: 600;
+  color: $accent-link;
+  text-decoration: none;
+  transition: opacity 0.2s;
+
+  &:hover {
+    text-decoration: underline;
+    opacity: 0.9;
+  }
+}

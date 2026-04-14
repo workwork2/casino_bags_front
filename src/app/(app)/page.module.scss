@@ -1,0 +1,38 @@
+.grid {
+  @include casino-page-shell;
+  @include casino-page-body-color;
+  display: grid;
+  gap: 20px;
+  margin-top: rem(20);
+  // grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(5, minmax(200px, 1fr));
+}
+
+.gridItem {
+  aspect-ratio: 1.48 / 1;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: rem(12);
+  }
+}
+
+@media (max-width: 1300) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

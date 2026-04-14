@@ -1,0 +1,277 @@
+// --- ЕДИНАЯ ЦВЕТОВАЯ ПАЛИТРА И БРЕЙКПОИНТЫ ---
+$tablet-bp: 1024px;
+$mobile-bp: 768px;
+
+$accent-color: var(--ds-color-accent-indigo);   // Фирменный Индиго
+$text-white: var(--ds-color-text-primary);
+$text-dim: var(--ds-color-text-secondary);       // Единый приглушенный серый
+
+// --- ОТСТУПЫ СТРАНИЦЫ ---
+.settingsPage {
+  @include casino-page-shell;
+  color: $text-white;
+  /* Без min-height: 100vh — как на главной, иначе под контентом тянется пустота до футера */
+  padding-top: 0;
+  padding-bottom: 20px;
+
+  @media (max-width: $mobile-bp) {
+    padding-bottom: 20px;
+  }
+}
+
+// --- ГЛАВНАЯ ОБЕРТКА (ЭФФЕКТ СТЕКЛА КАК НА СКРИНШОТЕ) ---
+.wrapper {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 32px;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: $mobile-bp) {
+    padding: 20px;
+    border-radius: 16px;
+  }
+}
+
+// --- ЗАГОЛОВОК И ИКОНКА ---
+.pageHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+
+  .headerIcon {
+    font-size: 32px;
+    color: $text-white;
+
+    @media (max-width: $mobile-bp) {
+      font-size: 26px;
+    }
+  }
+
+  h1 {
+    font-size: var(--glass-heading-size);
+    font-weight: var(--glass-heading-weight);
+    letter-spacing: var(--glass-heading-ls);
+    line-height: 1.2;
+    margin: 0;
+    color: var(--glass-heading-color);
+
+    @media (max-width: $mobile-bp) {
+      font-size: var(--glass-heading-size-sm);
+    }
+  }
+}
+
+// --- СЕТКА ДЛЯ КАРТОЧЕК ---
+.contentGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); // 2 колонки
+  gap: 24px;
+  width: 100%;
+
+  @media (max-width: $tablet-bp) {
+    grid-template-columns: 1fr; // На планшетах и телефонах 1 колонка
+    gap: 16px;
+  }
+}
+
+// --- ВНУТРЕННЯЯ КАРТОЧКА (Стиль как у карточек новостей) ---
+.card {
+  background: rgba(30, 35, 60, 0.4); // Легкий фон карточки
+  border: 1px solid var(--ds-color-border-deep);         // Рамка карточки
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: $mobile-bp) {
+    padding: 20px;
+    border-radius: 12px;
+  }
+}
+
+.cardHeader {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ds-color-border-deep); // Разделитель внутри карточки
+
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    color: $text-white;
+  }
+
+  p {
+    font-size: 13px;
+    color: $text-dim;
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+}
+
+// --- TOGGLE ROW (ПЕРЕКЛЮЧАТЕЛИ) ---
+.toggleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; 
+  gap: 16px;
+  width: 100%;
+}
+
+.toggleLeft {
+  flex: 1; 
+  min-width: 0; 
+
+  span {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: $text-dim;
+    line-height: 1.4;
+    cursor: pointer;
+
+    @media (max-width: $mobile-bp) {
+      font-size: 12px;
+    }
+  }
+}
+
+.titleWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap; 
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    cursor: pointer;
+    line-height: 1.3;
+    color: $text-white;
+
+    @media (max-width: $mobile-bp) {
+      font-size: 14px;
+    }
+  }
+}
+
+// Иконка вопроса "?"
+.questionBadge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff15; 
+  border: none;
+  color: $text-white;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0; 
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $accent-color;
+    transform: scale(1.1);
+  }
+}
+
+// --- SWITCH (ПОЛЗУНОК) ---
+.switch {
+  width: 44px;
+  height: 24px;
+  background-color: #ffffff20; 
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0; 
+  margin-top: 2px;
+  transition: background-color 0.3s ease;
+
+  .slider {
+    width: 18px;
+    height: 18px;
+    background: var(--ds-color-text-primary);
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.active {
+    background-color: $accent-color; 
+
+    .slider {
+      transform: translateX(20px);
+    }
+  }
+}
+
+// --- РАДИО КНОПКИ ---
+.radioRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: #ffffff0a; 
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:hover {
+    background: #ffffff15;
+  }
+
+  &.activeRow {
+    border-color: $accent-color; 
+    background: rgba(99, 102, 241, 0.1); 
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: $text-white;
+  }
+}
+
+.radioCircle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ffffff40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+
+  &.active {
+    border-color: $accent-color;
+  }
+
+  .radioDot {
+    width: 10px;
+    height: 10px;
+    background: $accent-color;
+    border-radius: 50%;
+  }
+}

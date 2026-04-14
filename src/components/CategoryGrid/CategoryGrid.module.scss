@@ -1,0 +1,190 @@
+$tablet-width: 1024px;
+$mobile-width: 767px;
+$grid-cols-xl: 1200px;
+$grid-cols-lg: 900px;
+$grid-cols-sm: 600px;
+
+$text-dim: #94a3b8;
+
+/* Главный бокс (Glassmorphism) */
+.section {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 16px 0;
+  padding: 20px 24px;
+
+  @media (max-width: $tablet-width) {
+    padding: 16px 18px;
+    gap: 12px;
+  }
+
+  @media (max-width: $mobile-width) {
+    padding: 14px 14px;
+    gap: 10px;
+    border-radius: 16px;
+    margin: 12px 0;
+  }
+}
+
+/* Как у последней секции на главной (RecentWinnings: margin 20px снизу) */
+.sectionLast {
+  margin-bottom: 20px;
+}
+
+/* Шапка внутри бокса */
+.headerWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.sectionTitle {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--glass-heading-size-sm);
+  font-weight: var(--glass-heading-weight);
+  letter-spacing: var(--glass-heading-ls);
+  color: var(--glass-heading-color);
+  text-transform: uppercase;
+
+  .emoji {
+    font-size: 1.2em;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  }
+
+  @media (max-width: $tablet-width) {
+    font-size: 18px;
+  }
+
+  @media (max-width: $mobile-width) {
+    font-size: 16px;
+    gap: 6px;
+  }
+}
+
+.countBadge {
+  font-size: 13px;
+  color: $text-dim;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 12px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+/* Сетка слотов: 6 → 4 → 3 → 2 */
+.grid {
+  display: grid;
+  width: 100%;
+  gap: 10px;
+  grid-template-columns: repeat(6, 1fr);
+
+  @media (max-width: $grid-cols-xl) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 9px;
+  }
+
+  @media (max-width: $grid-cols-lg) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  @media (max-width: $grid-cols-sm) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+}
+
+.cardHover {
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: translateY(-6px);
+  }
+}
+
+/* Карточка "Показать еще" с картинкой */
+.showMoreCard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; // Если твои карточки PlayCard квадратные, поменяй тут на 1 / 1
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transform: translateZ(0);
+
+  @media (max-width: $mobile-width) {
+    border-radius: 8px;
+  }
+}
+
+.showMoreBgImage {
+  object-fit: cover;
+  z-index: 1;
+}
+
+.showMoreOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.showMoreText {
+  color: var(--ds-color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+
+  @media (max-width: $mobile-width) {
+    font-size: 13px;
+  }
+}
+
+.showMoreIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  @media (max-width: $mobile-width) {
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

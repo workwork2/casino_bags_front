@@ -1,0 +1,100 @@
+$tablet-bp: 1024px;
+$mobile-bp: 768px;
+$muted: rgba(255, 255, 255, 0.5);
+
+.tournamentsPage {
+  @include casino-page-shell;
+  @include casino-page-body-color;
+  padding-top: 0;
+  padding-bottom: 20px;
+}
+
+/* Чуть светлее и ближе к блоку «Все новости» */
+.wrapper {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  width: 100%;
+  padding: 32px;
+  margin: 0 0 20px 0;
+
+  @media (max-width: $mobile-bp) {
+    padding: 16px;
+    margin: 0 0 20px 0;
+    border-radius: 16px;
+  }
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.titleIcon {
+  flex-shrink: 0;
+  font-size: 32px;
+  color: var(--ds-color-text-primary);
+  opacity: 0.95;
+}
+
+/* Как заголовок на странице новостей */
+.pageTitle {
+  color: var(--glass-heading-color);
+  font-size: var(--glass-heading-size);
+  font-weight: var(--glass-heading-weight);
+  margin: 0;
+  letter-spacing: var(--glass-heading-ls);
+  line-height: 1.2;
+
+  @media (max-width: $mobile-bp) {
+    font-size: var(--glass-heading-size-sm);
+  }
+}
+
+.categories {
+  @include ds-pill-nav-filter-row;
+}
+
+.categoryChip {
+  @include ds-pill-nav-chip;
+}
+
+.categoryChipIcon {
+  flex-shrink: 0;
+  margin-right: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.categoryChipLabel {
+  line-height: 1;
+}
+
+.tournamentsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  @media (max-width: $tablet-bp) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.emptyList {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--glass-text-muted);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+}

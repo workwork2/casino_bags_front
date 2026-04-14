@@ -1,0 +1,7 @@
+.navContainer {
+  @include ds-pill-nav-container;
+}
+
+.navLink {
+  @include ds-pill-nav-link;
+}

@@ -1,0 +1,73 @@
+.partnersFaq {
+  @include casino-page-shell;
+  padding-top: 0;
+  padding-bottom: 20px;
+  color: var(--glass-text-body);
+}
+
+.glassBox {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  width: 100%;
+  padding: 32px;
+  margin: 0 0 20px 0;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.glassPanel {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  width: 100%;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 20px 0;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    border-radius: 16px;
+  }
+}
+
+.accordionWrapper {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.footerHint {
+  margin: 28px 0 0 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--glass-border);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--glass-text-muted);
+  font-weight: 500;
+  max-width: 48rem;
+
+  a {
+    color: var(--ds-color-accent-indigo);
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  strong {
+    color: var(--glass-text-body);
+    font-weight: 600;
+  }
+}

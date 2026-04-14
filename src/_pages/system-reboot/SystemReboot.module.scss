@@ -1,0 +1,104 @@
+.page {
+  @include casino-page-shell;
+  @include casino-page-body-color;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: clamp(24px, 4vw, 40px);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  padding: clamp(16px, 4vw, 32px) 16px;
+  animation: rebootIn 0.65s ease-out;
+}
+
+.iconWrap {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: rgba(30, 35, 60, 0.45);
+  border: 1px solid var(--ds-color-border-deep);
+  color: rgba(199, 245, 252, 0.88);
+}
+
+.heroIcon {
+  width: 56px;
+  height: 56px;
+  animation: rebootFloat 5s ease-in-out infinite;
+}
+
+.title {
+  color: var(--glass-heading-color, var(--ds-color-text-primary));
+  font-weight: 700;
+  margin: 0 0 14px;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  font-size: clamp(26px, 3.5vw, 44px);
+}
+
+.description {
+  color: var(--glass-text-muted, var(--ds-color-text-secondary));
+  line-height: 1.5;
+  margin: 0 0 28px;
+  max-width: 520px;
+  font-weight: 400;
+  font-size: clamp(15px, 1.35vw, 18px);
+}
+
+.timerBlock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(30, 35, 60, 0.5);
+  border: 1px solid var(--ds-color-border-deep);
+  border-radius: 999px;
+  font-size: clamp(15px, 1.2vw, 18px);
+  padding: 12px 28px;
+}
+
+.timerIcon {
+  flex-shrink: 0;
+  opacity: 0.9;
+  color: rgba(199, 245, 252, 0.9);
+}
+
+@media (max-width: 768px) {
+  .timerBlock {
+    width: 100%;
+    max-width: 320px;
+    flex-wrap: wrap;
+  }
+}
+
+@keyframes rebootFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes rebootIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

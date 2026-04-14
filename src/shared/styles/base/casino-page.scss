@@ -1,0 +1,25 @@
+// Миксины маршрутных страниц казино (доступны во всех *.scss через @/shared/styles/main → next.config prependData).
+
+/// Корень маршрута: стекинг, ширина, бокс-модель (без цвета текста).
+@mixin casino-page-shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/// Базовый цвет текста контента (дизайн-система).
+@mixin casino-page-body-color {
+  color: var(--ds-color-text-secondary);
+}
+
+/// Подпись секции (как deposit / wallet).
+@mixin casino-page-section-label {
+  margin: 0 0 var(--ds-space-3);
+  font-size: clamp(10px, 0.85vw, 11px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--glass-text-muted, var(--ds-color-text-secondary));
+}

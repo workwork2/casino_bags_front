@@ -1,0 +1,100 @@
+$tablet-bp: 1024px;
+$mobile-bp: 768px;
+
+.newsPage {
+  @include casino-page-shell;
+  @include casino-page-body-color;
+  padding-top: 0;
+  padding-bottom: 20px;
+}
+
+/* Обертка в стиле карусели (Glassmorphism) */
+.wrapper {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  flex-direction: column;
+  width: 100%;
+  padding: 32px;
+  display: flex;
+  /* Верх — .mainContent; снизу — как у последней секции на главной (RecentWinnings: 20px) */
+  margin: 0 0 20px 0;
+
+  @media (max-width: $mobile-bp) {
+    padding: 16px;
+    margin: 0 0 20px 0;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.icon {
+  color: var(--ds-color-text-primary);
+  font-size: 32px;
+}
+
+.title {
+  color: var(--glass-heading-color);
+  font-size: var(--glass-heading-size);
+  font-weight: var(--glass-heading-weight);
+  letter-spacing: var(--glass-heading-ls);
+  margin: 0;
+  line-height: 1.2;
+
+  @media (max-width: $mobile-bp) {
+    font-size: var(--glass-heading-size-sm);
+  }
+}
+
+.categories {
+  @include ds-pill-nav-filter-row;
+}
+
+.categoryChip {
+  @include ds-pill-nav-chip;
+}
+
+.categoryChipIcon {
+  flex-shrink: 0;
+  margin-right: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.categoryChipLabel {
+  line-height: 1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+
+  @media (max-width: $tablet-bp) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: $mobile-bp) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.emptyList {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--glass-text-muted);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+}

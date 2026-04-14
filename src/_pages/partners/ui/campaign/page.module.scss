@@ -1,0 +1,326 @@
+$tablet-bp: 1024px;
+$mobile-bp: 768px;
+$card-border: var(--ds-color-border-deep);
+$accent: var(--ds-color-accent-indigo);
+
+.partnersCampaign {
+  @include casino-page-shell;
+  padding-top: 0;
+  padding-bottom: 20px;
+  color: var(--glass-text-body);
+}
+
+.glassBox {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  width: 100%;
+  padding: 32px;
+  margin: 0 0 20px 0;
+
+  @media (max-width: $mobile-bp) {
+    padding: 16px;
+  }
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  align-items: start;
+
+  @media (min-width: 1100px) {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    gap: 32px;
+  }
+}
+
+.mainCol {
+  min-width: 0;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media (min-width: 1100px) {
+    position: sticky;
+    top: 140px;
+  }
+}
+
+.sideCard {
+  background: rgba(30, 35, 60, 0.55);
+  border: 1px solid $card-border;
+  border-radius: 14px;
+  padding: 18px 18px 16px;
+}
+
+.sideTitle {
+  margin: 0 0 14px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ds-color-text-primary);
+  letter-spacing: 0.02em;
+}
+
+.sideSteps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ds-color-text-secondary);
+    font-weight: 500;
+
+    strong {
+      color: var(--glass-text-body);
+      font-weight: 600;
+    }
+
+    a {
+      color: $accent;
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.sideIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-size: 16px;
+  color: #4ade80;
+}
+
+.sideCardMuted {
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(74, 80, 128, 0.5);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.sideMutedTitle {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ds-color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sideMutedText {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ds-color-text-secondary);
+  font-weight: 500;
+}
+
+.sideLink {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: $accent;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.partnerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+
+  .formField {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--glass-text-muted);
+
+      span {
+        color: #ff4c4c;
+      }
+    }
+
+    input,
+    select,
+    textarea {
+      background: rgba(30, 35, 60, 0.45);
+      border: 1px solid $card-border;
+      border-radius: 12px;
+      padding: 14px 14px;
+      color: var(--ds-color-text-primary);
+      outline: none;
+      font-size: 15px;
+      width: 100%;
+      box-sizing: border-box;
+      transition:
+        border-color 0.2s,
+        background-color 0.2s,
+        box-shadow 0.2s;
+
+      &:hover {
+        border-color: rgba(99, 102, 241, 0.5);
+      }
+
+      &:focus {
+        border-color: $accent;
+        background: rgba(30, 35, 60, 0.65);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      }
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.35);
+      }
+    }
+
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%239fa3c4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 18px;
+      padding-right: 44px;
+
+      &:focus {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      }
+
+      option {
+        background: #1a1d23;
+        color: var(--ds-color-text-primary);
+      }
+
+      &:invalid,
+      &[value=""] {
+        color: rgba(255, 255, 255, 0.35);
+      }
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+  }
+
+  .gridRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    @media (max-width: $mobile-bp) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .addSource {
+    background: none;
+    border: none;
+    color: var(--ds-color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    width: fit-content;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 4px 0;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--ds-color-text-primary);
+    }
+
+    .addSourceIcon {
+      background: #4c52ff;
+      color: var(--ds-color-text-primary);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: background 0.3s ease;
+
+      svg {
+        display: block;
+      }
+    }
+
+    &:hover .addSourceIcon {
+      background: #3b41e6;
+    }
+  }
+
+  .formNote {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--glass-text-muted);
+    font-weight: 500;
+  }
+
+  .submitBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(90deg, #4c52ff, #7c3aed);
+    color: var(--ds-color-text-primary);
+    border: none;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    width: fit-content;
+    cursor: pointer;
+    margin-top: 4px;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+
+    svg {
+      display: block;
+      font-size: 16px;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(76, 82, 255, 0.35);
+    }
+
+    @media (max-width: $mobile-bp) {
+      width: 100%;
+    }
+  }
+}

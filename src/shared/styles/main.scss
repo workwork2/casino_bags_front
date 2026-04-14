@@ -1,0 +1,10 @@
+// @use 'base/variables';
+// @forward 'helpers/functions';
+// @forward 'helpers/media';
+// @forward 'helpers/mixins';
+
+@use '@styles/base/variables' as *;
+@forward '@styles/helpers/functions' ;
+@forward '@styles/helpers/media' ;
+@forward '@styles/helpers/mixins' ;
+@forward '@styles/base/casino-page';

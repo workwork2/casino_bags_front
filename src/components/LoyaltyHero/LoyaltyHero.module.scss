@@ -1,0 +1,178 @@
+$mobile-bp: 768px;
+$color-accent: var(--ds-color-accent-indigo); /* Фиолетово-синий акцент */
+
+.heroWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 280px; /* Задаем минимальную высоту, чтобы блок не был сплюснутым */
+  gap: 40px; /* Отступ между текстом и картинкой */
+  
+  /* Цвета и стекло как в вашем дизайне */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background: rgba(30, 35, 60, 0.4);
+  border: 1px solid var(--ds-color-border-deep);
+  border-radius: 20px;
+  
+  padding: 40px 60px;
+  width: 100%;
+  margin-bottom: 30px;
+
+  @media (max-width: $mobile-bp) {
+    flex-direction: column;
+    padding: 30px 20px;
+    text-align: center;
+    gap: 20px;
+  }
+}
+
+.contentLeft {
+  flex: 1 1 auto;
+  max-width: 65%; /* Растягиваем левую часть на 65% ширины */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @media (max-width: $mobile-bp) {
+    max-width: 100%;
+    align-items: center;
+  }
+}
+
+.titleWrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+
+  @media (max-width: $mobile-bp) {
+    justify-content: center;
+    text-align: left;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+}
+
+.titleIcon {
+  font-size: 28px;
+  color: var(--ds-color-accent-indigo);
+  opacity: 0.95;
+  flex-shrink: 0;
+
+  @media (max-width: $mobile-bp) {
+    font-size: 24px;
+  }
+}
+
+.title {
+  font-size: 32px; /* Чуть увеличили заголовок */
+  font-weight: 700;
+  color: var(--ds-color-text-primary);
+  margin: 0;
+
+  @media (max-width: $mobile-bp) {
+    font-size: 22px;
+    line-height: 1.25;
+    text-align: center;
+    max-width: 20ch;
+  }
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--ds-color-text-secondary);
+  margin-bottom: 35px; /* Больше воздуха перед прогресс-баром */
+  line-height: 1.5;
+}
+
+.progressBlock {
+  width: 100%; /* Прогресс бар растягивается на все доступные 65% */
+}
+
+.statsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 12px;
+  
+  @media (max-width: $mobile-bp) {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.userText {
+  color: var(--ds-color-text-secondary);
+  font-size: 15px;
+}
+
+.points {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ds-color-text-primary);
+
+  .maxPoints {
+    color: var(--ds-color-border-deep);
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.progressBarBg {
+  width: 100%;
+  height: 10px; /* Сделали полоску чуть толще */
+  background-color: rgba(0, 0, 0, 0.3); /* Темный фон полоски для контраста */
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: $color-accent; 
+  border-radius: 10px;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+}
+
+.actionButton {
+  background: #ffffff1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--ds-color-text-primary);
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #ffffff33;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.imageRight {
+  flex: 0 0 30%; /* Выделяем 30% ширины под картинку */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  @media (max-width: $mobile-bp) {
+    margin-top: -20px;
+    order: -1; 
+    justify-content: center;
+  }
+
+  .crownImage {
+    object-fit: contain;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+    
+    @media (max-width: $mobile-bp) {
+      width: 200px;
+      height: auto;
+    }
+  }
+}

@@ -1,0 +1,171 @@
+$tablet-bp: 1024px;
+$mobile-bp: 768px;
+
+/* Как новости / FAQ: верх — .mainContent, снизу — ~20px до футера */
+.loyaltyPage {
+  @include casino-page-shell;
+  @include casino-page-body-color;
+  padding-top: 0;
+  padding-bottom: 20px;
+}
+
+/* Стеклянный блок статусов — те же отступы, что у страницы новостей */
+.wrapper {
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  flex-direction: column;
+  width: 100%;
+  padding: 32px;
+  display: flex;
+  margin: 0 0 20px 0;
+
+  @media (max-width: $mobile-bp) {
+    padding: 16px;
+    margin: 0 0 20px 0;
+    border-radius: 16px;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+
+.titleWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Лента у заголовка «Статусы» (в hero — бриллиант как в сайдбаре) */
+.titleIcon {
+  flex-shrink: 0;
+  font-size: 22px;
+  color: var(--ds-color-accent-indigo);
+  opacity: 0.95;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: var(--glass-heading-weight);
+  color: var(--glass-heading-color);
+  margin: 0;
+  letter-spacing: var(--glass-heading-ls);
+  line-height: 1.2;
+}
+
+.mobileArrows {
+  display: none;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
+
+  @media (max-width: $mobile-bp) {
+    display: flex;
+  }
+}
+
+@media (max-width: $mobile-bp) {
+  .header {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .titleWrap {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .titleIcon {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .titleWrap {
+    flex: 1 1 100%;
+  }
+
+  .mobileArrows {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+.arrowBtn {
+  color: var(--ds-color-text-primary);
+  cursor: pointer;
+  background: #ffffff26;
+  border: none;
+  border-radius: 8px;
+  flex-shrink: 0;
+  width: 34px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #ffffff40;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  align-items: stretch;
+
+  @media (max-width: $tablet-bp) {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding-bottom: 8px;
+    gap: 12px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+.cardCol {
+  display: flex;
+  min-height: 0;
+
+  @media (max-width: $tablet-bp) {
+    min-width: 260px;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: $mobile-bp) {
+    min-width: 100%;
+    flex: 0 0 100%;
+  }
+}

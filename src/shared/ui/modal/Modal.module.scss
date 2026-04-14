@@ -1,0 +1,19 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal, 12000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: var(--app-modal-overlay);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.inner {
+  position: relative;
+  max-height: min(92vh, 900px);
+  overflow: auto;
+  outline: none;
+}

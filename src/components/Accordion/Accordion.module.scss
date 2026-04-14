@@ -1,0 +1,296 @@
+// --- ЕДИНАЯ ПАЛИТРА ---
+$accent-color: var(--ds-color-accent-indigo); // Фирменный индиго
+$text-white: var(--ds-color-text-primary);
+$text-dim: var(--ds-color-text-secondary);
+$border-color: var(--ds-color-border-deep);
+$bg-inner: rgba(30, 35, 60, 0.4);
+
+.accordionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+// Внутренняя карточка аккордеона
+.item {
+  background: $bg-inner;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    border-color: $accent-color;
+  }
+}
+
+.header {
+  width: 100%;
+  padding: 20px 24px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $text-white;
+  font-size: 16px;
+  font-weight: 600;
+  position: relative; 
+  line-height: 1.4;
+
+  @media (max-width: 768px) {
+    padding: 16px 20px; 
+    font-size: 15px;
+  }
+}
+
+.questionContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-grow: 1; 
+  max-width: calc(100% - 40px); 
+}
+
+.itemNumber {
+  font-size: 16px;
+  font-weight: 700;
+  color: $accent-color;
+  min-width: 24px;
+  flex-shrink: 0; 
+}
+
+.questionText {
+  flex-grow: 1;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+// Кнопка раскрытия: SVG-плюс (геометрически по центру), поворот → «крестик»
+.toggleIcon {
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s ease,
+    background-color 0.25s ease;
+  color: $text-dim;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: 50% 50%;
+
+  &.open {
+    transform: rotate(45deg);
+    color: $accent-color;
+  }
+}
+
+.toggleSvg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+// --- Стили контента ---
+.content {
+  max-height: 0; 
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out; 
+  color: #cfd4eb; // Чуть светлее чем text-dim для хорошей читаемости
+  font-size: 15px;
+  
+  padding-left: 64px; // Выравниваем текст ответа по тексту вопроса (минуя цифру)
+  padding-right: 24px;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  @media (max-width: 768px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+.contentOpen {
+  max-height: 1000px; 
+  padding-bottom: 24px; 
+
+  @media (max-width: 768px) {
+    padding-bottom: 20px;
+  }
+}
+
+.answerText {
+  border-top: 1px solid rgba(255, 255, 255, 0.05); // Тонкая линия между вопросом и ответом
+  padding-top: 16px; 
+  line-height: 1.6;
+
+  // Если внутри ответа есть теги ul li
+  ul {
+    margin-top: 10px;
+    padding-left: 20px;
+    
+    li {
+      margin-bottom: 8px;
+      list-style-type: disc;
+      color: #cfd4eb;
+
+      &::marker {
+        color: $accent-color;
+      }
+    }
+  }
+}
+
+// --- Вариант для страницы FAQ (ширина как у новостей, плотнее «карточки») ---
+.faqVariant {
+  gap: 12px;
+
+  .item {
+    position: relative;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: linear-gradient(
+      145deg,
+      rgba(35, 40, 72, 0.72) 0%,
+      rgba(22, 26, 48, 0.5) 100%
+    );
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, #8b7cff 0%, var(--ds-color-accent-indigo) 50%, #4f46e5 100%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    &:hover {
+      border-color: rgba(99, 102, 241, 0.35);
+      transform: none;
+    }
+  }
+
+  .itemExpanded {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow:
+      0 8px 36px rgba(40, 32, 120, 0.22),
+      0 0 0 1px rgba(99, 102, 241, 0.12);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  .header {
+    padding: 18px 22px;
+    gap: 12px;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      padding: 16px 18px;
+    }
+  }
+
+  .questionContent {
+    max-width: calc(100% - 52px);
+    min-width: 0;
+  }
+
+  .iconWrapper {
+    align-self: center;
+    min-width: 36px;
+    justify-content: center;
+  }
+
+  .itemNumber {
+    min-width: 2.25rem;
+    height: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: #c7d2fe;
+    background: rgba(99, 102, 241, 0.2);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    border-radius: 10px;
+  }
+
+  .questionText {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    font-size: 15px;
+    line-height: 1.45;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+  }
+
+  .toggleIcon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+
+    &.open {
+      background: rgba(99, 102, 241, 0.22);
+    }
+  }
+
+  .toggleSvg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Ответ выровнен по тексту вопроса (отступ хедера + бейдж номера + gap) */
+  .content {
+    padding-left: 74px;
+    padding-right: 22px;
+
+    @media (max-width: 768px) {
+      padding-left: 20px;
+      padding-right: 18px;
+    }
+  }
+
+  .contentOpen {
+    padding-bottom: 22px;
+
+    @media (max-width: 768px) {
+      padding-bottom: 18px;
+    }
+  }
+
+  .answerText {
+    border-top-color: rgba(99, 102, 241, 0.15);
+    padding-top: 18px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--glass-text-body);
+  }
+}

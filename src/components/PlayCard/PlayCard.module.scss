@@ -1,0 +1,193 @@
+$tablet-width: 1024px;
+$mobile-width: 767px;
+
+/* Плотная сетка слотов (шире превью, меньше по высоте — ближе к riobet-подобным лобби) */
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.linkWrapper {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  transform: translateZ(0);
+
+  @media (max-width: $mobile-width) {
+    border-radius: 8px;
+  }
+}
+
+.image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* --- ОВЕРЛЕЙ --- */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.card:hover .overlay {
+  opacity: 1;
+}
+
+/* --- Кнопка Play --- */
+.playButton {
+  background-color: #7fe282;
+  padding: 8px 14px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transform: scale(0.92);
+  transition: transform 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+
+  @media (max-width: $tablet-width) {
+    padding: 7px 12px;
+  }
+
+  @media (max-width: $mobile-width) {
+    padding: 6px 10px;
+    gap: 5px;
+  }
+}
+
+.card:hover .playButton {
+  transform: scale(1);
+}
+
+.playText {
+  color: var(--ds-color-text-primary);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  @media (max-width: $mobile-width) {
+    font-size: 12px;
+  }
+}
+
+/* --- Иконка Сердца --- */
+.heartIcon {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  z-index: 5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+
+  @media (max-width: $mobile-width) {
+    top: 4px;
+    left: 6px;
+  }
+
+  &:hover {
+    transform: scale(1.08);
+  }
+}
+
+.heartSvg {
+  display: block;
+  width: 24px;
+  height: 24px;
+
+  @media (max-width: $mobile-width) {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.playGlyph {
+  display: block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+
+  @media (max-width: $mobile-width) {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* --- НОВАЯ КРАСИВАЯ КНОПКА ИНФО --- */
+.infoButton {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  
+  // Делаем эффект "матового стекла"
+  background-color: rgba(62, 48, 233, 0.85); 
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  
+  // Тонкая обводка и мягкая тень для объема
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: rgba(62, 48, 233, 1); // При наведении становится ярче
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  @media (max-width: $mobile-width) {
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.questionIcon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  transform: translateY(1px);
+
+  @media (max-width: $mobile-width) {
+    width: 12px;
+    height: 12px;
+  }
+}

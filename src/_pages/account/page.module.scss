@@ -1,0 +1,531 @@
+/* Акцент как на главной (Stages / glass) */
+.blue {
+  color: rgba(199, 245, 252, 0.95);
+}
+
+/* Контент внутри WalletPageLayout (как deposit / withdraw): без второй внешней «коробки» */
+.accountContent {
+  @include casino-page-shell;
+  @include casino-page-body-color;
+  display: flex;
+  flex-direction: column;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 280px;
+  color: var(--glass-text-muted, var(--ds-color-text-secondary));
+  font-size: 15px;
+
+  p {
+    margin: 0;
+  }
+}
+
+.loadingIcon {
+  color: var(--ds-color-accent-indigo);
+  animation: accountPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes accountPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// --- PROFILE HERO ---
+.profileHero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 28px;
+  padding: 24px 28px;
+  background: rgba(30, 35, 60, 0.55);
+  border-radius: 16px;
+  border: 1px solid var(--ds-color-border-deep);
+  backdrop-filter: blur(var(--glass-blur, 10px));
+}
+
+.heroLeft {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.avatarBox {
+  .avatarCircle {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    background: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .avatarImg {
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .accountProfileGlyph {
+      color: rgba(255, 255, 255, 0.72);
+      flex-shrink: 0;
+    }
+
+    .addBtn {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: 26px;
+      height: 26px;
+      background: rgba(107, 126, 158, 0.6);
+      border: none;
+      border-radius: 50%;
+      color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(4px);
+
+      &:hover {
+        transform: scale(1.1);
+        background: rgba(120, 140, 175, 0.9);
+        color: var(--ds-color-text-primary);
+      }
+    }
+  }
+}
+
+.userDetails {
+  .nameRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .displayName {
+      font-size: 26px;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--ds-color-text-primary);
+    }
+
+    .nameInput {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--ds-color-accent-indigo);
+      border-radius: 8px;
+      color: var(--ds-color-text-primary);
+      font-size: 24px;
+      padding: 4px 12px;
+      font-weight: 700;
+      outline: none;
+      width: 180px;
+    }
+
+    .editBtn {
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ds-color-text-secondary);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--ds-color-text-primary);
+      }
+    }
+  }
+
+  .userStatus {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: var(--ds-color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.onlineDot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ds-color-success);
+  box-shadow: 0 0 8px rgba(0, 255, 148, 0.45);
+}
+
+.logoutBtn {
+  background: rgba(255, 60, 60, 0.08);
+  border: 1px solid rgba(255, 60, 60, 0.15);
+  color: var(--ds-color-error);
+  padding: 10px 20px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 60, 60, 0.15);
+    border-color: rgba(255, 60, 60, 0.3);
+    transform: translateY(-1px);
+  }
+}
+
+// --- Равные панели 2×2 ---
+.equalGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.panelCard {
+  background: rgba(30, 35, 60, 0.5);
+  border: 1px solid var(--ds-color-border-deep);
+  border-radius: 16px;
+  padding: 22px 24px;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 14px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(74, 80, 128, 0.55);
+  color: var(--ds-color-text-secondary);
+
+  svg {
+    flex-shrink: 0;
+    opacity: 0.95;
+    color: rgba(199, 245, 252, 0.85);
+  }
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ds-color-text-secondary);
+}
+
+.panelBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panelHint {
+  margin: auto 0 0;
+  padding-top: 16px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(159, 163, 196, 0.85);
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 14px;
+}
+
+.detailLabel {
+  color: var(--ds-color-text-secondary);
+  flex-shrink: 0;
+}
+
+.detailValue {
+  font-weight: 600;
+  color: var(--ds-color-text-primary);
+  text-align: right;
+  word-break: break-word;
+}
+
+.quickLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.quickLink {
+  width: 100%;
+  justify-content: center;
+  gap: 10px;
+}
+
+.referralHero {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(74, 80, 128, 0.55);
+}
+
+.referralBadge {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(129, 140, 248, 0.4);
+  color: rgba(199, 245, 252, 0.95);
+}
+
+.referralHeroText {
+  min-width: 0;
+}
+
+.referralKicker {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(199, 245, 252, 0.88);
+}
+
+.referralLead {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ds-color-text-secondary);
+}
+
+.referralStatStrip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.referralStatTile {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(30, 35, 60, 0.45);
+  border: 1px solid var(--ds-color-border-deep);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.referralStatValue {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ds-color-text-primary);
+}
+
+.referralStatLabel {
+  font-size: 12px;
+  color: var(--ds-color-text-secondary);
+  font-weight: 600;
+}
+
+.referralMicrocopy {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(159, 163, 196, 0.92);
+}
+
+.linkContainer {
+  display: flex;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.18);
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid var(--ds-color-border-deep);
+  align-items: center;
+}
+
+.refInput {
+  background: transparent;
+  border: none;
+  flex: 1;
+  color: rgba(199, 245, 252, 0.9);
+  padding: 0 12px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+  outline: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Поверх глобального .app-cta-primary — компактная кнопка в строке */
+.copyBtn {
+  flex-shrink: 0;
+  min-height: 38px !important;
+  height: 38px;
+  padding: 0 20px !important;
+  font-size: 14px !important;
+  gap: 8px;
+  white-space: nowrap;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// Gaming Stats Section
+.statsMainGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: rgba(30, 35, 60, 0.4);
+  border: 1px solid var(--ds-color-border-deep);
+  border-radius: 14px;
+  transition: background 0.2s, border-color 0.2s;
+
+  &:hover {
+    background: rgba(30, 35, 60, 0.65);
+    border-color: var(--ds-color-accent-indigo);
+  }
+
+  .statLabel {
+    color: var(--ds-color-text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .statValue {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ds-color-text-primary);
+  }
+
+  .green {
+    color: var(--ds-color-success);
+  }
+}
+
+.historyBtn {
+  margin-top: 20px;
+  /* визуал — глобальный .app-cta-secondary */
+}
+
+// --- RESPONSIVE / ADAPTIVE ---
+@media (max-width: 1024px) {
+  .equalGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .panelCard {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .profileHero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .heroLeft {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nameRow {
+    justify-content: center;
+  }
+
+  .heroActions {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .logoutBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  // Реферальная программа
+  .linkContainer {
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    padding: 0;
+    gap: 8px;
+  }
+
+  .refInput {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .copyBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .referralStatStrip {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsMainGrid {
+    grid-template-columns: 1fr; // Статистика игр в 1 колонку на совсем маленьких экранах
+  }
+
+  .userDetails .nameRow .displayName {
+    font-size: 22px;
+  }
+
+  .userDetails .nameRow .nameInput {
+    width: 150px;
+    font-size: 20px;
+  }
+}

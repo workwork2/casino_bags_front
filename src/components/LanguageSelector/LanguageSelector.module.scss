@@ -1,0 +1,129 @@
+$tablet-width: 1024px;
+$mobile-width: 768px;
+
+.container {
+  position: relative;
+  user-select: none;
+  display: inline-block;
+  
+  @media (max-width: $tablet-width) {
+    width: 100%; 
+  }
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: rem(12);
+  cursor: pointer;
+  color: var(--ds-color-text-primary);
+  font-family: inherit;
+  font-size: rem(15);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: rem(1) solid rgba(255, 255, 255, 0.3); 
+  border-radius: rem(100); 
+  padding: 0 rem(16) 0 rem(20);
+  height: rem(44); 
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  &.active {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: $tablet-width) {
+    width: 100%;
+    justify-content: center;
+    gap: rem(20);
+  }
+}
+
+.contentLeft {
+  display: flex;
+  align-items: center;
+  gap: rem(10);
+}
+
+.flagEmoji {
+  font-size: rem(18);
+  line-height: 1;
+}
+
+.langCode {
+  font-weight: 500;
+  letter-spacing: rem(0.5);
+}
+
+/* МАГИЯ: СТРЕЛКА БЕЗ ТЕГА SVG */
+.cssArrow {
+  width: rem(8);
+  height: rem(8);
+  border-right: rem(2) solid rgba(255, 255, 255, 0.8);
+  border-bottom: rem(2) solid rgba(255, 255, 255, 0.8);
+  transform: translateY(-25%) rotate(45deg);
+  transition: transform 0.3s ease;
+  display: inline-block;
+  margin-left: rem(4); /* Отступ от текста */
+
+  &.rotated {
+    transform: translateY(25%) rotate(225deg);
+  }
+}
+
+/* ВЫПАДАЮЩИЙ СПИСОК */
+.dropdown {
+  position: absolute;
+  bottom: calc(100% + rem(8)); /* ВВЕРХ НА ДЕСКТОПЕ */
+  top: auto;
+  left: 50%; 
+  transform: translateX(-50%);
+  background: var(--app-popover-gradient);
+  border: var(--app-popover-border);
+  border-radius: var(--app-popover-radius, 12px);
+  padding: rem(8);
+  list-style: none;
+  z-index: var(--z-dropdown, 10500);
+  box-shadow: var(--app-popover-shadow); 
+  min-width: 100%; 
+
+  @media (max-width: $tablet-width) {
+     bottom: auto;
+     top: calc(100% + rem(8)); /* ВНИЗ НА ПЛАНШЕТАХ/МОБИЛКАХ */
+  }
+
+  &Item {
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+    padding: rem(10) rem(12);
+    color: var(--ds-color-text-primary);
+    cursor: pointer;
+    border-radius: rem(8);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    &[aria-selected="true"] {
+        background-color: rgba(255, 255, 255, 0.25); 
+        font-weight: 600;
+    }
+  }
+
+  &DropdownFlagEmoji {
+    font-size: rem(16);
+    line-height: 1;
+  }
+
+  &Label {
+    font-size: rem(14);
+  }
+}
