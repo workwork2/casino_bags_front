@@ -23,8 +23,6 @@ const PromoWidget: React.FC<PromoWidgetProps> = ({
 }) => {
   return (
     <div className={styles.container}>
-      <div className={styles.glowBg} />
-
       <div className={styles.headerRow}>
         <div className={styles.titleBlock}>
           <div className={styles.iconWrapper}>

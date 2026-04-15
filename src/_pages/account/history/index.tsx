@@ -185,8 +185,8 @@ export default function TransactionsHistoryPage() {
     <>
       <WalletPageLayout
         title="Transactions history"
-        subtitle="Deposits, withdrawals, bonuses, and sports & casino bets — one ledger with the same navigation as wallet pages."
-        titleIcon={<IoReceiptOutline size={40} aria-hidden />}
+        subtitle="Deposits, withdrawals, bonuses, and bets — one ledger."
+        titleIcon={<IoReceiptOutline size={32} aria-hidden />}
         navSlot={<WalletNavigation />}
       >
         {isLoading ? (

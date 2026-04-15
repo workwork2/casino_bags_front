@@ -63,11 +63,12 @@ $head-gap: 16px;
 
 .partnersKicker {
   margin: 0 0 8px 0;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ds-color-accent-indigo);
+  letter-spacing: 0.1em;
+  color: rgba(199, 245, 252, 0.88);
+  line-height: 1.3;
 }
 
 .partnersH1 {
@@ -76,7 +77,7 @@ $head-gap: 16px;
   font-weight: var(--glass-heading-weight);
   letter-spacing: var(--glass-heading-ls);
   color: var(--glass-heading-color);
-  line-height: 1.15;
+  line-height: var(--app-heading-page-lh, 1.2);
 
   @media (max-width: $mobile-bp) {
     font-size: var(--glass-heading-size-sm);
@@ -108,9 +109,9 @@ $head-gap: 16px;
 
 .partnersLead {
   margin: 0;
-  max-width: 56rem;
-  font-size: 15px;
-  line-height: 1.55;
+  max-width: min(56rem, 100%);
+  font-size: clamp(14px, 1.12vw, 16px);
+  line-height: 1.6;
   font-weight: 500;
   color: var(--glass-text-muted);
 
@@ -120,12 +121,17 @@ $head-gap: 16px;
   }
 
   a {
-    color: var(--ds-color-accent-indigo);
+    color: rgba(199, 245, 252, 0.95);
     font-weight: 600;
     text-decoration: none;
+    border-bottom: 1px solid rgba(199, 245, 252, 0.28);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
 
     &:hover {
-      text-decoration: underline;
+      color: var(--ds-color-text-primary);
+      border-bottom-color: rgba(255, 255, 255, 0.35);
     }
   }
 }

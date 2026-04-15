@@ -249,7 +249,7 @@
   gap: var(--ds-pill-nav-gap);
   width: 100%;
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     gap: var(--ds-pill-nav-gap-tablet);
   }
 
@@ -297,7 +297,7 @@
     box-shadow: var(--ds-pill-nav-active-shadow);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     font-size: var(--ds-pill-nav-font-size-md);
     padding: var(--ds-pill-nav-py-md) var(--ds-pill-nav-px-md);
   }
@@ -314,24 +314,9 @@
   }
 }
 
-/// Чип категории (Game Type): тот же визуальный язык, компактнее, без flex:1 на 320px.
+/// Чип категории / фильтр: те же размеры и отступы, что у навигации ЛК и партнёров (ds-pill-nav-link).
 @mixin ds-pill-nav-chip {
   @include ds-pill-nav-link($stretch-narrow: false);
-  min-height: var(--ds-pill-nav-chip-min-height);
-  padding: 0 var(--ds-pill-nav-chip-px);
-  font-size: var(--ds-pill-nav-chip-font-size);
-  font-weight: var(--ds-pill-nav-chip-font-weight);
-
-  @media (max-width: 768px) {
-    font-size: var(--ds-pill-nav-chip-font-size);
-    padding: 0 var(--ds-pill-nav-chip-px);
-  }
-
-  @media (max-width: 400px) {
-    font-size: 12px;
-    padding: 0 10px;
-    min-height: 34px;
-  }
 
   span {
     font-size: inherit;

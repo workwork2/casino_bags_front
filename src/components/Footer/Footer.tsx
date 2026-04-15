@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import clsx from 'clsx';
 import styles from './Footer.module.scss';
 import LanguageSelector from '../LanguageSelector/LanguageSelector';
 import { useAppSelector } from '@/shared/lib/redux/hooks';
@@ -55,7 +54,15 @@ const Footer = () => {
                     <div className={styles.footer__colBrand}>
                         <div className={styles.footer__brandTop}>
                             <Link href='/' className={styles.footer__logo}>
-                                <Image src="/footer__logo.svg" alt='Casino Logo' width={104} height={104} priority quality={100} />
+                                <Image
+                                    src="/footer__logo.svg"
+                                    alt="Casino Logo"
+                                    width={80}
+                                    height={69}
+                                    priority
+                                    quality={100}
+                                    className={styles.footer__logoImg}
+                                />
                             </Link>
 
                             <div className={styles.footer__cryptoList}>
@@ -142,14 +149,14 @@ const Footer = () => {
                     </div>
 
                 </div>
-            </div>
 
-            {/* НИЖНЯЯ ПАНЕЛЬ С 18+ */}
-            <div className={styles.footer__bottom}>
-                <div className={clsx("container", styles.footer__bottomContent)}>
-                    <div className={styles.footer__legalInfo}>
-                        <div className={styles.footer__ageLimit}>18+</div>
-                        <p>© {new Date().getFullYear()} Casino Master. All rights reserved. Play Responsibly.</p>
+                {/* НИЖНЯЯ ПАНЕЛЬ С 18+ — в том же контейнере, что и сетка */}
+                <div className={styles.footer__bottom}>
+                    <div className={styles.footer__bottomContent}>
+                        <div className={styles.footer__legalInfo}>
+                            <div className={styles.footer__ageLimit}>18+</div>
+                            <p>© {new Date().getFullYear()} Casino Master. All rights reserved. Play Responsibly.</p>
+                        </div>
                     </div>
                 </div>
             </div>

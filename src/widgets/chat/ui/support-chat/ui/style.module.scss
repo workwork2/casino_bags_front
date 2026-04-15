@@ -28,7 +28,7 @@
     right: 0;
     width: 100%;
     max-width: rem(380);
-    z-index: var(--z-chat, 10050);
+    z-index: var(--z-chat, 11500);
 
     background: linear-gradient(180deg, rgba(88, 76, 237, 0.96) 0%, rgba(62, 53, 168, 0.96) 100%);
     border-left: 1px solid var(--chat-border);
@@ -42,13 +42,13 @@
     line-height: 1.35;
     letter-spacing: -0.02em;
 
-    @media (min-width: 769px) {
+    @media (min-width: 951px) {
         top: var(--app-header-height, 128px);
         height: calc(100dvh - var(--app-header-height, 128px));
         max-height: calc(100dvh - var(--app-header-height, 128px));
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         top: 0;
         left: 0;
         max-width: none;
@@ -71,7 +71,7 @@
     border-bottom: 1px solid var(--chat-border);
     flex-shrink: 0;
 
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         /* Крупнее зона закрытия под палец */
         padding-top: rem(10);
         padding-bottom: rem(10);
@@ -97,7 +97,7 @@
         background: rgba(255, 255, 255, 0.16);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         width: rem(48);
         height: rem(48);
         -webkit-tap-highlight-color: transparent;
@@ -185,7 +185,7 @@
         background: rgba(255, 255, 255, 0.16);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         width: rem(48);
         height: rem(48);
         -webkit-tap-highlight-color: transparent;
@@ -213,7 +213,7 @@
         background: rgba(255, 255, 255, 0.1);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         width: rem(48);
         height: rem(48);
         border-radius: rem(12);

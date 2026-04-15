@@ -59,16 +59,17 @@ $glass-control: #ffffff0a;
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--ds-color-text-primary);
+  font-size: var(--glass-heading-size-sm);
+  font-weight: var(--glass-heading-weight);
+  letter-spacing: var(--glass-heading-ls);
+  line-height: var(--app-heading-page-lh, 1.2);
+  color: var(--glass-heading-color);
   margin: 0;
   flex: 0 1 auto;
   min-width: 0;
   white-space: nowrap;
 
   @media (max-width: 767px) {
-    font-size: 17px;
     width: 100%;
   }
 }

@@ -87,11 +87,16 @@ label {
 
 // Не трогать fill="none" / fill="transparent": у react-icons и др. контурных SVG
 // атрибут fill="none" иначе перебивается каскадом и иконки превращаются в сплошные пятна.
-[fill]:not([fill='none']):not([fill='transparent']) {
+// Не перебивать градиенты/явные rgba/hex (иначе CpCoinIcon и др. становятся «белыми» от currentColor).
+[fill]:not([fill='none']):not([fill='transparent']):not([fill*='url']):not(
+    [fill^='#']
+  ):not([fill^='rgba']):not([fill^='rgb(']) {
   fill: currentColor;
 }
 
-[stroke]:not([stroke='none']) {
+[stroke]:not([stroke='none']):not([stroke*='url']):not([stroke^='#']):not(
+    [stroke^='rgba']
+  ):not([stroke^='rgb(']) {
   stroke: currentColor;
 }
 

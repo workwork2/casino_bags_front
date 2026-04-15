@@ -44,8 +44,27 @@ export default function Home() {
       <div className="container">
         <SlotsCarousel games={games} />
       </div>
+
       <div className="container">
         <Stages />
+      </div>
+
+      <div className="container">
+        <SlotsCarousel
+          games={games}
+          title="В тренде сейчас"
+          emoji="🔥"
+          sliceStart={11}
+        />
+      </div>
+
+      <div className="container">
+        <SlotsCarousel
+          games={games}
+          title="Топ по выплатам"
+          emoji="💎"
+          sliceStart={22}
+        />
       </div>
 
       <div className="container">

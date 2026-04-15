@@ -3,23 +3,23 @@ import React, { useState } from "react";
 import styles from "./GameNavigation.module.scss";
 import CategoryDropdown from "../CategoryDropdown/CategoryDropdown";
 
-import { 
-  FaSearch, 
-  FaThLarge, 
-  FaDice, 
-  FaVideo, 
-  FaTable, 
-  FaTrophy, 
-  FaStar, 
-  FaCopyright, 
+import {
+  FaSearch,
+  FaThLarge,
+  FaDice,
+  FaVideo,
+  FaTable,
+  FaTrophy,
+  FaStar,
+  FaCopyright,
   FaHome,
   FaLayerGroup,
-  FaGamepad, 
-  FaBolt,    
-  FaFire,    
-  FaGift,    
-  FaRocket,  
-  FaRandom   
+  FaGamepad,
+  FaBolt,
+  FaFire,
+  FaGift,
+  FaRocket,
+  FaRandom,
 } from "react-icons/fa";
 import { CurrencyIcon } from "@/shared/ui/CurrencyIcon/CurrencyIcon";
 

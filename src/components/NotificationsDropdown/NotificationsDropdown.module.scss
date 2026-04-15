@@ -24,7 +24,7 @@
     background: rgba(255, 255, 255, 0.08);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     width: rem(44);
     height: rem(44);
   }
@@ -74,7 +74,7 @@
     border-radius: 4px;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     width: 340px;
     right: -60px;
   }

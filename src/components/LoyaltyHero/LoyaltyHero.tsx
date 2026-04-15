@@ -32,8 +32,8 @@ const LoyaltyHero: React.FC<LoyaltyHeroProps> = ({
     <div className={styles.heroWrapper}>
       <div className={styles.contentLeft}>
         <div className={styles.titleWrap}>
-          <IoDiamondOutline className={styles.titleIcon} aria-hidden />
           <h1 className={styles.title}>Программа лояльности</h1>
+          <IoDiamondOutline className={styles.titleIcon} aria-hidden />
         </div>
 
         <p className={styles.subtitle}>
@@ -48,13 +48,13 @@ const LoyaltyHero: React.FC<LoyaltyHeroProps> = ({
               <strong style={{ color: "#fff" }}>{nextLevelName}</strong>:
             </span>
             <span className={styles.points}>
-              <CpCoinIcon className={styles.cpIcon} size={24} />
               <span className={styles.pointsInner} aria-label="Comp Points">
                 <span className={styles.cpNumbers}>
                   {formatCp(currentPoints)}
                   <span className={styles.maxPoints}> / {formatCp(maxPoints)}</span>
                 </span>
               </span>
+              <CpCoinIcon className={styles.cpIcon} size={24} />
             </span>
           </div>
 

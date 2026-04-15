@@ -125,11 +125,17 @@ h6,
 a,
 button,
 label,
-input,
-textarea,
-select,
 svg * {
   transition-duration: var(--transition-duration);
+}
+
+/* Поля: только осмысленные свойства — без «залипания» outline/shadow от универсального transition */
+input,
+textarea,
+select {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: ease;
 }
 
 a {
@@ -163,15 +169,57 @@ select {
   letter-spacing: inherit;
 }
 
+/* Цвет текста в полях (не трогаем checkbox/radio/file — у них своя отрисовка) */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+textarea,
+select {
+  color: var(--ds-color-text-primary);
+}
+
+/* Единая тёмная схема нативных контролов (меньше светлых артефактов в Chrome/Safari) */
+input,
+textarea,
+select {
+  color-scheme: dark;
+}
+
 li {
   list-style: none;
   cursor: pointer;
   transition-duration: var(--transition-duration);
 }
 
+/*
+ * Кольцо фокуса для кнопок/ссылок. Поля ввода исключены — иначе двойная обводка
+ * с локальными стилями (Auth, ЛК, депозит) и «залипание» визуала при blur.
+ */
 :focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-color-focus-ring);
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: 0 0 0 3px var(--ds-color-primary-muted);
   transition-duration: 0s !important;
 }
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Autofill: убираем жёлтый фон Chrome, выравниваем с --ds-color-bg-input */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ds-color-text-primary) !important;
+  caret-color: var(--ds-color-text-primary);
+  box-shadow: 0 0 0 1000px var(--ds-color-bg-input) inset !important;
+  transition: background-color 99999s ease-out 0s !important;
+}
+

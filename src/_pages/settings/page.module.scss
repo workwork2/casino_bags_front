@@ -79,45 +79,119 @@ $text-dim: var(--ds-color-text-secondary);       // Единый приглуш�
   }
 }
 
-// --- ВНУТРЕННЯЯ КАРТОЧКА (Стиль как у карточек новостей) ---
+// --- ВНУТРЕННЯЯ КАРТОЧКА (как панели ЛК / glass) ---
 .card {
-  background: rgba(30, 35, 60, 0.4); // Легкий фон карточки
-  border: 1px solid var(--ds-color-border-deep);         // Рамка карточки
-  border-radius: 16px;
-  padding: 24px;
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 22px 24px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 
   @media (max-width: $mobile-bp) {
-    padding: 20px;
-    border-radius: 12px;
+    padding: 18px 16px;
+    border-radius: 16px;
   }
 }
 
 .cardHeader {
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--ds-color-border-deep); // Разделитель внутри карточки
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--glass-border);
 
   h2 {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: var(--glass-heading-size-sm);
+    font-weight: var(--glass-heading-weight);
+    letter-spacing: var(--glass-heading-ls);
     margin: 0 0 6px 0;
-    color: $text-white;
+    color: var(--glass-heading-color);
   }
 
   p {
     font-size: 13px;
-    color: $text-dim;
+    color: var(--glass-text-muted);
     margin: 0;
     line-height: 1.5;
+  }
+}
+
+.cardHeaderWithIcon {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+
+  .cardHeaderIcon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    color: rgba(199, 245, 252, 0.9);
+    margin-top: 2px;
   }
 }
 
 .cardBody {
   display: flex;
   flex-direction: column;
-  gap: 20px; 
+  gap: 20px;
+}
+
+.cardDivider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: 4px 0;
+  flex-shrink: 0;
+}
+
+.authInfoPanel {
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.authInfoTitle {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(199, 245, 252, 0.88);
+}
+
+.authSteps {
+  margin: 0 0 14px;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--glass-text-muted);
+
+  li {
+    margin-bottom: 6px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.accountLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(199, 245, 252, 0.98);
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    color: var(--ds-color-text-primary);
+    transform: translateX(2px);
+  }
 }
 
 // --- TOGGLE ROW (ПЕРЕКЛЮЧАТЕЛИ) ---

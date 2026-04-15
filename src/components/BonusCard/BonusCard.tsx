@@ -43,26 +43,20 @@ export default function BonusCard({
     setIsFlipped((prev) => !prev);
   };
 
-  const handleFrontClick = () => {
-    setIsFlipped(true);
-  };
-
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onDeleteClick) onDeleteClick();
     else console.log("Удалить бонус");
   };
 
-  const customStyles = {
-    "--glow-color": glowColor,
-  } as CSSProperties;
+  const sceneStyle = { "--glow-color": glowColor } as CSSProperties;
 
   return (
-    <div className={styles.cardScene} style={customStyles}>
+    <div className={styles.cardScene} style={sceneStyle}>
       <div className={`${styles.cardInner} ${isFlipped ? styles.flipped : ""}`}>
         
         {/* ЛИЦЕВАЯ СТОРОНА */}
-        <div className={styles.cardFront} onClick={handleFrontClick}>
+        <div className={styles.cardFront}>
           
           {/* Симметричные кнопки сверху */}
           <button
@@ -80,7 +74,7 @@ export default function BonusCard({
           {/* Центрирование главной иконки */}
           <div className={styles.iconSpacer}>
             <div className={styles.imageWrapper}>
-              <div className={styles.glowEffect}></div>
+              <div className={styles.glowEffect} aria-hidden />
               <div className={styles.iconContainer}>
                 {mainIcon}
               </div>
@@ -110,7 +104,7 @@ export default function BonusCard({
         </div>
 
         {/* ЗАДНЯЯ СТОРОНА */}
-        <div className={styles.cardBack} onClick={handleFlip}>
+        <div className={styles.cardBack}>
           <div className={styles.backContentWrap}>
             <h3 className={styles.backTitle}>{backTitle}</h3>
             

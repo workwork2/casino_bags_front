@@ -1,7 +1,28 @@
 .navContainer {
   @include ds-pill-nav-container;
+
+  @media (max-width: 520px) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding-bottom: 6px;
+    margin-left: -2px;
+    margin-right: -2px;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
 }
 
 .navLink {
   @include ds-pill-nav-link;
+
+  @media (max-width: 520px) {
+    flex: 0 0 auto;
+  }
+
+  @media (max-width: 400px) {
+    flex: 0 0 auto;
+  }
 }

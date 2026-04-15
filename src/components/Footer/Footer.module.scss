@@ -1,18 +1,24 @@
 $tablet-width: 1024px;
-$mobile-width: 768px;
+$mobile-width: 950px;
 /* Одна ширина для Support, Log in и Sign up */
 $footer-action-pill-width: rem(200);
 
 .footer {
-  background: linear-gradient(180deg, rgba(88, 76, 237, 0.9) 0%, rgba(62, 53, 168, 0.9) 100%);
-  margin-top: rem(60); 
   width: 100%;
   flex-shrink: 0;
   box-sizing: border-box;
+  margin-top: rem(60);
+  background: linear-gradient(
+    180deg,
+    rgba(88, 76, 237, 0.9) 0%,
+    rgba(62, 53, 168, 0.9) 100%
+  );
 
   @media (max-width: $mobile-width) {
     margin-top: rem(32);
   }
+
+  /* Контент выровнен по .container (как у страниц), сам <footer> — градиент на 100% ширины */
 
   &__grid {
     display: grid;
@@ -54,23 +60,15 @@ $footer-action-pill-width: rem(200);
     display: flex;
     flex-direction: column;
     gap: rem(36);
+    align-items: flex-start;
 
     @media (max-width: $tablet-width) and (min-width: #{$mobile-width + 1px}) {
       grid-column: 1 / -1;
-    }
-
-    @media (max-width: $tablet-width) {
-      align-items: center;
       width: 100%;
     }
 
     @media (max-width: $mobile-width) {
       grid-column: 1 / -1;
-      align-items: stretch;
-    }
-
-    /* Десктоп: лого + крипта по центру первой колонки (как раньше) */
-    @media (min-width: #{$mobile-width + 1px}) {
       align-items: center;
     }
   }
@@ -78,17 +76,21 @@ $footer-action-pill-width: rem(200);
   &__brandTop {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: rem(24);
     width: 100%;
-    max-width: rem(420);
-    margin-left: auto;
-    margin-right: auto;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
     box-sizing: border-box;
+
+    @media (max-width: $tablet-width) and (min-width: #{$mobile-width + 1px}) {
+      align-items: flex-start;
+    }
 
     @media (max-width: $mobile-width) {
       gap: rem(14);
-      max-width: none;
+      align-items: center;
     }
   }
 
@@ -96,48 +98,58 @@ $footer-action-pill-width: rem(200);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    align-self: center;
-    transition: opacity 0.2s;
+    align-self: flex-start;
 
-    img {
-      width: auto;
-      height: auto;
-      max-width: rem(104);
-      max-height: rem(104);
-      object-fit: contain;
+    @media (max-width: $mobile-width) {
+      align-self: center;
     }
 
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  /* Те же размеры, что у логотипа в хедере (.header__wrapper-logoIcon) */
+  &__logoImg {
+    flex-shrink: 0;
+    width: auto;
+    height: auto;
+    max-width: rem(80);
+    max-height: rem(69);
+    object-fit: contain;
+
     @media (max-width: 1450px) {
-      img {
-        max-width: rem(52);
-        max-height: rem(52);
-      }
+      max-width: rem(50);
+      max-height: rem(50);
+      min-width: rem(50);
     }
 
     @media (max-width: $mobile-width) {
-      img {
-        max-width: rem(54);
-        max-height: rem(54);
-      }
+      max-width: rem(52);
+      max-height: rem(52);
+      min-width: rem(52);
     }
 
     @media (max-width: 400px) {
-      img {
-        max-width: rem(50);
-        max-height: rem(50);
-      }
+      max-width: rem(48);
+      max-height: rem(48);
+      min-width: rem(48);
     }
-
-    &:hover { opacity: 0.8; }
   }
 
   &__cryptoList {
     display: flex;
     flex-wrap: wrap;
     gap: rem(12);
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
     align-self: stretch;
+
+    @media (max-width: $mobile-width) {
+      justify-content: center;
+    }
   }
 
   &__cryptoItem {

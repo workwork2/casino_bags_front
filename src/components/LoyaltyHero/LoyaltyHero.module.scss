@@ -1,4 +1,4 @@
-$mobile-bp: 768px;
+$mobile-bp: 950px;
 $color-accent: var(--ds-color-accent-indigo); /* Фиолетово-синий акцент */
 
 .heroWrapper {
@@ -43,25 +43,28 @@ $color-accent: var(--ds-color-accent-indigo); /* Фиолетово-синий �
 .titleWrap {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 15px;
 
   @media (max-width: $mobile-bp) {
     justify-content: center;
-    text-align: left;
-    flex-wrap: wrap;
-    gap: 8px 12px;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    gap: 10px 12px;
   }
 }
 
 .titleIcon {
-  font-size: 28px;
-  color: var(--ds-color-accent-indigo);
-  opacity: 0.95;
   flex-shrink: 0;
+  font-size: 32px;
+  color: var(--ds-color-text-primary);
+  opacity: 0.95;
 
   @media (max-width: $mobile-bp) {
-    font-size: 24px;
+    font-size: 32px;
   }
 }
 
@@ -75,7 +78,8 @@ $color-accent: var(--ds-color-accent-indigo); /* Фиолетово-синий �
     font-size: 22px;
     line-height: 1.25;
     text-align: center;
-    max-width: 20ch;
+    max-width: min(100%, 22ch);
+    flex: 0 1 auto;
   }
 }
 
@@ -84,6 +88,12 @@ $color-accent: var(--ds-color-accent-indigo); /* Фиолетово-синий �
   color: var(--ds-color-text-secondary);
   margin-bottom: 35px; /* Больше воздуха перед прогресс-баром */
   line-height: 1.5;
+
+  @media (max-width: $mobile-bp) {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-inline: 4px;
+  }
 }
 
 .progressBlock {
@@ -119,6 +129,13 @@ $color-accent: var(--ds-color-accent-indigo); /* Фиолетово-синий �
 
 .cpIcon {
   flex-shrink: 0;
+  display: inline-flex;
+  line-height: 0;
+
+  svg {
+    display: block;
+    isolation: isolate;
+  }
 }
 
 .pointsInner {
@@ -167,6 +184,13 @@ $color-accent: var(--ds-color-accent-indigo); /* Фиолетово-синий �
   &:hover {
     background: #ffffff33;
     border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  @media (max-width: $mobile-bp) {
+    margin-inline: auto;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
   }
 }
 

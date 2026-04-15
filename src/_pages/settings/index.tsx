@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { IoSettingsOutline } from "react-icons/io5"; // Иконка шестеренки
+import Link from "next/link";
+import {
+  IoChevronForward,
+  IoSettingsOutline,
+  IoShieldCheckmarkOutline,
+} from "react-icons/io5";
 import styles from "./page.module.scss";
 
 import InfoModal from "@/components/InfoModal/InfoModal";
@@ -78,6 +83,8 @@ export default function PreferencePage() {
     giveUpRains: false,
     emailOffers: true,
     fiatFormat: "comma-dot",
+    /** Двухфакторная защита — в проде синхронизировать с /profile/dashboard */
+    twoFactorAuth: false,
   });
 
   const [modal, setModal] = useState({
@@ -113,7 +120,59 @@ export default function PreferencePage() {
 
           {/* Сетка карточек в 2 колонки */}
           <div className={styles.contentGrid}>
-            
+            {/* Вход, сессии и 2FA — один блок в стиле ЛК */}
+            <section className={styles.card}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardHeaderWithIcon}>
+                  <IoShieldCheckmarkOutline
+                    className={styles.cardHeaderIcon}
+                    aria-hidden
+                  />
+                  <div>
+                    <h2>Вход и защита</h2>
+                    <p>
+                      Пароль и email меняются в аккаунте. Вход в сайт — через
+                      окно в шапке (Log in / Register).
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.cardBody}>
+                <div className={styles.authInfoPanel}>
+                  <p className={styles.authInfoTitle}>Где проходит вход</p>
+                  <ol className={styles.authSteps}>
+                    <li>Нажмите Log in или Register в шапке.</li>
+                    <li>
+                      При регистрации после пароля может запроситься код
+                      приложения-аутентификатора (2FA).
+                    </li>
+                    <li>
+                      Статус сессии и выход — в разделе «Аккаунт» на сайте.
+                    </li>
+                  </ol>
+                  <Link href="/account" className={styles.accountLink}>
+                    <span>Открыть аккаунт</span>
+                    <IoChevronForward size={18} aria-hidden />
+                  </Link>
+                </div>
+
+                <div className={styles.cardDivider} />
+
+                <ToggleItem
+                  title="Двухфакторная аутентификация (2FA)"
+                  desc="Дополнительный код при входе. Полная привязка — после API."
+                  isChecked={settings.twoFactorAuth}
+                  onChange={() => handleToggle("twoFactorAuth")}
+                  onInfoClick={() =>
+                    openInfo(
+                      "2FA",
+                      "После включения на сервере вход будет с паролем и одноразовым кодом из приложения (Google Authenticator, Authy и т.п.).",
+                    )
+                  }
+                />
+              </div>
+            </section>
+
             {/* 1. Privacy */}
             <section className={styles.card}>
               <div className={styles.cardHeader}>

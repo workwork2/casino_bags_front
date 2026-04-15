@@ -30,7 +30,7 @@ $active-bg: rgba(255, 255, 255, 0.2);
   @media (max-width: 1024px) {
     width: $sidebar-collapsed;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     display: none;
   }
 }
@@ -38,6 +38,11 @@ $active-bg: rgba(255, 255, 255, 0.2);
 .overlayOpen {
   z-index: var(--z-sidebar-overlay, 10811);
   box-shadow: 8px 0 28px rgba(0, 0, 0, 0.35);
+  /* На планшете .sidebar { width: 80px } — без этого развёрнутая панель остаётся «рейлом» и ломается вёрстка */
+  @media (max-width: 1450px) {
+    width: min(#{$sidebar-width}, calc(100vw - 24px));
+    max-width: calc(100vw - 24px);
+  }
 }
 
 .backdrop {

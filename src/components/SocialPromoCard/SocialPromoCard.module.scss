@@ -13,12 +13,9 @@ $text-color: var(--ds-color-text-primary);
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  
-  /* Каркас симметрии: верх к верху, низ к низу */
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  justify-content: space-between;
 
   @media (max-width: 1024px) {
     border-radius: 16px;
@@ -67,7 +64,6 @@ $text-color: var(--ds-color-text-primary);
   .emoji {
     font-size: 18px;
     line-height: 1;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
   }
 
   @media (max-width: 480px) {
@@ -80,12 +76,10 @@ $text-color: var(--ds-color-text-primary);
 .title {
   font-size: var(--glass-heading-size-sm);
   font-weight: var(--glass-heading-weight);
+  letter-spacing: var(--glass-heading-ls);
+  line-height: var(--app-heading-page-lh, 1.2);
   color: var(--glass-heading-color);
   margin: 0;
-  line-height: 1.2;
-
-  @media (max-width: 1024px) { font-size: 16px; }
-  @media (max-width: 480px) { font-size: 15px; }
 }
 
 .subtitle {
@@ -115,28 +109,15 @@ $text-color: var(--ds-color-text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1; /* Равномерно растягиваем на всю ширину */
-  height: 42px; /* Высота ТОЧНО такая же, как у поля ввода PromoCard */
-  border-radius: 10px; /* Как у инпута */
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
+  flex: 1;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--ds-color-text-primary);
-  transition: all 0.3s ease;
 
   @media (max-width: 480px) {
     height: 40px;
     border-radius: 8px;
   }
-
-  &:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-
-  /* Цветовые акценты при наведении */
-  &.tg:hover { color: #38bdf8; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2); }
-  &.tw:hover { color: var(--glass-text-body); box-shadow: 0 4px 12px rgba(226, 232, 240, 0.2); }
-  &.ig:hover { color: #f472b6; box-shadow: 0 4px 12px rgba(236, 114, 153, 0.2); }
-  &.ds:hover { color: #818cf8; box-shadow: 0 4px 12px rgba(129, 140, 248, 0.2); }
 }

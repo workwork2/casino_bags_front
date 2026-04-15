@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   IoAdd,
   IoBarChartOutline,
@@ -11,7 +12,7 @@ import {
   IoLogOutOutline,
   IoPencil,
   IoPeopleOutline,
-  IoPersonCircleOutline,
+  IoPersonOutline,
   IoReceiptOutline,
   IoRibbonOutline,
   IoSettingsOutline,
@@ -31,11 +32,11 @@ import { useRouter } from "next/navigation";
 import { api } from "@/shared/lib/api/axios";
 
 import {
-  ACCOUNT_AVATAR_PX,
+  PROFILE_HERO_AVATAR_PX,
   isPlaceholderAvatar,
 } from "@/shared/config/navigation";
 
-const ICON = 20;
+const ICON = 18;
 
 const formatUsd = (value: number | undefined | null) => {
   const n = typeof value === "number" && Number.isFinite(value) ? value : 0;
@@ -59,6 +60,21 @@ function unwrapDashboardPayload(body: unknown): Record<string, unknown> | null {
   return null;
 }
 
+function unwrapAffiliateLinkPayload(body: unknown): string | null {
+  if (!body || typeof body !== "object") return null;
+  const b = body as Record<string, unknown>;
+  if (b.success === false) return null;
+  const inner = b.data;
+  if (inner && typeof inner === "object") {
+    const d = inner as Record<string, unknown>;
+    const link = d.link;
+    if (typeof link === "string" && link.trim()) return link.trim();
+  }
+  const top = b.link;
+  if (typeof top === "string" && top.trim()) return top.trim();
+  return null;
+}
+
 export default function ProfileDashboardPage() {
   const router = useRouter();
   const appDispatch = useAppDispatch();
@@ -76,9 +92,71 @@ export default function ProfileDashboardPage() {
 
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [origin, setOrigin] = useState("");
+  const [generatedReferralLink, setGeneratedReferralLink] = useState<
+    string | null
+  >(null);
+  const [referralGenLoading, setReferralGenLoading] = useState(false);
+  const [referralGenError, setReferralGenError] = useState<string | null>(null);
 
-  const referralLink =
-    (profileData?.affiliate as Record<string, string> | undefined)?.link ?? "";
+  useEffect(() => {
+    setOrigin(typeof window !== "undefined" ? window.location.origin : "");
+  }, []);
+
+  /** Прямая ссылка с бэкенда (если есть — показываем сразу) */
+  const affiliateLinkFromApi = useMemo(() => {
+    const aff = profileData?.affiliate as Record<string, unknown> | undefined;
+    const direct =
+      typeof aff?.link === "string" ? aff.link.trim() : "";
+    return direct || "";
+  }, [profileData]);
+
+  const finalReferralLink =
+    affiliateLinkFromApi || (generatedReferralLink ?? "");
+
+  const handleGenerateReferralLink = async () => {
+    if (!origin) return;
+    setReferralGenLoading(true);
+    setReferralGenError(null);
+    try {
+      try {
+        const body = await api.post<unknown>("/profile/affiliate/link", {});
+        const fromApi = unwrapAffiliateLinkPayload(body);
+        if (fromApi) {
+          setGeneratedReferralLink(fromApi);
+          return;
+        }
+      } catch {
+        /* пробуем собрать локально */
+      }
+      const aff = profileData?.affiliate as Record<string, unknown> | undefined;
+      const codeRaw =
+        typeof aff?.code === "string"
+          ? aff.code
+          : typeof aff?.refCode === "string"
+            ? aff.refCode
+            : typeof aff?.referralCode === "string"
+              ? aff.referralCode
+              : "";
+      const code = String(codeRaw).trim();
+      if (code) {
+        setGeneratedReferralLink(
+          `${origin}/?ref=${encodeURIComponent(code)}`,
+        );
+        return;
+      }
+      const slug =
+        (typeof userName === "string" && userName.trim()) ||
+        `ref-${Math.random().toString(36).slice(2, 11)}`;
+      setGeneratedReferralLink(
+        `${origin}/?ref=${encodeURIComponent(slug)}`,
+      );
+    } catch {
+      setReferralGenError("Could not generate link. Try again.");
+    } finally {
+      setReferralGenLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchProfileData();
@@ -110,8 +188,9 @@ export default function ProfileDashboardPage() {
   };
 
   const handleCopyLink = () => {
-    if (!referralLink) return;
-    navigator.clipboard.writeText(referralLink);
+    const text = finalReferralLink;
+    if (!text) return;
+    void navigator.clipboard.writeText(text);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 2000);
   };
@@ -163,8 +242,8 @@ export default function ProfileDashboardPage() {
     <>
       <WalletPageLayout
         title="My account"
-        subtitle="Referrals, balances, and gaming stats — same navigation as deposit and withdraw."
-        titleIcon={<IoRibbonOutline size={40} aria-hidden />}
+        subtitle="Profile & wallet."
+        titleIcon={<IoRibbonOutline size={32} aria-hidden />}
         navSlot={<WalletNavigation />}
       >
         <div className={styles.accountContent}>
@@ -182,32 +261,34 @@ export default function ProfileDashboardPage() {
               <section className={styles.profileHero}>
                 <div className={styles.heroLeft}>
                   <div className={styles.avatarBox}>
-                    <div className={styles.avatarCircle}>
-                      {isPlaceholderAvatar(currentAvatar) ? (
-                        <IoPersonCircleOutline
-                          size={ACCOUNT_AVATAR_PX}
-                          className={styles.accountProfileGlyph}
-                          aria-hidden
-                        />
-                      ) : (
-                        <Image
-                          src={currentAvatar}
-                          alt=""
-                          width={ACCOUNT_AVATAR_PX}
-                          height={ACCOUNT_AVATAR_PX}
-                          sizes={`${ACCOUNT_AVATAR_PX}px`}
-                          quality={100}
-                          unoptimized
-                          className={styles.avatarImg}
-                        />
-                      )}
+                    <div className={styles.avatarWrap}>
+                      <div className={styles.avatarCircle}>
+                        {isPlaceholderAvatar(currentAvatar) ? (
+                          <IoPersonOutline
+                            size={52}
+                            className={styles.accountProfileGlyph}
+                            aria-hidden
+                          />
+                        ) : (
+                          <Image
+                            src={currentAvatar}
+                            alt=""
+                            width={PROFILE_HERO_AVATAR_PX}
+                            height={PROFILE_HERO_AVATAR_PX}
+                            sizes={`${PROFILE_HERO_AVATAR_PX}px`}
+                            quality={100}
+                            unoptimized
+                            className={styles.avatarImg}
+                          />
+                        )}
+                      </div>
                       <button
                         type="button"
                         className={styles.addBtn}
                         onClick={() => setIsAvatarModalOpen(true)}
                         aria-label="Change avatar"
                       >
-                        <IoAdd size={18} />
+                        <IoAdd size={16} />
                       </button>
                     </div>
                   </div>
@@ -237,27 +318,32 @@ export default function ProfileDashboardPage() {
                         <IoPencil size={ICON} />
                       </button>
                     </div>
+                    {accountEmail !== "—" ? (
+                      <p className={styles.heroEmail}>{accountEmail}</p>
+                    ) : null}
                     <p className={styles.userStatus}>
                       <span className={styles.onlineDot} aria-hidden />
                       <span>
-                        Online
                         {typeof user?.memberSince === "string"
-                          ? ` • Member since ${user.memberSince}`
-                          : null}
+                          ? `Since ${user.memberSince}`
+                          : "Active"}
                       </span>
+                      {kycLevel !== "—" ? (
+                        <span className={styles.heroMetaPill}>{kycLevel}</span>
+                      ) : null}
                     </p>
                   </div>
                 </div>
 
-                <div className={styles.heroActions}>
+                <div className={styles.heroRight}>
                   <button
                     type="button"
                     className={styles.logoutBtn}
                     title="Sign out"
                     onClick={() => setIsExitModalOpen(true)}
                   >
-                    <IoLogOutOutline size={ICON} aria-hidden />
-                    <span>Logout</span>
+                    <IoLogOutOutline size={20} aria-hidden />
+                    <span>Log out</span>
                   </button>
                 </div>
               </section>
@@ -273,28 +359,43 @@ export default function ProfileDashboardPage() {
                       <span className={styles.detailLabel}>Email</span>
                       <span className={styles.detailValue}>{accountEmail}</span>
                     </div>
+                    <Link
+                      href="/settings"
+                      className={styles.panelSettingsLink}
+                    >
+                      Settings → email & login
+                    </Link>
                     <div className={styles.detailRow}>
                       <span className={styles.detailLabel}>Last sign-in</span>
                       <span className={styles.detailValue}>
                         {lastLoginLabel}
                       </span>
                     </div>
-                    <div className={styles.detailRow}>
-                      <span className={styles.detailLabel}>
-                        Two-factor auth
-                      </span>
-                      <span className={styles.detailValue}>
-                        {twoFactorOn ? "On" : "Off"}
-                      </span>
+                    <div className={styles.twoFactorPanel}>
+                      <div className={styles.twoFactorPanelHeader}>
+                        <span className={styles.twoFactorTitle}>2FA</span>
+                        <span
+                          className={
+                            twoFactorOn
+                              ? styles.statusBadgeOn
+                              : styles.statusBadgeOff
+                          }
+                        >
+                          {twoFactorOn ? "On" : "Off"}
+                        </span>
+                      </div>
+                      <Link
+                        href="/settings"
+                        className={styles.twoFactorSettingsLink}
+                      >
+                        <IoSettingsOutline size={16} aria-hidden />
+                        Manage in Settings
+                      </Link>
                     </div>
                     <div className={styles.detailRow}>
                       <span className={styles.detailLabel}>Verification</span>
                       <span className={styles.detailValue}>{kycLevel}</span>
                     </div>
-                    <p className={styles.panelHint}>
-                      Enable 2FA in settings when available for extra
-                      protection.
-                    </p>
                   </div>
                 </div>
 
@@ -304,62 +405,65 @@ export default function ProfileDashboardPage() {
                     <h2 className={styles.panelTitle}>Referral program</h2>
                   </div>
                   <div className={styles.panelBody}>
-                    <div className={styles.referralHero}>
-                      <div className={styles.referralBadge} aria-hidden>
-                        <IoPeopleOutline size={28} />
+                    <div className={styles.statsMainGrid}>
+                      <div className={styles.statItem}>
+                        <span className={styles.statLabel}>Friends joined</span>
+                        <span className={styles.statValue}>{totalReferred}</span>
                       </div>
-                      <div className={styles.referralHeroText}>
-                        <p className={styles.referralKicker}>Invite & earn</p>
-                        <p className={styles.referralLead}>
-                          One link for friends. You get a revenue share when
-                          they play slots and live games — rates scale up to
-                          about 15%.
-                        </p>
-                      </div>
-                    </div>
-                    <div className={styles.referralStatStrip}>
-                      <div className={styles.referralStatTile}>
-                        <span className={styles.referralStatValue}>
-                          {totalReferred}
-                        </span>
-                        <span className={styles.referralStatLabel}>
-                          Friends joined
-                        </span>
-                      </div>
-                      <div className={styles.referralStatTile}>
-                        <span
-                          className={`${styles.referralStatValue} ${styles.blue}`}
-                        >
+                      <div className={styles.statItem}>
+                        <span className={styles.statLabel}>Your earnings</span>
+                        <span className={`${styles.statValue} ${styles.blue}`}>
                           {formatUsd(totalEarnedUsd)}
                         </span>
-                        <span className={styles.referralStatLabel}>
-                          Your earnings
-                        </span>
                       </div>
-                    </div>
-                    <p className={styles.referralMicrocopy}>
-                      Copy the link below and share it anywhere — socials,
-                      messengers, or streams.
-                    </p>
-                    <div className={styles.linkContainer}>
-                      <input
-                        readOnly
-                        value={referralLink}
-                        className={styles.refInput}
-                        aria-label="Referral link"
-                      />
-                      <button
-                        type="button"
-                        className={`app-cta-primary ${styles.copyBtn}`}
-                        onClick={handleCopyLink}
-                      >
-                        {copied ? (
-                          <IoCheckmarkCircle size={ICON} aria-hidden />
-                        ) : (
-                          <IoCopyOutline size={ICON} aria-hidden />
-                        )}
-                        <span>{copied ? "Copied" : "Copy"}</span>
-                      </button>
+                      {finalReferralLink ? (
+                        <div
+                          className={`${styles.statItem} ${styles.statItemSpan}`}
+                        >
+                          <span className={styles.statLabel}>Referral link</span>
+                          <div className={styles.linkInline}>
+                            <input
+                              readOnly
+                              value={finalReferralLink}
+                              className={styles.refInput}
+                              aria-label="Referral link"
+                              onFocus={(e) => e.currentTarget.select()}
+                              onClick={(e) => e.currentTarget.select()}
+                            />
+                            <button
+                              type="button"
+                              className={`app-cta-primary ${styles.copyBtn}`}
+                              onClick={handleCopyLink}
+                            >
+                              {copied ? (
+                                <IoCheckmarkCircle size={ICON} aria-hidden />
+                              ) : (
+                                <IoCopyOutline size={ICON} aria-hidden />
+                              )}
+                              <span>{copied ? "Copied" : "Copy"}</span>
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className={`${styles.statItem} ${styles.statItemSpan}`}
+                        >
+                          <span className={styles.statLabel}>Your link</span>
+                          <button
+                            type="button"
+                            className={`app-cta-secondary ${styles.referralGenBtn}`}
+                            onClick={() => void handleGenerateReferralLink()}
+                            disabled={!origin || referralGenLoading}
+                          >
+                            {referralGenLoading ? "…" : "Get link"}
+                          </button>
+                          {referralGenError ? (
+                            <p className={styles.referralGenError} role="alert">
+                              {referralGenError}
+                            </p>
+                          ) : null}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

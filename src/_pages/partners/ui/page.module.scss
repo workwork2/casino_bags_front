@@ -1,13 +1,15 @@
 $tablet-bp: 1024px;
 $mobile-bp: 768px;
+$narrow-bp: 640px;
 
-/* Карточки как в CarouselNews / сетка «Все новости» */
-$card-bg: rgba(30, 35, 60, 0.6);
-$card-border: var(--ds-color-border-deep);
+/* Внутренние плитки — как на /account (glass + тёмная подложка) */
+$card-bg: rgba(0, 0, 0, 0.18);
+$card-border: var(--glass-border);
 $card-header-grad: linear-gradient(
-  90deg,
-  rgba(60, 70, 110, 0.8) 0%,
-  rgba(54, 57, 126, 0.8) 100%
+  135deg,
+  rgba(99, 102, 241, 0.22) 0%,
+  rgba(30, 35, 60, 0.55) 50%,
+  rgba(0, 0, 0, 0.12) 100%
 );
 $accent-link: var(--ds-color-accent-indigo);
 
@@ -27,13 +29,13 @@ $accent-link: var(--ds-color-accent-indigo);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   width: 100%;
-  padding: 32px;
+  padding: clamp(16px, 3.5vw, 32px);
   display: flex;
   flex-direction: column;
-  margin: 0 0 20px 0;
+  margin: 0 0 clamp(12px, 2vw, 20px) 0;
 
   @media (max-width: $mobile-bp) {
-    padding: 16px;
+    border-radius: 16px;
   }
 }
 
@@ -41,11 +43,11 @@ $accent-link: var(--ds-color-accent-indigo);
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: clamp(20px, 3vw, 28px);
 
-  @media (min-width: 900px) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+  @media (min-width: $tablet-bp) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
   }
 }
 
@@ -56,20 +58,30 @@ $accent-link: var(--ds-color-accent-indigo);
   padding: 14px 16px;
   background: $card-bg;
   border: 1px solid $card-border;
-  border-radius: 12px;
+  border-radius: 14px;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(99, 102, 241, 0.35);
+  }
 
   strong {
     display: block;
-    font-size: 14px;
+    font-size: clamp(13px, 1.1vw, 15px);
     font-weight: 600;
-    color: var(--ds-color-text-primary);
+    color: var(--glass-heading-color);
     margin-bottom: 4px;
+    letter-spacing: var(--glass-heading-ls);
+    line-height: 1.3;
   }
 
   span {
-    font-size: 13px;
-    line-height: 1.45;
-    color: var(--ds-color-text-secondary);
+    font-size: clamp(12px, 1.05vw, 14px);
+    line-height: 1.55;
+    color: var(--glass-text-muted);
     font-weight: 500;
   }
 }
@@ -83,43 +95,34 @@ $accent-link: var(--ds-color-accent-indigo);
 
 .sectionHeading {
   margin: 8px 0 12px 0;
-  font-size: var(--glass-heading-size-sm);
+  font-size: clamp(17px, 1.35vw, 22px);
   font-weight: var(--glass-heading-weight);
   letter-spacing: var(--glass-heading-ls);
   color: var(--glass-heading-color);
-  line-height: 1.2;
-
-  @media (min-width: $mobile-bp) {
-    font-size: var(--glass-heading-size);
-  }
+  line-height: var(--app-heading-page-lh, 1.2);
 }
 
 .sectionIntro {
-  margin: 0 0 24px 0;
-  max-width: 48rem;
-  font-size: 14px;
-  line-height: 1.55;
+  margin: 0 0 clamp(18px, 2.5vw, 24px) 0;
+  max-width: min(48rem, 100%);
+  font-size: clamp(14px, 1.12vw, 16px);
+  line-height: 1.6;
   font-weight: 500;
   color: var(--glass-text-muted);
-
-  @media (min-width: $mobile-bp) {
-    font-size: 15px;
-  }
 }
 
 /* Сетка как «Все новости» */
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 24px);
 
-  @media (max-width: $tablet-bp) {
-    grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @media (max-width: $mobile-bp) {
+  @media (max-width: $narrow-bp) {
     grid-template-columns: 1fr;
-    gap: 16px;
   }
 }
 
@@ -128,15 +131,17 @@ $accent-link: var(--ds-color-accent-indigo);
   flex-direction: column;
   background: $card-bg;
   border: 1px solid $card-border;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   transition:
     border-color 0.3s,
-    transform 0.3s;
+    transform 0.3s,
+    box-shadow 0.3s;
 
   &:hover {
-    border-color: $accent-link;
-    transform: translateY(-4px);
+    border-color: rgba(99, 102, 241, 0.45);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -151,10 +156,11 @@ $accent-link: var(--ds-color-accent-indigo);
 }
 
 .newsCardTitle {
-  color: var(--ds-color-text-primary);
-  font-size: 14px;
+  color: var(--glass-heading-color);
+  font-size: clamp(13px, 1.05vw, 15px);
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.35;
+  letter-spacing: var(--glass-heading-ls);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -162,9 +168,11 @@ $accent-link: var(--ds-color-accent-indigo);
 }
 
 .newsCardMeta {
-  color: var(--ds-color-text-secondary);
-  font-size: 12px;
-  font-weight: 500;
+  color: var(--glass-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -200,9 +208,9 @@ $accent-link: var(--ds-color-accent-indigo);
 
 .newsCardDesc {
   margin: 0;
-  color: var(--ds-color-text-secondary);
-  font-size: 13px;
-  line-height: 1.45;
+  color: var(--glass-text-muted);
+  font-size: clamp(12px, 1.05vw, 14px);
+  line-height: 1.55;
   font-weight: 500;
 }
 
@@ -324,8 +332,8 @@ $accent-link: var(--ds-color-accent-indigo);
 /* Benefits — 2 колонки, те же границы */
 .benefitsGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 16px);
 
   @media (max-width: $tablet-bp) {
     grid-template-columns: 1fr;
@@ -338,14 +346,14 @@ $accent-link: var(--ds-color-accent-indigo);
   gap: 10px;
   background: $card-bg;
   border: 1px solid $card-border;
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: clamp(14px, 2vw, 18px);
   transition:
     border-color 0.3s,
     transform 0.3s;
 
   &:hover {
-    border-color: $accent-link;
+    border-color: rgba(99, 102, 241, 0.4);
     transform: translateY(-2px);
   }
 }
@@ -376,19 +384,20 @@ $accent-link: var(--ds-color-accent-indigo);
 
 .benefitTitle {
   margin: 0;
-  font-size: 15px;
+  font-size: clamp(14px, 1.1vw, 16px);
   font-weight: 600;
-  line-height: 1.3;
-  color: var(--ds-color-text-primary);
+  line-height: 1.35;
+  color: var(--glass-heading-color);
+  letter-spacing: var(--glass-heading-ls);
   flex: 1;
   min-width: 0;
 }
 
 .benefitDesc {
   margin: 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--ds-color-text-secondary);
+  font-size: clamp(12px, 1.05vw, 14px);
+  line-height: 1.55;
+  color: var(--glass-text-muted);
   font-weight: 500;
 }
 
@@ -400,10 +409,10 @@ $accent-link: var(--ds-color-accent-indigo);
 
 /* FAQ */
 .faqList {
-  border: 1px solid $card-border;
-  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.14);
   margin-bottom: 28px;
 }
 
@@ -436,14 +445,11 @@ $accent-link: var(--ds-color-accent-indigo);
 }
 
 .faqQuestion {
-  font-size: 14px;
+  font-size: clamp(14px, 1.1vw, 16px);
   font-weight: 600;
-  color: var(--ds-color-text-primary);
-  line-height: 1.35;
-
-  @media (min-width: $mobile-bp) {
-    font-size: 15px;
-  }
+  color: var(--glass-heading-color);
+  line-height: 1.4;
+  letter-spacing: var(--glass-heading-ls);
 }
 
 .faqToggle {
@@ -484,14 +490,10 @@ $accent-link: var(--ds-color-accent-indigo);
 .faqAnswer {
   margin: 0;
   padding: 0 18px 16px 18px;
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--ds-color-text-secondary);
+  font-size: clamp(13px, 1.05vw, 15px);
+  line-height: 1.6;
+  color: var(--glass-text-muted);
   font-weight: 500;
-
-  @media (min-width: $mobile-bp) {
-    font-size: 14px;
-  }
 }
 
 .applyBlock {

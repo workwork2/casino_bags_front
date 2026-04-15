@@ -132,6 +132,7 @@ export default function PartnersReferralsPage() {
                 <FaChartColumn className={ph.partnersIconSvg} />
               </div>
               <div className={ph.partnersHeadBody}>
+                <p className={ph.partnersKicker}>Affiliate program</p>
                 <div className={ph.partnersTitleRow}>
                   <h1 className={ph.partnersH1}>Partner dashboard</h1>
                   <button

@@ -3,6 +3,10 @@ import Image, { StaticImageData } from "next/image";
 import CpCoinIcon from "@/components/icons/CpCoinIcon";
 import styles from "./StatusCard.module.scss";
 
+function formatCp(n: number) {
+  return new Intl.NumberFormat("ru-RU").format(Math.max(0, Math.floor(n)));
+}
+
 export interface BenefitItemProps {
   label: string;
   value?: string | number;
@@ -67,11 +71,14 @@ const StatusCard: React.FC<StatusCardProps> = ({
           <div className={styles.progressHeader}>
             <span>Ваш прогресс</span>
             <div className={styles.currentValues}>
-              <CpCoinIcon className={styles.cpInlineIcon} size={18} />
               <span className={styles.cpValues}>
-                <span className={styles.accentText}>CP{currentMoney}</span>
-                <span className={styles.cpSlash}> / CP{targetMoney}</span>
+                <span className={styles.accentText}>{formatCp(currentMoney)}</span>
+                <span className={styles.cpSlash}>
+                  {" "}
+                  / {formatCp(targetMoney)}
+                </span>
               </span>
+              <CpCoinIcon className={styles.cpInlineIcon} size={18} />
             </div>
           </div>
 

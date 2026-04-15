@@ -41,8 +41,8 @@ footer {
   /*
    * Пилюли лобби: высоты = кнопки/инпуты (--ds-control-height-*)
    */
-  --lobby-control-height: var(--ds-control-height-md);
-  --lobby-pill-padding-x: var(--ds-control-padding-x-md);
+  --lobby-control-height: var(--ds-control-height-lg);
+  --lobby-pill-padding-x: var(--ds-space-4);
   --lobby-pill-radius: var(--ds-radius-pill);
   --lobby-search-icon-left: var(--ds-space-4);
   --lobby-search-input-pl: calc(var(--ds-space-4) + var(--ds-space-5));
@@ -82,10 +82,11 @@ footer {
   --app-modal-radius: var(--ds-radius-xl);
   --app-modal-max-width: 440px;
 
-  /* Слои: хедер < выпадашки < бургер < чат < модалки */
+  /* Слои: хедер < сайдбар/бургер/нижняя навигация < чат < модалки */
   --z-header: 1000;
   --z-sidebar: 1001;
-  --z-chat: 10050;
+  /* Выше оверлея сайдбара и нижней навигации, чтобы инпут чата/поддержки не перекрывался */
+  --z-chat: 11500;
   --app-mobile-bottom-nav-height: 80px;
   --z-dropdown: 10500;
   --z-burger-backdrop: 10800;
@@ -139,7 +140,7 @@ footer {
     filter: none;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     padding: 0 var(--ds-space-5);
     font-size: var(--ds-control-font-sm);
   }
@@ -250,7 +251,7 @@ footer {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 950px) {
   :root {
     --app-sidebar-offset: 0px;
     --app-sidebar-gap: 0px;
@@ -280,7 +281,7 @@ footer {
   transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 950px) {
   .mainContent {
     padding-bottom: calc(
       var(--app-mobile-bottom-nav-height) + env(safe-area-inset-bottom, 0px)

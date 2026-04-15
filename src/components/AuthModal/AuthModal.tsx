@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useId } from 'react';
+import { useState, useEffect, useId, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import {
 	IoClose,
@@ -37,7 +37,11 @@ interface AuthModalProps {
 	onSwitchMode: (mode: ProviderMode) => void;
 }
 
-type ViewState = 'login' | 'registration' | 'forgot_password';
+type ViewState =
+	| 'login'
+	| 'registration'
+	| 'registration_totp'
+	| 'forgot_password';
 
 type FormValues = {
 	email: string;
@@ -46,6 +50,7 @@ type FormValues = {
 	currency: string;
 	ageConfirmed: boolean;
 	promoOptIn: boolean;
+	totpCode: string;
 };
 
 const CURRENCIES = [
@@ -71,7 +76,9 @@ export default function AuthModal({
 	const dispatch = useAppDispatch();
 	const currencyId = useId();
 
-	const { register, handleSubmit, reset } = useForm<FormValues>({
+	const pendingRegistrationRef = useRef<FormValues | null>(null);
+
+	const { register, handleSubmit, reset, getValues } = useForm<FormValues>({
 		defaultValues: {
 			email: '',
 			password: '',
@@ -79,6 +86,7 @@ export default function AuthModal({
 			currency: 'USD',
 			ageConfirmed: false,
 			promoOptIn: false,
+			totpCode: '',
 		},
 	});
 
@@ -89,6 +97,8 @@ export default function AuthModal({
 			} else if (currentMode === 'signup') {
 				setView('registration');
 			}
+		} else {
+			pendingRegistrationRef.current = null;
 		}
 	}, [currentMode, opened]);
 
@@ -98,6 +108,7 @@ export default function AuthModal({
 		setView(value as ViewState);
 		setError(null);
 		setForgotSent(false);
+		pendingRegistrationRef.current = null;
 	};
 
 	const socialLogin = (provider: string) => {
@@ -123,6 +134,44 @@ export default function AuthModal({
 			return;
 		}
 
+		if (view === 'registration_totp') {
+			const pending = pendingRegistrationRef.current;
+			if (!pending) {
+				setError('Start registration again.');
+				setView('registration');
+				return;
+			}
+			const code = (data.totpCode ?? '').replace(/\s/g, '');
+			if (!/^\d{6}$/.test(code)) {
+				setError('Enter a 6-digit code.');
+				return;
+			}
+			setLoading(true);
+			try {
+				await dispatch(
+					registerUser({
+						email: pending.email,
+						password: pending.password,
+						promo: pending.promo,
+						totpCode: code,
+					}),
+				).unwrap();
+				onClose();
+				reset();
+				pendingRegistrationRef.current = null;
+				setView('login');
+			} catch (err: unknown) {
+				const msg =
+					typeof err === 'string'
+						? err
+						: 'Something went wrong. Please try again.';
+				setError(msg);
+			} finally {
+				setLoading(false);
+			}
+			return;
+		}
+
 		if (!/^\S+@\S+$/.test(data.email)) {
 			setError('Invalid email');
 			return;
@@ -137,6 +186,13 @@ export default function AuthModal({
 			return;
 		}
 
+		if (view === 'registration') {
+			pendingRegistrationRef.current = { ...data };
+			setView('registration_totp');
+			reset({ ...getValues(), totpCode: '' });
+			return;
+		}
+
 		setLoading(true);
 		try {
 			if (view === 'login') {
@@ -144,14 +200,6 @@ export default function AuthModal({
 					loginUser({
 						email: data.email,
 						password: data.password,
-					}),
-				).unwrap();
-			} else {
-				await dispatch(
-					registerUser({
-						email: data.email,
-						password: data.password,
-						promo: data.promo,
 					}),
 				).unwrap();
 			}
@@ -190,8 +238,16 @@ export default function AuthModal({
 							<p className={classes.authKicker}>Account</p>
 							<h2 className={classes.authTitle}>Reset password</h2>
 							<p className={classes.authLead}>
-								Enter the email linked to your account. We&apos;ll send you a
-								reset link.
+								We&apos;ll email you a reset link.
+							</p>
+						</header>
+					) : view === 'registration_totp' ? (
+						<header className={classes.authHeader}>
+							<p className={classes.authKicker}>2FA</p>
+							<h2 className={classes.authTitle}>Authenticator</h2>
+							<p className={classes.authLead}>
+								Enter the 6-digit code. Backend can verify later — demo accepts
+								any 6 digits.
 							</p>
 						</header>
 					) : (
@@ -199,14 +255,12 @@ export default function AuthModal({
 							<header className={classes.authHeader}>
 								<p className={classes.authKicker}>Casino Master</p>
 								<h2 className={classes.authTitle}>
-									{view === 'login'
-										? 'Welcome back'
-										: 'Create your account'}
+									{view === 'login' ? 'Welcome back' : 'Sign up'}
 								</h2>
 								<p className={classes.authLead}>
 									{view === 'login'
-										? 'Log in to play, claim bonuses, and manage your wallet.'
-										: 'Join in seconds. Secure signup with email or social login.'}
+										? 'Log in to play and use your wallet.'
+										: 'Email, password, then one-time code.'}
 								</p>
 							</header>
 
@@ -227,7 +281,35 @@ export default function AuthModal({
 						onSubmit={handleSubmit(onValid)}
 					>
 						<Stack className={classes.authFormStack} gap={10}>
-							{!(forgotMode && forgotSent) && (
+							{view === 'registration_totp' ? (
+								<>
+									<TextField
+										placeholder='6-digit code'
+										type='text'
+										inputMode='numeric'
+										autoComplete='one-time-code'
+										maxLength={6}
+										leftSection={<MdOutlineLock size={16} />}
+										className={classes.fieldRow}
+										inputClassName={classes.fieldControl}
+										sectionClassName={classes.inputSection}
+										{...register('totpCode')}
+									/>
+									<button
+										type='button'
+										className={classes.backLink}
+										onClick={() => {
+											setView('registration');
+											setError(null);
+										}}
+									>
+										← Edit details
+									</button>
+								</>
+							) : null}
+
+							{!(forgotMode && forgotSent) &&
+								view !== 'registration_totp' && (
 								<TextField
 									placeholder='Email address'
 									type='email'
@@ -240,7 +322,7 @@ export default function AuthModal({
 								/>
 							)}
 
-							{!forgotMode && (
+							{!forgotMode && view !== 'registration_totp' && (
 								<>
 									<PasswordField
 										placeholder='Password'
@@ -381,7 +463,8 @@ export default function AuthModal({
 									className={classes.submitButton}
 								>
 									{view === 'login' && 'Log in'}
-									{view === 'registration' && 'Create account'}
+									{view === 'registration' && 'Continue'}
+									{view === 'registration_totp' && 'Create account'}
 									{forgotMode && 'Send reset link'}
 								</Button>
 							)}

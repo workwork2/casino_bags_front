@@ -1,5 +1,5 @@
 $tablet-bp: 1024px;
-$mobile-bp: 768px;
+$mobile-bp: 950px;
 
 /* Как новости / FAQ: верх — .mainContent, снизу — ~20px до футера */
 .loyaltyPage {
@@ -51,8 +51,8 @@ $mobile-bp: 768px;
 /* Лента у заголовка «Статусы» (в hero — бриллиант как в сайдбаре) */
 .titleIcon {
   flex-shrink: 0;
-  font-size: 22px;
-  color: var(--ds-color-accent-indigo);
+  font-size: 32px;
+  color: var(--ds-color-text-primary);
   opacity: 0.95;
 }
 
@@ -92,7 +92,7 @@ $mobile-bp: 768px;
   }
 
   .titleIcon {
-    font-size: 20px;
+    font-size: 32px;
   }
 }
 

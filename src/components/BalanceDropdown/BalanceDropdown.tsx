@@ -452,6 +452,15 @@ import {
 } from "@/entities/wallet/api/walletApi";
 import { useParams } from "next/navigation";
 import { openGame } from "@/entities/game/model/slice";
+import { fetchVipData } from "@/entities/vip/model/vipSlice";
+import type { RootState } from "@/shared/lib/redux/store";
+import {
+  applyWalletUiDemo,
+  isWalletUiDemoMode,
+  PAY_FROM_CP,
+  WALLET_UI_DEMO_CP_BALANCE,
+} from "@/shared/config/walletUiDemo";
+import CpCoinIcon from "@/components/icons/CpCoinIcon";
 
 const formatUsdTotal = (n: number) =>
   new Intl.NumberFormat("en-US", {
@@ -460,6 +469,12 @@ const formatUsdTotal = (n: number) =>
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(n);
+
+/** 100 CP = $1 USD эквивалент при обмене на крипту */
+const CP_PER_USD = 100;
+
+/** Иконки в строках «Отдать / Получить» и в селектах — один размер */
+const SWAP_ROW_ICON_PX = 20;
 
 const BalanceDropdown: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -474,9 +489,14 @@ const BalanceDropdown: React.FC = () => {
   const currencies = useAppSelector(currenciesSelectors.selectEntities);
   const selectedWallet = useAppSelector(walletsSelectors.selectedWallet);
   const selectedWalletId = useAppSelector(walletsSelectors.selectedWalletId);
+  const vip = useAppSelector((s: RootState) => s.vip);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isSwapMode, setIsSwapMode] = useState(false);
+  /** Откуда списываем: `cp` или currencyId крипто-кошелька */
+  const [payFromId, setPayFromId] = useState<string>("");
+  /** Демо: остаток CP после обмена, если нет VIP с бэка */
+  const [demoCpRemaining, setDemoCpRemaining] = useState<number | null>(null);
   const [loadState, setLoadState] = useState<"loading" | "ready">("loading");
 
   const [swapAmount, setSwapAmount] = useState("");
@@ -494,6 +514,7 @@ const BalanceDropdown: React.FC = () => {
         );
       } else {
         setIsSwapMode(false);
+        setPayFromId("");
       }
       return next;
     });
@@ -502,16 +523,12 @@ const BalanceDropdown: React.FC = () => {
   const loadWallets = useCallback(async () => {
     setLoadState("loading");
 
-    // if (isWalletUiDemoMode) {
-    //   applyWalletUiDemo(dispatch);
-    //   setLoadState("ready");
-    //   return;
-    // }
-
     const data = await getMyWallets();
 
     if (!data) {
-      // dispatch(walletsActions.resetWallets());
+      if (isWalletUiDemoMode) {
+        applyWalletUiDemo(dispatch);
+      }
       setLoadState("ready");
       return;
     }
@@ -524,7 +541,9 @@ const BalanceDropdown: React.FC = () => {
     dispatch(walletsActions.upsertMany(walletsData));
 
     if (walletsData.length === 0) {
-      // dispatch(walletsActions.resetWallets());
+      if (isWalletUiDemoMode) {
+        applyWalletUiDemo(dispatch);
+      }
       setLoadState("ready");
       return;
     }
@@ -555,6 +574,7 @@ const BalanceDropdown: React.FC = () => {
       if (customEvent.detail?.source !== "balance") {
         setIsOpen(false);
         setIsSwapMode(false);
+        setPayFromId("");
       }
     };
 
@@ -578,15 +598,147 @@ const BalanceDropdown: React.FC = () => {
     }
     setIsOpen(false);
     setIsSwapMode(false);
+    setPayFromId("");
   };
 
+  useEffect(() => {
+    if (isOpen && isSwapMode) {
+      dispatch(fetchVipData());
+    }
+  }, [isOpen, isSwapMode, dispatch]);
+
+  /** CP доступно к обмену (реальный бэк или демо) */
+  const exchangeableCp = useMemo(() => {
+    if (vip.data) {
+      const wallet = vip.data.cpWallet ?? vip.data.cpBalance;
+      if (typeof wallet === "number" && Number.isFinite(wallet)) return wallet;
+      return vip.data.progress?.currentPoints ?? 0;
+    }
+    if (isWalletUiDemoMode) {
+      return demoCpRemaining ?? WALLET_UI_DEMO_CP_BALANCE;
+    }
+    return 0;
+  }, [vip.data, demoCpRemaining]);
+
   const handleSwap = async () => {
-    if (!selectedWallet || !targetCurrencyId || !swapAmount) return;
+    if (!swapAmount || !targetCurrencyId || !payFromId) return;
+
+    const targetWallet = wallets.find(
+      (w) => w.currencyId === targetCurrencyId,
+    );
+    const targetCurrency = currencies[targetCurrencyId];
+    if (!targetWallet || !targetCurrency) return;
 
     try {
       setIsSwapping(true);
+
+      if (payFromId === PAY_FROM_CP) {
+        const amt = Math.floor(parseFloat(swapAmount.replace(/\s/g, "")));
+        if (!Number.isFinite(amt) || amt <= 0) {
+          alert("Введите сумму CP.");
+          return;
+        }
+        if (amt > exchangeableCp) {
+          alert("Недостаточно CP.");
+          return;
+        }
+        if (amt % CP_PER_USD !== 0) {
+          alert(`Сумма должна быть кратна ${CP_PER_USD} CP.`);
+          return;
+        }
+
+        const usd = amt / CP_PER_USD;
+        const priceUsd = parseFloat(targetCurrency.priceUsd || "1");
+        if (!Number.isFinite(priceUsd) || priceUsd <= 0) {
+          alert("Нет курса для выбранной валюты.");
+          return;
+        }
+        const cryptoOut = Big(usd).div(priceUsd).toFixed(8);
+
+        if (isWalletUiDemoMode) {
+          const nextBal = Big(targetWallet.realBalance || "0")
+            .plus(cryptoOut)
+            .toFixed(8);
+          const nextUsd = Big(nextBal).times(priceUsd).toFixed(2);
+          dispatch(
+            walletsActions.applyBalancePatch({
+              walletId: targetWallet.id,
+              patch: {
+                realBalance: nextBal,
+                balanceUsd: nextUsd,
+              },
+            }),
+          );
+          if (!vip.data) {
+            setDemoCpRemaining(
+              (demoCpRemaining ?? WALLET_UI_DEMO_CP_BALANCE) - amt,
+            );
+          }
+        } else {
+          // TODO: POST /wallet/exchange-cp-to-crypto { amountCp, toCurrencyId }
+          alert(
+            "Обмен CP на криптобаланс будет доступен после подключения API.",
+          );
+          return;
+        }
+
+        setSwapAmount("");
+        setIsSwapMode(false);
+        setPayFromId("");
+        setIsOpen(false);
+        await loadWallets();
+        return;
+      }
+
+      const fromWallet = wallets.find((w) => w.currencyId === payFromId);
+      const fromCurrency = currencies[payFromId];
+      if (!fromWallet || !fromCurrency || payFromId === targetCurrencyId) {
+        return;
+      }
+
+      if (isWalletUiDemoMode) {
+        const amt = Big(swapAmount);
+        const maxBal = Big(fromWallet.realBalance || "0");
+        if (amt.lte(0) || amt.gt(maxBal)) {
+          alert("Некорректная сумма.");
+          return;
+        }
+        const pFrom = parseFloat(fromCurrency.priceUsd || "1");
+        const pTo = parseFloat(targetCurrency.priceUsd || "1");
+        if (!Number.isFinite(pFrom) || !Number.isFinite(pTo) || pTo <= 0) {
+          alert("Нет курса для обмена.");
+          return;
+        }
+        const usdVal = amt.times(pFrom).times(0.99);
+        const cryptoOut = usdVal.div(pTo).toFixed(8);
+        const nextFrom = maxBal.minus(amt).toFixed(8);
+        const nextFromUsd = Big(nextFrom).times(pFrom).toFixed(2);
+        const nextToBal = Big(targetWallet.realBalance || "0")
+          .plus(cryptoOut)
+          .toFixed(8);
+        const nextToUsd = Big(nextToBal).times(pTo).toFixed(2);
+
+        dispatch(
+          walletsActions.applyBalancePatch({
+            walletId: fromWallet.id,
+            patch: { realBalance: nextFrom, balanceUsd: nextFromUsd },
+          }),
+        );
+        dispatch(
+          walletsActions.applyBalancePatch({
+            walletId: targetWallet.id,
+            patch: { realBalance: nextToBal, balanceUsd: nextToUsd },
+          }),
+        );
+        setSwapAmount("");
+        setIsSwapMode(false);
+        setPayFromId("");
+        setIsOpen(false);
+        return;
+      }
+
       await swapCurrency(
-        selectedWallet.currencyId,
+        fromWallet.currencyId,
         targetCurrencyId,
         swapAmount,
       );
@@ -594,6 +746,7 @@ const BalanceDropdown: React.FC = () => {
       await loadWallets();
 
       setIsSwapMode(false);
+      setPayFromId("");
       setIsOpen(false);
       setSwapAmount("");
 
@@ -642,6 +795,34 @@ const BalanceDropdown: React.FC = () => {
     targetCurrencyId && currencies[targetCurrencyId]
       ? currencies[targetCurrencyId]
       : undefined;
+
+  const payFromCurrency =
+    payFromId && payFromId !== PAY_FROM_CP && currencies[payFromId]
+      ? currencies[payFromId]
+      : undefined;
+
+  const payBalanceMax = useMemo(() => {
+    if (!payFromId) return "0";
+    if (payFromId === PAY_FROM_CP) return String(exchangeableCp);
+    const w = wallets.find((x) => x.currencyId === payFromId);
+    return w?.realBalance ?? "0";
+  }, [payFromId, wallets, exchangeableCp]);
+
+  const receivePreview = useMemo(() => {
+    if (!targetCurrencyId || !swapAmount) return null;
+    const tc = currencies[targetCurrencyId];
+    if (!tc) return null;
+    if (payFromId === PAY_FROM_CP) {
+      const amt = Math.floor(parseFloat(swapAmount.replace(/\s/g, "")));
+      if (!Number.isFinite(amt) || amt <= 0) return null;
+      const usd = amt / CP_PER_USD;
+      const p = parseFloat(tc.priceUsd || "1");
+      if (!Number.isFinite(p) || p <= 0) return null;
+      const out = Big(usd).div(p);
+      return `≈ ${out.toFixed(8)} ${tc.symbol}`;
+    }
+    return null;
+  }, [payFromId, targetCurrencyId, swapAmount, currencies]);
 
   return (
     <div className={styles.wrapper}>
@@ -696,7 +877,16 @@ const BalanceDropdown: React.FC = () => {
                     disabled={!hasWallet}
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (hasWallet) setIsSwapMode(true);
+                      if (!hasWallet) return;
+                      const from =
+                        selectedWallet?.currencyId ??
+                        wallets[0]?.currencyId ??
+                        "";
+                      setPayFromId(from);
+                      const other = wallets.find((w) => w.currencyId !== from);
+                      setTargetCurrencyId(other?.currencyId ?? "");
+                      setSwapAmount("");
+                      setIsSwapMode(true);
                     }}
                   >
                     Exchange
@@ -717,7 +907,8 @@ const BalanceDropdown: React.FC = () => {
               ) : (
                 wallets.map((w) => {
                   const c = currencies[w.currencyId];
-                  if (!c || !c.isActive) return null;
+                  if (!c) return null;
+                  if (c.isActive === false) return null;
 
                   const balance = w.realBalance
                     ? Big(w.realBalance).toFixed(6)
@@ -764,37 +955,144 @@ const BalanceDropdown: React.FC = () => {
             </>
           )}
 
-          {isSwapMode && hasWallet && currency && (
+          {isSwapMode && (
             <div className={styles.swapContainer}>
               <h3 className={styles.swapTitle}>Exchange</h3>
               <p className={styles.swapSubtitle}>
-                Convert between your wallets — same colors and typography as
-                cash desk pages.
+                Отдайте криптовалюту или Comp Points — получите выбранную
+                монету на реальный баланс кошелька.
               </p>
 
               <div className={styles.swapField}>
                 <label className={styles.swapLabel}>
-                  <CurrencyIcon
-                    symbol={currency.symbol}
-                    apiIconPath={currency.icon}
-                    size={18}
-                    variant="ui"
-                    className={styles.swapLabelIcon}
-                  />
-                  Pay ({currency.symbol})
+                  {payFromId === PAY_FROM_CP ? (
+                    <CpCoinIcon
+                      size={SWAP_ROW_ICON_PX}
+                      className={styles.swapLabelIcon}
+                    />
+                  ) : payFromCurrency ? (
+                    <CurrencyIcon
+                      symbol={payFromCurrency.symbol}
+                      apiIconPath={payFromCurrency.icon}
+                      size={SWAP_ROW_ICON_PX}
+                      variant="ui"
+                      className={styles.swapLabelIcon}
+                    />
+                  ) : (
+                    <span
+                      className={styles.swapLabelIconPlaceholder}
+                      aria-hidden
+                    />
+                  )}
+                  Отдать
+                </label>
+                <div className={styles.swapSelectRow}>
+                  <span className={styles.swapSelectLead} aria-hidden>
+                    {payFromId === PAY_FROM_CP ? (
+                      <CpCoinIcon
+                        size={SWAP_ROW_ICON_PX}
+                        className={styles.swapSelectGlyph}
+                      />
+                    ) : payFromCurrency ? (
+                      <CurrencyIcon
+                        symbol={payFromCurrency.symbol}
+                        apiIconPath={payFromCurrency.icon}
+                        size={SWAP_ROW_ICON_PX}
+                        variant="ui"
+                        className={styles.swapSelectGlyph}
+                      />
+                    ) : (
+                      <span className={styles.swapSelectIconPlaceholder} />
+                    )}
+                  </span>
+                  <select
+                    className={`${styles.swapSelect} ${styles.swapSelectEmbed}`}
+                    value={payFromId}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setPayFromId(v);
+                      setSwapAmount("");
+                      if (v !== PAY_FROM_CP) {
+                        const w = wallets.find((x) => x.currencyId === v);
+                        if (w) dispatch(walletsActions.setSelectedWallet(w.id));
+                      }
+                      const firstRecv = wallets.find((x) => x.currencyId !== v);
+                      if (firstRecv && v !== PAY_FROM_CP) {
+                        setTargetCurrencyId(firstRecv.currencyId);
+                      } else if (v === PAY_FROM_CP && wallets[0]) {
+                        setTargetCurrencyId(wallets[0].currencyId);
+                      }
+                    }}
+                  >
+                    <option value="" disabled>
+                      Выберите источник
+                    </option>
+                    <option value={PAY_FROM_CP}>
+                      Comp Points (CP) — {exchangeableCp.toLocaleString("ru-RU")}{" "}
+                      доступно
+                    </option>
+                    {wallets.map((w) => {
+                      const c = currencies[w.currencyId];
+                      if (!c) return null;
+                      return (
+                        <option key={w.currencyId} value={w.currencyId}>
+                          {c.symbol} — {c.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
+
+              <div className={styles.swapField}>
+                <label className={styles.swapLabel}>
+                  {payFromId === PAY_FROM_CP ? (
+                    <CpCoinIcon
+                      size={SWAP_ROW_ICON_PX}
+                      className={styles.swapLabelIcon}
+                    />
+                  ) : payFromId && currencies[payFromId] ? (
+                    <CurrencyIcon
+                      symbol={currencies[payFromId]!.symbol}
+                      apiIconPath={currencies[payFromId]!.icon}
+                      size={SWAP_ROW_ICON_PX}
+                      variant="ui"
+                      className={styles.swapLabelIcon}
+                    />
+                  ) : (
+                    <span
+                      className={styles.swapLabelIconPlaceholder}
+                      aria-hidden
+                    />
+                  )}
+                  Сумма
                 </label>
                 <div className={styles.swapInputWrapper}>
                   <input
-                    type="number"
+                    type="text"
+                    inputMode={
+                      payFromId === PAY_FROM_CP ? "numeric" : "decimal"
+                    }
                     value={swapAmount}
-                    onChange={(e) => setSwapAmount(e.target.value)}
-                    placeholder={`Max: ${activeBalance}`}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      if (payFromId === PAY_FROM_CP) {
+                        setSwapAmount(raw.replace(/[^\d]/g, ""));
+                      } else {
+                        setSwapAmount(raw);
+                      }
+                    }}
+                    placeholder={
+                      payFromId === PAY_FROM_CP
+                        ? `Кратно ${CP_PER_USD} CP`
+                        : `Макс: ${payBalanceMax}`
+                    }
                     className={styles.swapInput}
                   />
                   <button
                     type="button"
                     className={styles.maxBtn}
-                    onClick={() => setSwapAmount(activeBalance)}
+                    onClick={() => setSwapAmount(payBalanceMax)}
                   >
                     MAX
                   </button>
@@ -807,7 +1105,7 @@ const BalanceDropdown: React.FC = () => {
                     <CurrencyIcon
                       symbol={targetSwapCurrency.symbol}
                       apiIconPath={targetSwapCurrency.icon}
-                      size={18}
+                      size={SWAP_ROW_ICON_PX}
                       variant="ui"
                       className={styles.swapLabelIcon}
                     />
@@ -817,34 +1115,73 @@ const BalanceDropdown: React.FC = () => {
                       aria-hidden
                     />
                   )}
-                  Receive
+                  Получить (на баланс)
                 </label>
-                <select
-                  className={styles.swapSelect}
-                  value={targetCurrencyId}
-                  onChange={(e) => setTargetCurrencyId(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Choose currency
-                  </option>
-                  {wallets
-                    .filter((w) => w.currencyId !== selectedWallet!.currencyId)
-                    .map((w) => {
-                      const c = currencies[w.currencyId];
-                      return (
-                        <option key={w.currencyId} value={w.currencyId}>
-                          {c?.symbol} — {c?.name}
-                        </option>
-                      );
-                    })}
-                </select>
+                <div className={styles.swapSelectRow}>
+                  <span className={styles.swapSelectLead} aria-hidden>
+                    {targetSwapCurrency ? (
+                      <CurrencyIcon
+                        symbol={targetSwapCurrency.symbol}
+                        apiIconPath={targetSwapCurrency.icon}
+                        size={SWAP_ROW_ICON_PX}
+                        variant="ui"
+                        className={styles.swapSelectGlyph}
+                      />
+                    ) : (
+                      <span className={styles.swapSelectIconPlaceholder} />
+                    )}
+                  </span>
+                  <select
+                    className={`${styles.swapSelect} ${styles.swapSelectEmbed}`}
+                    value={targetCurrencyId}
+                    onChange={(e) => setTargetCurrencyId(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Выберите валюту
+                    </option>
+                    {wallets
+                      .filter((w) =>
+                        payFromId === PAY_FROM_CP
+                          ? true
+                          : w.currencyId !== payFromId,
+                      )
+                      .map((w) => {
+                        const c = currencies[w.currencyId];
+                        return (
+                          <option key={w.currencyId} value={w.currencyId}>
+                            {c?.symbol} — {c?.name}
+                          </option>
+                        );
+                      })}
+                  </select>
+                </div>
               </div>
+
+              {receivePreview ? (
+                <p className={styles.swapPreview}>{receivePreview}</p>
+              ) : null}
+
+              {payFromId && payFromId !== PAY_FROM_CP ? (
+                <div className={styles.swapNote}>
+                  Демо: курс через USD, комиссия 1%. В проде — через API.
+                </div>
+              ) : payFromId === PAY_FROM_CP ? (
+                <div className={styles.swapNote}>
+                  Курс: {CP_PER_USD} CP = $1 к эквиваленту выбранной монеты.
+                  {isWalletUiDemoMode && !vip.data
+                    ? " Демо-баланс CP без бэка."
+                    : null}
+                </div>
+              ) : null}
 
               <div className={styles.swapButtons}>
                 <button
                   type="button"
                   className={styles.cancelBtn}
-                  onClick={() => setIsSwapMode(false)}
+                  onClick={() => {
+                    setIsSwapMode(false);
+                    setPayFromId("");
+                  }}
                   disabled={isSwapping}
                 >
                   Back
@@ -853,13 +1190,16 @@ const BalanceDropdown: React.FC = () => {
                   type="button"
                   className={styles.confirmBtn}
                   onClick={handleSwap}
-                  disabled={!swapAmount || !targetCurrencyId || isSwapping}
+                  disabled={
+                    !payFromId ||
+                    !targetCurrencyId ||
+                    !swapAmount ||
+                    isSwapping ||
+                    (payFromId === PAY_FROM_CP && exchangeableCp <= 0)
+                  }
                 >
-                  {isSwapping ? "Exchanging..." : "Confirm Swap"}
+                  {isSwapping ? "Exchanging..." : "Confirm"}
                 </button>
-              </div>
-              <div className={styles.swapNote}>
-                1% exchange fee applies. Rates are indicative.
               </div>
             </div>
           )}

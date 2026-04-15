@@ -30,6 +30,7 @@ export default function PartnersCampaignPage() {
                 <FaFileLines className={ph.partnersIconSvg} />
               </div>
               <div className={ph.partnersHeadBody}>
+                <p className={ph.partnersKicker}>Affiliate program</p>
                 <h1 className={ph.partnersH1}>Become a partner</h1>
                 <p className={ph.partnersLead}>
                   Tell us about your traffic sources, regions, and experience. We review each application manually.

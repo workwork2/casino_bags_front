@@ -241,6 +241,14 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:focus-within {
+    border-color: rgba(99, 102, 241, 0.45);
+    box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.25);
+  }
 
   input {
     width: 100%;
@@ -251,6 +259,13 @@
     font-size: clamp(14px, 1.15vw, 17px);
     font-weight: 700;
     outline: none;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--ds-color-text-primary) !important;
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.28) inset !important;
+    transition: background-color 99999s ease-out 0s !important;
   }
 
   .currencySymbol {

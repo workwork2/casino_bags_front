@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useId, useMemo, useState } from "react";
 import CpCoinIcon from "@/components/icons/CpCoinIcon";
 import classes from "./LoyaltyCpExchange.module.scss";
 
@@ -15,13 +15,18 @@ type Props = {
   cpPerBonusUnit?: number;
   /** Подпись единицы зачисления */
   bonusUnitLabel?: string;
+  /** Компактный вид без второго «стекла» — для выпадающего кошелька */
+  embedded?: boolean;
 };
 
 export default function LoyaltyCpExchange({
   availableCp,
   cpPerBonusUnit = 100,
   bonusUnitLabel = "бонусного баланса",
+  embedded = false,
 }: Props) {
+  const fieldId = useId().replace(/:/g, "");
+  const inputId = `cp-exchange-input-${fieldId}`;
   const [raw, setRaw] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -66,24 +71,39 @@ export default function LoyaltyCpExchange({
     setRaw("");
   }, [amount, availableCp, cpPerBonusUnit]);
 
+  const titleId = embedded
+    ? `loyalty-cp-exchange-title-${fieldId}`
+    : "loyalty-cp-exchange-title";
+
   return (
-    <section className={classes.panel} aria-labelledby="loyalty-cp-exchange-title">
+    <section
+      className={`${classes.panel} ${embedded ? classes.panelEmbedded : ""}`}
+      aria-labelledby={titleId}
+    >
       <div className={classes.head}>
-        <CpCoinIcon className={classes.headIcon} size={44} />
+        <CpCoinIcon className={classes.headIcon} size={embedded ? 28 : 32} />
         <div className={classes.headText}>
-          <h2 id="loyalty-cp-exchange-title" className={classes.panelTitle}>
+          <h2 id={titleId} className={classes.panelTitle}>
             Обмен Comp Points
           </h2>
-          <p className={classes.panelHint}>
-            Меняйте накопленные CP на {bonusUnitLabel}. Курс фиксированный — как в
-            классической программе лояльности казино.
-          </p>
+          {!embedded ? (
+            <p className={classes.panelHint}>
+              Меняйте накопленные CP на {bonusUnitLabel}. Курс фиксированный — как в
+              классической программе лояльности казино.
+            </p>
+          ) : (
+            <p className={classes.panelHintCompact}>
+              CP → {bonusUnitLabel} (курс фиксированный).
+            </p>
+          )}
         </div>
       </div>
 
       <div className={classes.balanceRow}>
         <span className={classes.balanceLabel}>
-          <CpCoinIcon size={22} />
+          <span className={classes.balanceLabelIcon}>
+            <CpCoinIcon size={22} />
+          </span>
           Доступно
         </span>
         <span className={classes.balanceValue}>{formatCp(availableCp)} CP</span>
@@ -101,11 +121,11 @@ export default function LoyaltyCpExchange({
 
       <div className={classes.formRow}>
         <div className={classes.field}>
-          <label className={classes.label} htmlFor="cp-exchange-input">
+          <label className={classes.label} htmlFor={inputId}>
             Сколько CP обменять
           </label>
           <input
-            id="cp-exchange-input"
+            id={inputId}
             className={classes.input}
             inputMode="numeric"
             autoComplete="off"

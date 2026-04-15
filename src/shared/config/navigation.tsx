@@ -43,6 +43,9 @@ export const HEADER_ICON_SIZE = 22;
 /** Аватар в хедере (круг) */
 export const HEADER_AVATAR_PX = 32;
 
+/** Аватар в карточке профиля ЛК (круг, без сжатия — cover, фиксированный размер) */
+export const PROFILE_HERO_AVATAR_PX = 72;
+
 /** Аватар в карточке профиля (круг) */
 export const ACCOUNT_AVATAR_PX = 80;
 

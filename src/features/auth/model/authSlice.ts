@@ -3,6 +3,8 @@ import { User } from "./types";
 import { ApiHttpError } from "@/shared/lib/api/baseApi";
 import { setUser } from "@/entities/user/model/slice";
 import { api } from "@/shared/lib/api/axios";
+import { DEV_LOYALTY_PREVIEW } from "@/shared/config/devFlags";
+import { DEV_MOCK_USER } from "@/shared/config/loyaltyDevMock";
 
 interface AuthState {
   token: string | null;
@@ -71,6 +73,10 @@ export const registerUser = createAsyncThunk(
 export const fetchMe = createAsyncThunk(
   "auth/me",
   async (_, { rejectWithValue, dispatch }) => {
+    if (DEV_LOYALTY_PREVIEW) {
+      dispatch(setUser(DEV_MOCK_USER));
+      return DEV_MOCK_USER;
+    }
     try {
       const { data } = await api.get("/auth/me");
       dispatch(setUser(data));

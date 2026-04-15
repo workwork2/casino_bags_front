@@ -69,6 +69,9 @@ export const WALLET_UI_DEMO_CURRENCIES: Currency[] = [
 	}),
 ];
 
+/** CP для UI-демо (когда нет VIP с бэка) — обмен CP → крипта в выпадающем кошельке */
+export const WALLET_UI_DEMO_CP_BALANCE = 12_500;
+
 export const WALLET_UI_DEMO_WALLETS: VirtualWallet[] = [
 	{
 		id: 'demo-usdt',
@@ -98,6 +101,9 @@ export function applyWalletUiDemo(dispatch: AppDispatch): void {
 	dispatch(walletsActions.upsertMany(WALLET_UI_DEMO_WALLETS));
 	dispatch(walletsActions.setSelectedWallet(WALLET_UI_DEMO_WALLETS[0].id));
 }
+
+/** Идентификатор «источника» CP в форме обмена (не валюта в API) */
+export const PAY_FROM_CP = "cp";
 
 export function getDemoDepositAddress(symbol: string): string {
 	const s = symbol.toUpperCase();

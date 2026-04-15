@@ -154,7 +154,6 @@ import {
 } from "react-icons/io5";
 
 import LoyaltyHero from "@/components/LoyaltyHero/LoyaltyHero";
-import LoyaltyCpExchange from "@/components/LoyaltyCpExchange/LoyaltyCpExchange";
 import StatusCard from "@/components/StatusCard/StatusCard";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -268,14 +267,6 @@ export default function LoyaltyPage() {
     });
   }, [data]);
 
-  /** CP для обмена: отдельный кошелёк с бэка или, пока нет поля, текущий прогресс CP */
-  const exchangeableCp = useMemo(() => {
-    if (!data) return 0;
-    const wallet = data.cpWallet ?? data.cpBalance;
-    if (typeof wallet === "number" && Number.isFinite(wallet)) return wallet;
-    return data.progress?.currentPoints ?? 0;
-  }, [data]);
-
   // Дизайн первого варианта полностью сохранён (включая стрелки, grid, scrollRef, заголовок "Статусы" и т.д.)
   // Добавлена только функциональность Redux + обработка загрузки/ошибки
   return (
@@ -305,8 +296,6 @@ export default function LoyaltyPage() {
               nextLevelName={heroData.nextLevelName}
               imageSrc={heroData.imageSrc}
             />
-
-            <LoyaltyCpExchange availableCp={exchangeableCp} cpPerBonusUnit={100} />
 
             <section className={styles.wrapper}>
               <div className={styles.header}>

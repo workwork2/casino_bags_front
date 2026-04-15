@@ -23,6 +23,7 @@ $mobile-bp: 600px;
   font-size: var(--glass-heading-size-sm);
   font-weight: var(--glass-heading-weight);
   letter-spacing: var(--glass-heading-ls);
+  line-height: var(--app-heading-page-lh, 1.2);
   color: var(--glass-heading-color);
   margin: 0 0 10px 0;
 }

@@ -9,6 +9,7 @@ import {
   NAV_ICON_SIZE,
   SUPPORT_NAV_ITEMS,
 } from "@/shared/config/navigation";
+import { APP_LAYOUT_MOBILE_MAX_PX } from "@/shared/config/layout";
 import { IoShieldCheckmarkOutline } from "react-icons/io5";
 import { FaTelegramPlane, FaTwitter, FaDiscord } from "react-icons/fa";
 import { MdLanguage } from "react-icons/md";
@@ -26,10 +27,11 @@ const SlideBar = () => {
   useEffect(() => {
     const handleResize = () => {
       const vw = window.innerWidth;
-      const shouldUseOverlayMode = vw <= 1450 && vw > 768;
+      const shouldUseOverlayMode =
+        vw <= 1450 && vw > APP_LAYOUT_MOBILE_MAX_PX;
       setIsOverlayMode(shouldUseOverlayMode);
 
-      if (vw <= 768) {
+      if (vw <= APP_LAYOUT_MOBILE_MAX_PX) {
         setIsCollapsed(true);
         prevOverlayModeRef.current = false;
         return;
@@ -54,7 +56,7 @@ const SlideBar = () => {
   useEffect(() => {
     const applySidebarOffset = () => {
       const vw = window.innerWidth;
-      if (vw <= 768) {
+      if (vw <= APP_LAYOUT_MOBILE_MAX_PX) {
         document.documentElement.style.setProperty(
           "--app-sidebar-offset",
           "0px",

@@ -26,7 +26,7 @@
     right: 0;
     width: 100%;
     max-width: rem(380);
-    z-index: var(--z-chat, 10050);
+    z-index: var(--z-chat, 11500);
 
     background: linear-gradient(180deg, rgba(88, 76, 237, 0.96) 0%, rgba(62, 53, 168, 0.96) 100%);
     box-shadow: rem(-6) 0 rem(28) rgba(0, 0, 0, 0.35);
@@ -41,14 +41,14 @@
     letter-spacing: -0.02em;
 
     /* Десктоп / планшет: под фиксированным хедером, не наезжаем на него */
-    @media (min-width: 769px) {
+    @media (min-width: 951px) {
         top: var(--app-header-height, 128px);
         height: calc(100dvh - var(--app-header-height, 128px));
         max-height: calc(100dvh - var(--app-header-height, 128px));
     }
 
     /* Телефон: на весь экран */
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         top: 0;
         left: 0;
         max-width: none;
@@ -71,7 +71,7 @@
     align-items: center;
     gap: rem(10);
 
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         padding-top: rem(10);
         padding-bottom: rem(10);
     }
@@ -149,7 +149,7 @@
         background: rgba(255, 255, 255, 0.1);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         width: rem(48);
         height: rem(48);
         border-radius: rem(12);

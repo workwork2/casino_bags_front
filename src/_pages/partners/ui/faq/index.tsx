@@ -11,7 +11,7 @@ import styles from "./page.module.scss";
 const faqData: AccordionItemData[] = [
   {
     id: 1,
-    question: "HOW DOES THE PARTNER PROGRAM WORK?",
+    question: "How does the partner program work?",
     answer:
       "You promote our casino using tracking links and optional promo codes. When players register and play, " +
       "commissions are calculated from qualifying activity (for example net gaming revenue or CPA — depending on your deal). " +
@@ -19,7 +19,7 @@ const faqData: AccordionItemData[] = [
   },
   {
     id: 2,
-    question: "WHAT COMMISSION MODELS ARE AVAILABLE?",
+    question: "What commission models are available?",
     answer:
       "We typically offer: " +
       "<ul>" +
@@ -31,7 +31,7 @@ const faqData: AccordionItemData[] = [
   },
   {
     id: 3,
-    question: "WHEN AND HOW DO I GET PAID?",
+    question: "When and how do I get paid?",
     answer:
       "Payouts run on a fixed schedule (e.g. weekly or monthly — stated in your agreement). " +
       "Minimum amounts and methods match the options in your wallet: crypto and fiat where supported. " +
@@ -39,14 +39,14 @@ const faqData: AccordionItemData[] = [
   },
   {
     id: 4,
-    question: "WHAT MARKETING TOOLS DO YOU PROVIDE?",
+    question: "What marketing tools do you provide?",
     answer:
       "Partners get tracking links, deep links to games, banners in multiple sizes, landing pages, and on request: " +
       "postback URLs, API access, and creative refreshes aligned with seasonal campaigns on the site.",
   },
   {
     id: 5,
-    question: "WHICH TRAFFIC SOURCES ARE NOT ALLOWED?",
+    question: "Which traffic sources are not allowed?",
     answer:
       "We welcome SEO, PPC where permitted, streaming, and social traffic that follows local laws. Prohibited: " +
       "<ul>" +
@@ -75,6 +75,7 @@ export default function PartnersFaqPage() {
                 <FaHandshake className={ph.partnersIconSvg} />
               </div>
               <div className={ph.partnersHeadBody}>
+                <p className={ph.partnersKicker}>Affiliate program</p>
                 <h1 className={ph.partnersH1}>Partner FAQ</h1>
                 <p className={ph.partnersLead}>
                   Models, payouts, creatives, and compliance — aligned with the same glass layout as{" "}

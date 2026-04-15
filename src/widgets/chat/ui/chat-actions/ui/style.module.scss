@@ -1,17 +1,17 @@
 .chatActions {
     position: fixed;
     right: 0;
-    z-index: calc(var(--z-chat, 10050) + 1);
+    z-index: calc(var(--z-chat, 11500) + 1);
     transform: translateY(-50%);
 
-    @media (min-width: 769px) {
+    @media (min-width: 951px) {
         top: calc(
             var(--app-header-height, 128px) +
                 (100dvh - var(--app-header-height, 128px)) / 2
         );
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 950px) {
         top: 50%;
     }
 
@@ -59,7 +59,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 950px) {
     .chatActions {
         padding: rem(6);
         gap: rem(6);
