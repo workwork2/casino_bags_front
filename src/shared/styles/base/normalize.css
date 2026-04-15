@@ -81,11 +81,11 @@ label {
   cursor: pointer;
 }
 
-[fill]:not([fill=none]):not([fill=transparent]) {
+[fill]:not([fill=none]):not([fill=transparent]):not([fill*=url]):not([fill^="#"]):not([fill^=rgba]):not([fill^="rgb("]) {
   fill: currentColor;
 }
 
-[stroke]:not([stroke=none]) {
+[stroke]:not([stroke=none]):not([stroke*=url]):not([stroke^="#"]):not([stroke^=rgba]):not([stroke^="rgb("]) {
   stroke: currentColor;
 }
 

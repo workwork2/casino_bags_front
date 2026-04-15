@@ -4,10 +4,14 @@
   display: flex;
   gap: 28px;
   align-items: flex-start;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 
   @media (max-width: 900px) {
     flex-direction: column;
     align-items: stretch;
+    gap: 20px;
   }
 }
 
@@ -18,27 +22,34 @@
 .leftSection {
   flex: 1.5;
   min-width: 0;
+  max-width: 100%;
 }
 
 .methodsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 
   @media (max-width: 768px) {
     display: flex;
     overflow-x: auto;
-    padding: 4px 0 18px;
-    margin: 0 -12px;
-    padding-left: 12px;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 0 calc(18px + env(safe-area-inset-bottom, 0px));
+    margin: 0;
     gap: 12px;
     scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
 
     &::-webkit-scrollbar {
-      display: none;
+      height: 4px;
     }
 
-    mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    mask-image: linear-gradient(
+      to right,
+      black calc(100% - 28px),
+      transparent 100%
+    );
   }
 }
 
@@ -111,11 +122,8 @@
 
 .rightSection {
   flex: 1;
-  min-width: 300px;
-
-  @media (max-width: 768px) {
-    min-width: 100%;
-  }
+  min-width: 0;
+  max-width: 100%;
 }
 
 .paymentDetails {
@@ -126,10 +134,15 @@
   padding: clamp(20px, 3vw, 28px);
   position: sticky;
   top: calc(var(--app-header-height, 128px) + 12px);
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
     position: relative;
     top: auto;
+    padding: clamp(14px, 4vw, 22px);
+    border-radius: 16px;
   }
 }
 
@@ -139,6 +152,13 @@
   align-items: flex-start;
   gap: 12px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
 }
 
 .selectedTitle {
@@ -146,6 +166,7 @@
   align-items: center;
   gap: 14px;
   min-width: 0;
+  flex: 1 1 auto;
 }
 
 .detailsHeading {
@@ -155,6 +176,8 @@
   color: var(--glass-heading-color, var(--ds-color-text-primary));
   line-height: 1.2;
   letter-spacing: var(--glass-heading-ls, -0.02em);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .networkName {
@@ -184,11 +207,19 @@
   font-weight: 700;
   line-height: 1.2;
   text-align: right;
+  max-width: min(100%, 200px);
+  overflow-wrap: anywhere;
+
+  @media (max-width: 640px) {
+    align-self: flex-start;
+    max-width: none;
+    text-align: left;
+  }
 }
 
 .infoGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 20px;
 
@@ -205,6 +236,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 
   span {
     font-size: 11px;
@@ -215,9 +247,11 @@
   }
 
   strong {
-    font-size: 15px;
+    font-size: clamp(13px, 3.5vw, 15px);
     font-weight: 800;
     color: var(--ds-color-text-primary);
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 }
 
@@ -225,11 +259,15 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 
   .label {
     font-size: clamp(12px, 1vw, 14px);
     font-weight: 600;
     color: var(--glass-text-muted, var(--ds-color-text-secondary));
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 }
 
@@ -244,10 +282,15 @@
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
+  min-width: 0;
 
   &:focus-within {
     border-color: rgba(99, 102, 241, 0.45);
     box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.25);
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px 14px;
   }
 
   input {
@@ -259,6 +302,8 @@
     font-size: clamp(14px, 1.15vw, 17px);
     font-weight: 700;
     outline: none;
+    overflow-wrap: anywhere;
+    word-break: break-all;
   }
 
   input:-webkit-autofill,
@@ -285,11 +330,15 @@
 
 .presets {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
 
   @media (max-width: 520px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (max-width: 380px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   button {
@@ -304,6 +353,8 @@
     transition:
       background 0.2s ease,
       border-color 0.2s ease;
+    min-height: 44px;
+    box-sizing: border-box;
 
     &:hover {
       background: rgba(99, 102, 241, 0.2);
@@ -333,6 +384,8 @@
 }
 
 .submitBtn {
+  width: 100%;
+  max-width: 100%;
   background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
   color: var(--ds-color-text-primary);
   border: none;
@@ -344,6 +397,8 @@
   transition:
     filter 0.2s ease,
     transform 0.2s ease;
+  box-sizing: border-box;
+  min-height: 48px;
 
   &:hover:not(:disabled) {
     filter: brightness(1.06);
