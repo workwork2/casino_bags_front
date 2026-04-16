@@ -177,13 +177,15 @@ export default function LoyaltyPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.offsetWidth;
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
+    const track = scrollRef.current;
+    if (!track) return;
+    const first = track.firstElementChild as HTMLElement | null;
+    const gap = 12;
+    const step = first ? first.offsetWidth + gap : track.offsetWidth;
+    track.scrollBy({
+      left: direction === "left" ? -step : step,
+      behavior: "smooth",
+    });
   };
 
   // Загружаем реальные данные из Redux (функциональность из второго варианта)

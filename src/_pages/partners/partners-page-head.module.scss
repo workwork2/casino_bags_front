@@ -3,11 +3,23 @@ $mobile-bp: 768px;
 $icon-col: 48px;
 $head-gap: 16px;
 
-.partnersNavShell {
+/* Компактный стеклянный блок — как полоса nav в личном кабинете (WalletPageLayout .shell + .navSlot) */
+.partnersNavStrip {
   @include casino-page-shell;
-  padding-bottom: 20px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-sizing: border-box;
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  width: 100%;
+  padding: 10px 14px;
+  margin: 0 0 clamp(12px, 2vw, 20px) 0;
+
+  @media (min-width: #{$mobile-bp + 1px}) {
+    padding: 12px 20px;
+    border-radius: 18px;
+  }
 }
 
 .partnersPageHead {

@@ -1,5 +1,9 @@
-$tablet-bp: 1024px;
 $mobile-bp: 950px;
+/* Ниже этой ширины — лента карточек фиксированной ширины (как Riobet), не 4×1fr */
+$loyalty-carousel-max-bp: 1400px;
+$loyalty-card-width: 280px;
+/* Только узкий телефон: одна карточка на ширину; 601–950 — лента (не одна «растянутая») */
+$loyalty-full-width-card-bp: 600px;
 
 /* Как новости / FAQ: верх — .mainContent, снизу — ~20px до футера */
 .loyaltyPage {
@@ -71,7 +75,7 @@ $mobile-bp: 950px;
   flex-shrink: 0;
   margin-left: auto;
 
-  @media (max-width: $mobile-bp) {
+  @media (max-width: $loyalty-carousel-max-bp) {
     display: flex;
   }
 }
@@ -134,11 +138,12 @@ $mobile-bp: 950px;
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   align-items: stretch;
+  max-width: 100%;
 
-  @media (max-width: $tablet-bp) {
+  @media (max-width: $loyalty-carousel-max-bp) {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -158,14 +163,18 @@ $mobile-bp: 950px;
   display: flex;
   min-height: 0;
 
-  @media (max-width: $tablet-bp) {
-    min-width: 260px;
+  @media (max-width: $loyalty-carousel-max-bp) {
+    flex: 0 0 $loyalty-card-width;
+    width: $loyalty-card-width;
+    min-width: $loyalty-card-width;
+    max-width: $loyalty-card-width;
     scroll-snap-align: start;
-    flex-shrink: 0;
   }
 
-  @media (max-width: $mobile-bp) {
-    min-width: 100%;
+  @media (max-width: $loyalty-full-width-card-bp) {
     flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
+    max-width: none;
   }
 }

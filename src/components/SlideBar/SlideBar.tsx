@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./SlideBar.module.scss";
@@ -23,6 +29,50 @@ const SlideBar = () => {
   const [isOverlayMode, setIsOverlayMode] = useState(false);
   const [currentLang, setCurrentLang] = useState("EN");
   const prevOverlayModeRef = useRef<boolean | null>(null);
+  const sidebarRef = useRef<HTMLElement>(null);
+  const skipHoverFlushRef = useRef(true);
+
+  const flushHoverOnSidebar = useCallback(() => {
+    const el = sidebarRef.current;
+    if (!el) return;
+    el.style.pointerEvents = "none";
+    requestAnimationFrame(() => {
+      el.style.pointerEvents = "";
+    });
+  }, []);
+
+  // После смены ширины :hover может «залипать» без mouseleave — сбрасываем.
+  useLayoutEffect(() => {
+    if (skipHoverFlushRef.current) {
+      skipHoverFlushRef.current = false;
+      return;
+    }
+    flushHoverOnSidebar();
+  }, [isCollapsed, isOverlayMode, flushHoverOnSidebar]);
+
+  const lastLayoutBandRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const layoutBand = (vw: number) => {
+      if (vw <= APP_LAYOUT_MOBILE_MAX_PX) return "mobile";
+      if (vw <= 1450) return "tablet";
+      return "desktop";
+    };
+
+    const onResize = () => {
+      const vw = window.innerWidth;
+      const band = layoutBand(vw);
+      const prev = lastLayoutBandRef.current;
+      if (prev !== null && prev !== band) {
+        flushHoverOnSidebar();
+      }
+      lastLayoutBandRef.current = band;
+    };
+
+    lastLayoutBandRef.current = layoutBand(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [flushHoverOnSidebar]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -98,6 +148,7 @@ const SlideBar = () => {
         />
       )}
       <aside
+        ref={sidebarRef}
         className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""} ${isOverlayOpen ? styles.overlayOpen : ""}`}
       >
         <div className={styles.scrollArea}>

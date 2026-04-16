@@ -119,11 +119,9 @@ export default function PartnersReferralsPage() {
   return (
     <div className={styles.partnersReferrals}>
       <div className="container">
-        <section className={styles.glassBox}>
-          <div className={ph.partnersNavShell}>
-            <PartnersNavigation />
-          </div>
-        </section>
+        <div className={ph.partnersNavStrip}>
+          <PartnersNavigation />
+        </div>
 
         <section className={styles.glassBox}>
           <header className={ph.partnersPageHead}>

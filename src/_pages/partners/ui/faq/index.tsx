@@ -62,11 +62,9 @@ export default function PartnersFaqPage() {
   return (
     <div className={styles.partnersFaq}>
       <div className="container">
-        <section className={styles.glassBox}>
-          <div className={ph.partnersNavShell}>
-            <PartnersNavigation />
-          </div>
-        </section>
+        <div className={ph.partnersNavStrip}>
+          <PartnersNavigation />
+        </div>
 
         <div className={styles.glassPanel}>
           <header className={ph.partnersPageHead}>
